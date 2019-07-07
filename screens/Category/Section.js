@@ -33,9 +33,20 @@ const Section = ({ name, items }) => (
     </Box>
     {items.map((item, index) =>
       index === items.length - 1 ? (
-        <Item key={item.id} id={item.id} name={item.name} isLast={true} />
+        <Item
+          key={item.id}
+          id={item.id}
+          name={item.name}
+          products={item.products}
+          isLast={true}
+        />
       ) : (
-        <Item key={item.id} id={item.id} name={item.name} />
+        <Item
+          key={item.id}
+          id={item.id}
+          name={item.name}
+          products={item.products}
+        />
       )
     )}
   </Container>

@@ -32,14 +32,15 @@ const Icon = styled.View`
   flex: 1;
 `;
 
-const Item = ({ name, isLast = false, navigation }) => (
+const Item = ({ name, isLast = false, products, navigation }) => (
   <Container isLast={isLast}>
     <Touchable
       onPress={() =>
         navigation.navigate({
           routeName: "ProductList",
           params: {
-            name
+            name,
+            products
           }
         })
       }
@@ -54,6 +55,7 @@ const Item = ({ name, isLast = false, navigation }) => (
 
 Item.proptypes = {
   name: PropTypes.string.isRequired,
+  products: PropTypes.array.isRequired,
   isLast: PropTypes.bool
 };
 
