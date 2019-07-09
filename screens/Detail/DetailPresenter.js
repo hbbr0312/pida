@@ -30,13 +30,49 @@ const InCart = styled.TouchableOpacity`
   justify-content: center;
   flex-direction: row;
 `;
+
+const Join = styled.TouchableOpacity`
+  flex: 1
+  background-color: ${Colors.tintColor};
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+`;
+
 const Text = styled.Text`
   margin-left: 10px;
   color: ${props => props.color};
 `;
+
 const Container = styled.ScrollView``;
+
+const createBottom = tab => {
+  if (tab === "category")
+    return (
+      <Bottom>
+        <InPallete onPress={() => alert("테스터제품")}>
+          <Ionicons name="ios-color-palette" size={20} color="white" />
+          <Text color="white">테스터 제품 담기</Text>
+        </InPallete>
+        <InCart onPress={() => alert("장바구니")}>
+          <Ionicons name="ios-cart" size={20} color="grey" />
+          <Text color="black">장바구니 담기</Text>
+        </InCart>
+      </Bottom>
+    );
+  else if (tab === "group_buying")
+    return (
+      <Bottom>
+        <Join onPress={() => alert("참여하기")}>
+          <Ionicons name="ios-people" size={20} color="white" />
+          <Text color="white">참여하기</Text>
+        </Join>
+      </Bottom>
+    );
+  else return null;
+};
+
 const DetailPresenter = ({ product, tab }) => {
-  console.log(product);
   return (
     <>
       <Container>
@@ -55,16 +91,7 @@ const DetailPresenter = ({ product, tab }) => {
         <IngredientSection ingredients={product.ingredients} />
         <ReviewSection reviews={product.reviews} />
       </Container>
-      <Bottom>
-        <InPallete onPress={() => alert("테스터제품")}>
-          <Ionicons name="ios-color-palette" size={20} color="white" />
-          <Text color="white">테스터 제품 담기</Text>
-        </InPallete>
-        <InCart onPress={() => alert("장바구니")}>
-          <Ionicons name="ios-cart" size={20} color="grey" />
-          <Text color="black">장바구니 담기</Text>
-        </InCart>
-      </Bottom>
+      {createBottom(tab)}
     </>
   );
 };
