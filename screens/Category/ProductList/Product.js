@@ -10,7 +10,9 @@ const Container = styled.View`
   flex: 0.98;
   align-self: center;
   border-radius: 10px;
-  box-shadow: 0px 5px 5px grey;
+  box-shadow: 0px 0px 5px grey;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;
 
 const Touchable = styled.TouchableOpacity`
@@ -47,10 +49,20 @@ const Price = styled.Text`
   font-size: 15px;
 `;
 
-const Product = ({ product }) => {
+const Product = ({ product, navigation }) => {
   return (
     <Container>
-      <Touchable>
+      <Touchable
+        onPress={() =>
+          navigation.navigate({
+            routeName: "Detail",
+            params: {
+              tab: "category",
+              product
+            }
+          })
+        }
+      >
         <Image source={{ uri: product.image }} />
         <Text>
           <Brand>{product.brand.name}</Brand>

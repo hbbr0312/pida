@@ -1,28 +1,28 @@
 import React from "react";
 import styled from "styled-components";
-import Section from "./Section";
+import Section from "./components/Section";
 import PropTypes from "prop-types";
+import ReadySections from "./components/ReadySections";
 
-const Container = styled.ScrollView`
-  margin-bottom: 15px;
-`;
-
-const Text = styled.Text``;
+const ScrollView = styled.ScrollView``;
 
 const CategoryPresenter = ({ category }) => {
   return (
-    <Container>
+    <ScrollView>
       <Section
-        key={1}
+        key={0}
         name="크림"
+        color="#ff5158"
         items={category.filter(data => data.big_name === "크림")}
       />
       <Section
-        key={2}
+        key={1}
         name="유아용품"
+        color="#45D2F5"
         items={category.filter(data => data.big_name === "유아용품")}
       />
-    </Container>
+      <ReadySections />
+    </ScrollView>
   );
 };
 

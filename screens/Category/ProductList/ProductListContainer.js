@@ -321,7 +321,8 @@ export default class extends React.Component {
     this.state = {
       products,
       loading: true,
-      products: null
+      products: null,
+      navigation: props.navigation
     };
   }
 
@@ -342,8 +343,8 @@ export default class extends React.Component {
     }
   }
   render() {
-    const { loading, products } = this.state;
+    const { loading, products, navigation } = this.state;
     if (loading) return <Loader />;
-    return <ProductListPresenter products={products} />;
+    return <ProductListPresenter products={products} navigation={navigation} />;
   }
 }

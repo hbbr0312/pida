@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import Layout from "../../constants/Layout";
+import Layout from "../../../constants/Layout";
 import { Ionicons } from "@expo/vector-icons";
 import { withNavigation } from "react-navigation";
+import { Layer } from "../../../components/Layer";
 
 const Container = styled.View`
   height: 50px;
@@ -13,8 +14,15 @@ const Container = styled.View`
   border-bottom-end-radius: ${props => (props.isLast ? "5px " : "0px")};
   border-bottom-width: ${props => (props.isLast ? "0px " : "0.3px")};
   border-bottom-color: grey;
+  ${props => (props.isFake ? "position: relative" : "")};
 `;
 const Touchable = styled.TouchableOpacity`
+  flex-direction: row;
+  flex: 1;
+  align-items: center;
+`;
+
+const View = styled.View`
   flex-direction: row;
   flex: 1;
   align-items: center;
@@ -32,31 +40,45 @@ const Icon = styled.View`
   flex: 1;
 `;
 
-const Item = ({ name, isLast = false, products, navigation }) => (
-  <Container isLast={isLast}>
-    <Touchable
-      onPress={() =>
-        navigation.navigate({
-          routeName: "ProductList",
-          params: {
-            name,
-            products
-          }
-        })
-      }
-    >
+const Item = ({ name, isLast = false, products, navigation, isFake }) => {
+  const content = (
+    <>
       <Text>{name}</Text>
       <Icon>
         <Ionicons name={`ios-arrow-forward`} style={{ fontSize: 15 }} />
       </Icon>
-    </Touchable>
-  </Container>
-);
+    </>
+  );
+  return (
+    <Container isLast={isLast} isFake={isFake}>
+      {isFake ? (
+        <Layer top={false}>
+          <View>{content}</View>
+        </Layer>
+      ) : (
+        <Touchable
+          onPress={() =>
+            navigation.navigate({
+              routeName: "ProductList",
+              params: {
+                name,
+                products
+              }
+            })
+          }
+        >
+          {content}
+        </Touchable>
+      )}
+    </Container>
+  );
+};
 
 Item.proptypes = {
   name: PropTypes.string.isRequired,
   products: PropTypes.array.isRequired,
-  isLast: PropTypes.bool
+  isLast: PropTypes.bool,
+  isFake: PropTypes.bool.isRequired
 };
 
 export default withNavigation(Item);

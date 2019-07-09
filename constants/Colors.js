@@ -14,6 +14,5 @@ export default {
   noticeText: "#fff",
   priceText: "grey",
   brandText: "grey",
-  cream: ["#FF5158", "#FCA7AC"],
-  kid: ["#45D2F4", "#A2E5F6"]
+  fakeLayer: "rgba(0, 0, 0, 0.7)"
 };

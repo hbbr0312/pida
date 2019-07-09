@@ -5,13 +5,12 @@ import Product from "./Product";
 import Swiper from "react-native-swiper";
 import Layout from "../../../constants/Layout";
 
-const SWIPER_HEIGHT = Layout.window.height / 2.5;
+const SWIPER_HEIGHT = Layout.window.height / 2.2;
 
 const Container = styled.View`
   height: ${SWIPER_HEIGHT};
   width: ${Layout.window.width};
   margin-top: 30px;
-  background-color: #ff5158;
 `;
 
 const Btn = styled.Text`
@@ -19,7 +18,7 @@ const Btn = styled.Text`
   font-size: 30px;
 `;
 
-const ProductListPresenter = ({ products }) => {
+const ProductListPresenter = ({ products, navigation }) => {
   const nextBtn = <Btn> › </Btn>;
   const prevBtn = <Btn> ‹ </Btn>;
   return (
@@ -32,7 +31,7 @@ const ProductListPresenter = ({ products }) => {
         nextButton={nextBtn}
       >
         {products.map(product => (
-          <Product product={product} key={product.id} />
+          <Product product={product} key={product.id} navigation={navigation} />
         ))}
       </Swiper>
     </Container>
