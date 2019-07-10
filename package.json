@@ -12,6 +12,7 @@
     "apollo-client": "^2.6.3",
     "apollo-link": "^1.2.12",
     "apollo-link-rest": "^0.7.3",
+    "braces": "^3.0.2",
     "expo": "^33.0.0",
     "graphql": "^14.4.2",
     "graphql-anywhere": "^4.2.4",
@@ -26,7 +27,8 @@
     "react-native-swiper": "^1.5.14",
     "react-native-web": "^0.11.4",
     "react-navigation": "^3.11.0",
-    "styled-components": "^4.3.2"
+    "styled-components": "^4.3.2",
+    "ws": "^7.1.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.1.1"
