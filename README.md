@@ -19,8 +19,8 @@
 
 ###GroupBuying
 
-- [ ] Main
-- [ ] ProductDetail
+- [x] Main
+- [x] ProductDetail
 - [ ] JoinComplete
 
 ###MyPida
