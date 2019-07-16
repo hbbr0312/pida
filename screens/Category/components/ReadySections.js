@@ -74,6 +74,7 @@ const ReadySections = () => (
             products={data.products}
             isFake={true}
             isLast={true}
+            itemColor="white"
           />
         </Container>
       </Touchable>

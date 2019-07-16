@@ -27,7 +27,7 @@ const Text = styled.Text`
 `;
 
 /*This is section for Category*/
-const Section = ({ name, items, color }) => {
+const Section = ({ name, items, color, itemColor = "#fff1f2" }) => {
   return (
     <Container>
       <Box color={color}>
@@ -41,6 +41,7 @@ const Section = ({ name, items, color }) => {
             name={item.name}
             products={item.products}
             isLast={true}
+            itemColor={itemColor}
           />
         ) : (
           <Item
@@ -48,6 +49,7 @@ const Section = ({ name, items, color }) => {
             id={item.id}
             name={item.name}
             products={item.products}
+            itemColor={itemColor}
           />
         )
       )}
@@ -58,7 +60,8 @@ const Section = ({ name, items, color }) => {
 Section.proptypes = {
   name: PropTypes.string.isRequired,
   items: PropTypes.array,
-  color: PropTypes.string.isRequired
+  color: PropTypes.string.isRequired,
+  itemColor: PropTypes.string
 };
 
 export default Section;

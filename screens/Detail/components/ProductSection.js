@@ -2,10 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import Colors from "../../../constants/Colors";
+import { priceParser } from "../../../utils";
 
 const Container = styled.View`
   border-bottom-color: grey;
-  border-bottom-width: 0.3px;
+  border-bottom-width: ${props => (props.bottomLine ? "0.3px" : "0px")};
 `;
 const Image = styled.Image`
   align-self:center;
@@ -31,12 +32,12 @@ const Price = styled.Text`
   margin-left: 20px;
 `;
 
-const ProductSection = ({ image, brand_name, name, price }) => (
-  <Container>
+const ProductSection = ({ image, brand_name, name, price, bottomLine }) => (
+  <Container bottomLine={bottomLine}>
     <Image source={{ uri: image }} />
     <Brand>{brand_name}</Brand>
     <Name>{name}</Name>
-    <Price>₩ {price}</Price>
+    <Price>{priceParser(price)}</Price>
   </Container>
 );
 
@@ -44,7 +45,8 @@ ProductSection.propTypes = {
   image: PropTypes.string.isRequired,
   brand_name: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired
+  price: PropTypes.number.isRequired,
+  bottomLine: PropTypes.bool
 };
 
 export default ProductSection;

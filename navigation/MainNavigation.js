@@ -8,7 +8,10 @@ import React from "react";
 
 const MainNavigation = createStackNavigator(
   {
-    Tabs: { screen: TabNavigation, navigationOptions: { header: null } },
+    Tabs: {
+      screen: TabNavigation,
+      navigationOptions: { header: null }
+    },
     ProductList: {
       screen: ProductList,
       navigationOptions: ({ navigation }) => ({

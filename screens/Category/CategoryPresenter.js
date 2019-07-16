@@ -20,6 +20,7 @@ const CategoryPresenter = ({ category }) => {
         name="유아용품"
         color="#45D2F5"
         items={category.filter(data => data.big_name === "유아용품")}
+        itemColor="#F3FBFE"
       />
       <ReadySections />
     </ScrollView>

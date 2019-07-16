@@ -7,24 +7,14 @@ const restLink = new RestLink({
   uri: "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/"
 });
 
-const client = new ApolloClient({
+const defaultClient = new ApolloClient({
   link: restLink,
   cache: new InMemoryCache(),
   connectToDevTools: true
 });
 
-const query = gql`
-  query category($id: Int!) {
-    category @rest(type: "Category", path: "categories/", endpoint: $id) {
-      id
-      big_name
-      name
-      products
-      name
-    }
-  }
-`;
+export default defaultClient;
 
-client.query({ query }).then(response => {
-  console.log(response.data);
-});
+// client.query({ query }).then(response => {
+//   console.log(response.data);
+// });

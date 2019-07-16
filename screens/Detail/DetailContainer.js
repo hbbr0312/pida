@@ -9,17 +9,28 @@ export default class extends React.Component {
     const {
       navigation: {
         state: {
-          params: { product, tab }
+          params: { product, tab, discount_rates, orders_num, period }
         }
       }
     } = props;
     this.state = {
       product,
-      tab
+      tab,
+      discount_rates,
+      orders_num,
+      period
     };
   }
   render() {
-    const { tab, product } = this.state;
-    return <DetailPresenter tab={tab} product={product} />;
+    const { tab, product, discount_rates, orders_num, period } = this.state;
+    return (
+      <DetailPresenter
+        tab={tab}
+        product={product}
+        discount_rates={discount_rates}
+        orders_num={orders_num}
+        period={period}
+      />
+    );
   }
 }

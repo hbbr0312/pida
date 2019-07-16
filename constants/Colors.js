@@ -14,5 +14,7 @@ export default {
   noticeText: "#fff",
   priceText: "grey",
   brandText: "grey",
-  fakeLayer: "rgba(0, 0, 0, 0.7)"
+  fakeLayer: "rgba(0, 0, 0, 0.7)",
+  progressRemainColor: "#D5D5D5",
+  iconTintColor: "#FFB1B4"
 };
