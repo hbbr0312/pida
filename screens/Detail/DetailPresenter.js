@@ -8,6 +8,7 @@ import ReviewSection from "./components/ReviewSection";
 import Layout from "../../constants/Layout";
 import Colors from "../../constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
+import ProgressBar from "../../components/ProgressBar";
 
 const Bottom = styled.View`
   background-color: black;
@@ -41,21 +42,32 @@ const Join = styled.TouchableOpacity`
 
 const Text = styled.Text`
   margin-left: 10px;
+  font-size: 15px;
+  letter-spacing: 2px;
   color: ${props => props.color};
 `;
 
 const Container = styled.ScrollView``;
+
+const Progress = styled.View`
+  border-bottom-color: grey;
+  border-bottom-width: 0.3px;
+`;
 
 const createBottom = tab => {
   if (tab === "category")
     return (
       <Bottom>
         <InPallete onPress={() => alert("테스터제품")}>
-          <Ionicons name="ios-color-palette" size={20} color="white" />
+          <Ionicons
+            name="ios-color-palette"
+            size={25}
+            color={Colors.iconTintColor}
+          />
           <Text color="white">테스터 제품 담기</Text>
         </InPallete>
         <InCart onPress={() => alert("장바구니")}>
-          <Ionicons name="ios-cart" size={20} color="grey" />
+          <Ionicons name="ios-cart" size={25} color="grey" />
           <Text color="black">장바구니 담기</Text>
         </InCart>
       </Bottom>
@@ -64,7 +76,7 @@ const createBottom = tab => {
     return (
       <Bottom>
         <Join onPress={() => alert("참여하기")}>
-          <Ionicons name="ios-people" size={20} color="white" />
+          <Ionicons name="ios-people" size={25} color={Colors.iconTintColor} />
           <Text color="white">참여하기</Text>
         </Join>
       </Bottom>
@@ -72,7 +84,13 @@ const createBottom = tab => {
   else return null;
 };
 
-const DetailPresenter = ({ product, tab }) => {
+const DetailPresenter = ({
+  product,
+  tab,
+  discount_rates,
+  orders_num,
+  period
+}) => {
   return (
     <>
       <Container>
@@ -81,7 +99,19 @@ const DetailPresenter = ({ product, tab }) => {
           brand_name={product.brand.name}
           name={product.name}
           price={product.price}
+          bottomLine={tab === "category"}
         />
+        {tab === "group_buying" ? (
+          <Progress>
+            <ProgressBar
+              period={period}
+              marginBottom="20px"
+              price={product.price}
+              discount_rates={discount_rates}
+              orders_num={orders_num}
+            />
+          </Progress>
+        ) : null}
         <InfoSection
           seller={product.info_seller}
           manufacture={product.info_manufacturer}
@@ -98,7 +128,10 @@ const DetailPresenter = ({ product, tab }) => {
 
 DetailPresenter.propTypes = {
   tab: PropTypes.string.isRequired,
-  product: PropTypes.object.isRequired
+  product: PropTypes.object.isRequired,
+  discount_rates: PropTypes.array,
+  orders_num: PropTypes.number,
+  period: PropTypes.string
 };
 
 export default DetailPresenter;

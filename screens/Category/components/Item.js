@@ -9,7 +9,7 @@ import { Layer } from "../../../components/Layer";
 const Container = styled.View`
   height: 50px;
   width: ${Layout.window.width - 30};
-  background-color: #fff1f2;
+  background-color: ${props => props.itemColor};
   border-bottom-left-radius: ${props => (props.isLast ? "5px " : "0px")};
   border-bottom-end-radius: ${props => (props.isLast ? "5px " : "0px")};
   border-bottom-width: ${props => (props.isLast ? "0px " : "0.3px")};
@@ -40,7 +40,14 @@ const Icon = styled.View`
   flex: 1;
 `;
 
-const Item = ({ name, isLast = false, products, navigation, isFake }) => {
+const Item = ({
+  name,
+  isLast = false,
+  products,
+  navigation,
+  isFake,
+  itemColor
+}) => {
   const content = (
     <>
       <Text>{name}</Text>
@@ -50,7 +57,7 @@ const Item = ({ name, isLast = false, products, navigation, isFake }) => {
     </>
   );
   return (
-    <Container isLast={isLast} isFake={isFake}>
+    <Container isLast={isLast} isFake={isFake} itemColor={itemColor}>
       {isFake ? (
         <Layer top={false}>
           <View>{content}</View>
@@ -78,7 +85,8 @@ Item.proptypes = {
   name: PropTypes.string.isRequired,
   products: PropTypes.array.isRequired,
   isLast: PropTypes.bool,
-  isFake: PropTypes.bool.isRequired
+  isFake: PropTypes.bool.isRequired,
+  itemColor: PropTypes.string.isRequired
 };
 
 export default withNavigation(Item);

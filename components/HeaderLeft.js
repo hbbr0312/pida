@@ -11,30 +11,24 @@ const Container = styled.TouchableOpacity`
 `;
 export const Back = ({ navigation }) => {
   return (
-    <Container>
-      <Ionicons
-        name={"ios-arrow-back"}
-        color="grey"
-        size={26}
-        onPress={() => {
-          navigation.goBack();
-        }}
-      />
+    <Container
+      onPress={() => {
+        navigation.goBack();
+      }}
+    >
+      <Ionicons name={"ios-arrow-back"} color="grey" size={26} />
     </Container>
   );
 };
 
 export const Close = ({ navigation }) => {
   return (
-    <Container>
-      <Ionicons
-        name={"ios-close"}
-        color="grey"
-        size={35}
-        onPress={() => {
-          navigation.goBack();
-        }}
-      />
+    <Container
+      onPress={() => {
+        navigation.goBack();
+      }}
+    >
+      <Ionicons name={"ios-close"} color="grey" size={35} />
     </Container>
   );
 };

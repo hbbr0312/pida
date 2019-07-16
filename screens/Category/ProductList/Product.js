@@ -3,6 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import Colors from "../../../constants/Colors";
 import Layout from "../../../constants/Layout";
+import { priceParser } from "../../../utils";
 
 const Container = styled.View`
   background-color: ${Colors.bgColor};
@@ -67,7 +68,7 @@ const Product = ({ product, navigation }) => {
         <Text>
           <Brand>{product.brand.name}</Brand>
           <Name>{product.name}</Name>
-          <Price>₩ {product.price}</Price>
+          <Price>{priceParser(product.price)}</Price>
         </Text>
       </Touchable>
     </Container>
