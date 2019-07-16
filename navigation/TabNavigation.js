@@ -87,6 +87,7 @@ const TabNavigation = createBottomTabNavigator(
     }
   },
   {
+    initialRouteName: "GroupBuying",
     tabBarOptions: {
       style: {
         backgroundColor: BG_COLOR
