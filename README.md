@@ -9,7 +9,7 @@
 - [x] Main
 - [x] ProductList
 - [x] ProductDetail
-- [ ] Pallete
+- [ ] Palette
 - [ ] SampleModal
 
 ###Cart
