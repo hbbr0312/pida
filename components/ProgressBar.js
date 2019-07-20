@@ -136,7 +136,6 @@ const putCircle = discount_rates => {
   for (var i = 0; i < len - 1; i++) {
     curr = discount_rates[i].quantity;
     let percent = (curr / max) * 100;
-    console.log(percent);
     let { triangle } = calculateMargin(percent);
     answer.push(<Circle marginLeft={triangle} key={curr} />);
   }
@@ -153,11 +152,8 @@ const ProgressBar = ({
   margin = "15px"
 }) => {
   const json = calculateDiscount(discount_rates, orders_num);
-
-  console.log(orders_num);
   const current_price = price - Math.floor((price * json.discount_rate) / 100);
   const marginLeft = calculateMargin(json.process_rate);
-  console.log(marginLeft);
   return (
     <Wrap>
       <Tag marginLeft={0} marginTop={margin}>

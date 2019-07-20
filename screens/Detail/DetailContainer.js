@@ -1,5 +1,6 @@
 import React from "react";
 import DetailPresenter from "./DetailPresenter";
+import { AsyncStorage } from "react-native";
 
 //TODO: image load , reviews load
 
@@ -21,6 +22,7 @@ export default class extends React.Component {
       period
     };
   }
+
   render() {
     const { tab, product, discount_rates, orders_num, period } = this.state;
     return (
