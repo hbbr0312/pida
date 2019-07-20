@@ -9,6 +9,7 @@ import Layout from "../../constants/Layout";
 import Colors from "../../constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import ProgressBar from "../../components/ProgressBar";
+import { put2cart } from "../../utils";
 
 const Bottom = styled.View`
   background-color: black;
@@ -54,7 +55,7 @@ const Progress = styled.View`
   border-bottom-width: 0.3px;
 `;
 
-const createBottom = tab => {
+const createBottom = (tab, product) => {
   if (tab === "category")
     return (
       <Bottom>
@@ -66,7 +67,12 @@ const createBottom = tab => {
           />
           <Text color="white">테스터 제품 담기</Text>
         </InPallete>
-        <InCart onPress={() => alert("장바구니")}>
+        <InCart
+          onPress={() => {
+            put2cart(product, 1);
+            alert("장바구니에 담았습니다.");
+          }}
+        >
           <Ionicons name="ios-cart" size={25} color="grey" />
           <Text color="black">장바구니 담기</Text>
         </InCart>
@@ -121,7 +127,7 @@ const DetailPresenter = ({
         <IngredientSection ingredients={product.ingredients} />
         <ReviewSection reviews={product.reviews} />
       </Container>
-      {createBottom(tab)}
+      {createBottom(tab, product)}
     </>
   );
 };

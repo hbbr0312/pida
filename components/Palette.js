@@ -3,13 +3,13 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 /*
- {  
-    size,
-    selected : {
-        id,
-        name
-    }
- }
+ palette: {  
+            size,
+            selected : {
+                id,
+                name
+            }
+        }
 */
 const Palette = ({ palette }) => {};
 

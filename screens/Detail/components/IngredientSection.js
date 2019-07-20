@@ -69,12 +69,10 @@ export default class IngredientSection extends Component {
 
   _handleClick = () => {
     const { open } = this.state;
-    console.log("open");
     this.setState({ open: !open });
   };
 
   render() {
-    console.log("render");
     const { open, ingredients } = this.state;
     let header;
     let info = null;

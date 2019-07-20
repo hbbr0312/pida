@@ -2,6 +2,7 @@ import React from "react";
 import { getProduct } from "../../../api";
 import Loader from "../../../components/Loader";
 import ProductListPresenter from "./ProductListPresenter";
+import { AsyncStorage } from "react-native";
 
 export default class extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -22,12 +23,27 @@ export default class extends React.Component {
       urls: products,
       products: [],
       loading: true,
-      products: products,
+      palette: {},
       navigation: props.navigation
     };
   }
 
   async componentDidMount() {
+    let products, palette;
+    try {
+      products = await this._loadProducts();
+      palette = await this._loadPalette();
+    } catch {
+    } finally {
+      this.setState({
+        loading: false,
+        products,
+        palette: palette || {}
+      });
+    }
+  }
+
+  _loadProducts = async () => {
     const { urls } = this.state;
     let products = [];
     try {
@@ -35,34 +51,26 @@ export default class extends React.Component {
         let json = await getProduct(urls[i]);
         products.push(json);
       }
+      return products;
     } catch (error) {
       console.log(error);
-    } finally {
-      this.setState({
-        loading: false,
-        products
-      });
     }
-  }
+  };
+
+  _loadPalette = async () => {
+    try {
+      const palette = await AsyncStorage.getItem("palette");
+      const parsedPalette = JSON.parse(palette);
+      return parsedPalette;
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   render() {
-    const { loading, products, navigation } = this.state;
-    console.log(products);
+    const { loading, products, navigation, palette } = this.state;
+    console.log(palette);
     if (loading) return <Loader />;
     return <ProductListPresenter products={products} navigation={navigation} />;
-
-    // return (
-    //   <Query query={PRODUCT} variables={{ id: 1 }}>
-    //     {({ loading, error, data }) => {
-    //       if (loading) return <Loader />;
-    //       if (error) {
-    //         console.log(error);
-    //         return null;
-    //       }
-    //       console.log(data);
-    //       return null;
-    //     }}
-    //   </Query>
-    //);
   }
 }
