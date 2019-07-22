@@ -6,7 +6,7 @@ import Layout from "../../../constants/Layout";
 import { priceParser } from "../../../utils";
 
 const Container = styled.View`
-  background-color: ${Colors.bgColor};
+  background-color: white;
   width: ${Layout.window.width - 100};
   flex: 0.98;
   align-self: center;

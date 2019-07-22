@@ -9,7 +9,7 @@ import Layout from "../../constants/Layout";
 import Colors from "../../constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import ProgressBar from "../../components/ProgressBar";
-import { put2cart } from "../../utils";
+import { put2cart, add2palette } from "../../utils";
 
 const Bottom = styled.View`
   background-color: black;
@@ -59,7 +59,11 @@ const createBottom = (tab, product) => {
   if (tab === "category")
     return (
       <Bottom>
-        <InPallete onPress={() => alert("테스터제품")}>
+        <InPallete
+          onPress={() => {
+            add2palette(product);
+          }}
+        >
           <Ionicons
             name="ios-color-palette"
             size={25}
@@ -70,7 +74,6 @@ const createBottom = (tab, product) => {
         <InCart
           onPress={() => {
             put2cart(product, 1);
-            alert("장바구니에 담았습니다.");
           }}
         >
           <Ionicons name="ios-cart" size={25} color="grey" />
