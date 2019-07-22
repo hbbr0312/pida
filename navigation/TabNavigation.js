@@ -87,7 +87,7 @@ const TabNavigation = createBottomTabNavigator(
     }
   },
   {
-    initialRouteName: "Cart",
+    initialRouteName: "Category",
     tabBarOptions: {
       style: {
         backgroundColor: BG_COLOR

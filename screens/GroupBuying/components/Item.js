@@ -14,7 +14,7 @@ const Container = styled.TouchableOpacity`
   border-radius: 5px;
   box-shadow: 0px 2px 3px grey;
   width: ${Layout.window.width - 40};
-  background-color: ${Colors.bgColor};
+  background-color: white;
   align-self: center;
   margin-top: 20px;
   margin-bottom: ${props => (props.isLast ? "20px" : "0px")};

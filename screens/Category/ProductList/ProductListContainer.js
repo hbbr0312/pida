@@ -2,7 +2,10 @@ import React from "react";
 import { getProduct } from "../../../api";
 import Loader from "../../../components/Loader";
 import ProductListPresenter from "./ProductListPresenter";
-import { AsyncStorage } from "react-native";
+import PaletteSelect from "./PaletteSelect";
+import { loadPalette, paletteSelect, initializePalette } from "../../../utils";
+import PaletteModal from "./PaletteModal";
+import { View } from "react-native";
 
 export default class extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -24,7 +27,8 @@ export default class extends React.Component {
       products: [],
       loading: true,
       palette: {},
-      navigation: props.navigation
+      navigation: props.navigation,
+      modalVisible: false
     };
   }
 
@@ -32,7 +36,7 @@ export default class extends React.Component {
     let products, palette;
     try {
       products = await this._loadProducts();
-      palette = await this._loadPalette();
+      palette = await loadPalette();
     } catch {
     } finally {
       this.setState({
@@ -57,20 +61,41 @@ export default class extends React.Component {
     }
   };
 
-  _loadPalette = async () => {
-    try {
-      const palette = await AsyncStorage.getItem("palette");
-      const parsedPalette = JSON.parse(palette);
-      return parsedPalette;
-    } catch (err) {
-      console.log(err);
-    }
+  _select = size => {
+    paletteSelect(size);
+    const palette = {
+      size: size,
+      selected: []
+    };
+    this.setState({ palette });
+  };
+
+  _openModal = () => {
+    console.log("openModal");
+    this.setState({ modalVisible: true });
+  };
+
+  _closeModal = () => {
+    console.log("closeModal");
+    this.setState({ modalVisible: false });
   };
 
   render() {
-    const { loading, products, navigation, palette } = this.state;
-    console.log(palette);
+    const { loading, products, navigation, palette, modalVisible } = this.state;
     if (loading) return <Loader />;
-    return <ProductListPresenter products={products} navigation={navigation} />;
+    else if (Object.keys(palette).length === 0)
+      return <PaletteSelect _select={this._select} />;
+    else
+      return (
+        <>
+          <ProductListPresenter
+            products={products}
+            palette={palette}
+            navigation={navigation}
+            _openModal={this._openModal}
+          />
+          <PaletteModal visible={modalVisible} _closeModal={this._closeModal} />
+        </>
+      );
   }
 }

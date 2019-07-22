@@ -2,7 +2,7 @@ const tintColor = "#FF5259";
 
 export default {
   tintColor,
-  bgColor: "white",
+  bgColor: "#F7F7F7",
   tabIconDefault: "#ccc",
   tabIconSelected: tintColor,
   tabBar: "#fefefe",
@@ -15,6 +15,9 @@ export default {
   priceText: "grey",
   brandText: "grey",
   fakeLayer: "rgba(0, 0, 0, 0.7)",
+  paletteLayer: "rgba(255, 255, 255, 0.7)",
   progressRemainColor: "#D5D5D5",
-  iconTintColor: "#FFB1B4"
+  iconTintColor: "#FFB1B4",
+  emptyHole: "#EFEFEF",
+  filledHole: tintColor
 };

@@ -6,6 +6,7 @@ import Layout from "../constants/Layout";
 import { priceParser } from "../utils";
 
 const Wrap = styled.View`
+  height: 120px;
   width: ${Layout.window.width - 100};
   align-self: center;
 `;

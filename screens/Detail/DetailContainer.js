@@ -1,6 +1,5 @@
 import React from "react";
 import DetailPresenter from "./DetailPresenter";
-import { AsyncStorage } from "react-native";
 
 //TODO: image load , reviews load
 
