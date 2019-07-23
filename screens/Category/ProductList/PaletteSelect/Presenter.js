@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { Palette2 } from "../../../../components/Palettes";
+import { Palette2, Palette3, Palette7 } from "../../../../components/Palettes";
 import { PaletteLayer } from "../../../../components/Layer";
 
 const Container = styled.ScrollView`
@@ -71,7 +71,7 @@ const Presenter = ({ _select }) => {
       </Section>
       <Section inReady={true} onPress={() => alert("준비중입니다")}>
         <PaletteContainer>
-          <Palette2 isSmall={true} />
+          <Palette3 />
         </PaletteContainer>
         <TextContainer>
           <Title>피다 플러스</Title>
@@ -88,7 +88,7 @@ const Presenter = ({ _select }) => {
         onPress={() => alert("준비중입니다")}
       >
         <PaletteContainer>
-          <Palette2 isSmall={true} />
+          <Palette7 />
         </PaletteContainer>
         <TextContainer>
           <Title>피다 프리미엄</Title>
