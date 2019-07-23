@@ -4,8 +4,8 @@ import Loader from "../../../components/Loader";
 import ProductListPresenter from "./ProductListPresenter";
 import PaletteSelect from "./PaletteSelect";
 import { loadPalette, paletteSelect, initializePalette } from "../../../utils";
-import PaletteModal from "./PaletteModal";
-import { View } from "react-native";
+import PaletteModal from "./components/PaletteModal";
+import Detail from "../../Detail/Detail";
 
 export default class extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -27,8 +27,10 @@ export default class extends React.Component {
       products: [],
       loading: true,
       palette: {},
+      product: {},
       navigation: props.navigation,
-      modalVisible: false
+      modalVisible: false,
+      detailVisible: false
     };
   }
 
@@ -46,6 +48,11 @@ export default class extends React.Component {
       });
     }
   }
+
+  _clearPalette = () => {
+    initializePalette();
+    this.setState({ palette: {} });
+  };
 
   _loadProducts = async () => {
     const { urls } = this.state;
@@ -70,18 +77,48 @@ export default class extends React.Component {
     this.setState({ palette });
   };
 
+  _removeTester = id => {
+    const { palette } = this.state;
+    const newPallete = removeTester(id, palette);
+    this.setState({ palette: newPallete });
+  };
+
   _openModal = () => {
-    console.log("openModal");
     this.setState({ modalVisible: true });
   };
 
   _closeModal = () => {
-    console.log("closeModal");
     this.setState({ modalVisible: false });
   };
 
+  _openDetail = product => {
+    this.setState({ detailVisible: true, product });
+  };
+
+  _closeDetail = () => {
+    this.setState({ detailVisible: false });
+  };
+
+  _addTester = async product => {
+    try {
+      const newPalette = await add2palette(product);
+      this.setState({ palette: newPalette });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   render() {
-    const { loading, products, navigation, palette, modalVisible } = this.state;
+    const {
+      loading,
+      products,
+      navigation,
+      palette,
+      modalVisible,
+      product,
+      detailVisible
+    } = this.state;
+    console.log("is this?", palette);
     if (loading) return <Loader />;
     else if (Object.keys(palette).length === 0)
       return <PaletteSelect _select={this._select} />;
@@ -93,8 +130,22 @@ export default class extends React.Component {
             palette={palette}
             navigation={navigation}
             _openModal={this._openModal}
+            _openDetail={this._openDetail}
           />
-          <PaletteModal visible={modalVisible} _closeModal={this._closeModal} />
+          <Detail
+            visible={detailVisible}
+            product={product}
+            tab="category"
+            _closeDetail={this._closeDetail}
+            _addTester={this._addTester}
+          />
+          <PaletteModal
+            visible={modalVisible}
+            _closeModal={this._closeModal}
+            palette={palette}
+            _removeTester={this._removeTester}
+            _clearPalette={this._clearPalette}
+          />
         </>
       );
   }

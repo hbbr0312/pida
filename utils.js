@@ -19,7 +19,6 @@ export const loadCart = async () => {
   try {
     const cart = await AsyncStorage.getItem("cart");
     const parsedCart = JSON.parse(cart);
-    console.log(parsedCart);
     return parsedCart || [];
   } catch (err) {
     console.log(err);
@@ -79,8 +78,8 @@ export const add2palette = async product => {
       palette.selected.push(item);
       AsyncStorage.setItem("palette", JSON.stringify(palette));
       alert("테스터를 담았습니다.");
-      console.log("add2palette", palette);
     }
+    return palette;
   } catch (err) {
     console.log(err);
   }
@@ -92,4 +91,14 @@ export const initializePalette = () => {
 
 export const countSelected = palette => {
   return palette.selected.length;
+};
+
+export const removeTester = (id, palette) => {
+  const filtered = palette.selected.filter(item => item.id !== id);
+  const newPalette = {
+    size: palette.size,
+    selected: filtered
+  };
+  AsyncStorage.setItem("palette", JSON.stringify(newPalette));
+  return newPalette;
 };
