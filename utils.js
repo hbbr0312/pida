@@ -39,9 +39,14 @@ export const put2cart = async (product, number) => {
   };
   try {
     const cart = await loadCart();
+    for (var i = 0; i < cart.length; i++) {
+      if (cart[i].id === item.id) {
+        return 0;
+      }
+    }
     cart.push(item);
     AsyncStorage.setItem("cart", JSON.stringify(cart));
-    alert("장바구니에 담았습니다.");
+    return 1;
   } catch (err) {
     console.log(err);
   }
@@ -72,9 +77,16 @@ export const add2palette = async product => {
   };
   try {
     const palette = await loadPalette();
-    if (countSelected(palette) === palette.size) {
+    const filled = countSelected(palette);
+    if (filled === palette.size) {
       alert("이미 팔레트가 꽉 찼습니다.");
     } else {
+      for (var i = 0; i < filled; i++) {
+        if (palette.selected[i].id === item.id) {
+          alert("이미 담긴 상품입니다.");
+          return palette;
+        }
+      }
       palette.selected.push(item);
       AsyncStorage.setItem("palette", JSON.stringify(palette));
       alert("테스터를 담았습니다.");

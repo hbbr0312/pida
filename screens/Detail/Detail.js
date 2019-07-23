@@ -5,12 +5,10 @@ import ProductSection from "./components/ProductSection";
 import InfoSection from "./components/InfoSection";
 import IngredientSection from "./components/IngredientSection";
 import ReviewSection from "./components/ReviewSection";
-import Layout from "../../constants/Layout";
-import Colors from "../../constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import ProgressBar from "../../components/ProgressBar";
-import { put2cart } from "../../utils";
 import { Modal } from "react-native";
+import Bottom from "./components/Bottom";
 
 const Top = styled.View`
   height: 100px;
@@ -22,43 +20,6 @@ const Close = styled.TouchableOpacity`
   margin-left: 20px;
   align-items: center;
   justify-content: center;
-`;
-
-const Bottom = styled.View`
-  background-color: black;
-  width: ${Layout.window.width};
-  height: 90px;
-  flex-direction: row;
-  box-shadow: 0px -0.5px 5px grey;
-`;
-const InPallete = styled.TouchableOpacity`
-  flex: 1;
-  background-color: ${Colors.tintColor};
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-`;
-const InCart = styled.TouchableOpacity`
-  flex: 1
-  background-color: ${Colors.bgColor};
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-`;
-
-const Join = styled.TouchableOpacity`
-  flex: 1
-  background-color: ${Colors.tintColor};
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-`;
-
-const Text = styled.Text`
-  margin-left: 10px;
-  font-size: 15px;
-  letter-spacing: 2px;
-  color: ${props => props.color};
 `;
 
 const Container = styled.ScrollView``;
@@ -78,43 +39,6 @@ const Detail = ({
   _addTester,
   _closeDetail
 }) => {
-  const createBottom = (tab, product) => {
-    if (tab === "category")
-      return (
-        <Bottom>
-          <InPallete onPress={() => _addTester(product)}>
-            <Ionicons
-              name="ios-color-palette"
-              size={25}
-              color={Colors.iconTintColor}
-            />
-            <Text color="white">테스터 제품 담기</Text>
-          </InPallete>
-          <InCart
-            onPress={() => {
-              put2cart(product, 1);
-            }}
-          >
-            <Ionicons name="ios-cart" size={25} color="grey" />
-            <Text color="black">장바구니 담기</Text>
-          </InCart>
-        </Bottom>
-      );
-    else if (tab === "group_buying")
-      return (
-        <Bottom>
-          <Join onPress={() => alert("참여하기")}>
-            <Ionicons
-              name="ios-people"
-              size={25}
-              color={Colors.iconTintColor}
-            />
-            <Text color="white">참여하기</Text>
-          </Join>
-        </Bottom>
-      );
-    else return null;
-  };
   if (visible) {
     return (
       <Modal visible={visible} transparent={false}>
@@ -151,11 +75,13 @@ const Detail = ({
           <IngredientSection ingredients={product.ingredients} />
           <ReviewSection reviews={product.reviews} />
         </Container>
-        {createBottom(tab, product)}
+        <Bottom tab={tab} product={product} />
       </Modal>
     );
   } else {
-    return <Modal visible={visible} transparent={false} />;
+    return (
+      <Modal visible={visible} transparent={false} _addTester={_addTester} />
+    );
   }
 };
 

@@ -3,9 +3,15 @@ import { getProduct } from "../../../api";
 import Loader from "../../../components/Loader";
 import ProductListPresenter from "./ProductListPresenter";
 import PaletteSelect from "./PaletteSelect";
-import { loadPalette, paletteSelect, initializePalette } from "../../../utils";
+import {
+  loadPalette,
+  paletteSelect,
+  initializePalette,
+  add2palette
+} from "../../../utils";
 import PaletteModal from "./components/PaletteModal";
 import Detail from "../../Detail/Detail";
+import Notice from "../../../components/Notice";
 
 export default class extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -103,6 +109,7 @@ export default class extends React.Component {
     try {
       const newPalette = await add2palette(product);
       this.setState({ palette: newPalette });
+      console.log("addTester");
     } catch (error) {
       console.log(error);
     }
@@ -120,6 +127,8 @@ export default class extends React.Component {
     } = this.state;
     console.log("is this?", palette);
     if (loading) return <Loader />;
+    else if (products.length === 0)
+      return <Notice text="상품을 준비중입니다." />;
     else if (Object.keys(palette).length === 0)
       return <PaletteSelect _select={this._select} />;
     else
