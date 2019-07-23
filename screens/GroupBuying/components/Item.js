@@ -46,7 +46,7 @@ const Price = styled.Text`
   text-decoration-color: ${Colors.priceText};
 `;
 
-const Item = ({ item, navigation, isLast = false }) => {
+const Item = ({ item, navigation, isLast = false, _openDetail }) => {
   return (
     <Query query={PRODUCT} variables={{ id: item.product.id }}>
       {({ loading, error, data }) => {
@@ -59,16 +59,12 @@ const Item = ({ item, navigation, isLast = false }) => {
           <Container
             isLast={isLast}
             onPress={() =>
-              navigation.navigate({
-                routeName: "Detail",
-                params: {
-                  tab: "group_buying",
-                  product: data.product,
-                  discount_rates: item.discount_rates,
-                  orders_num: item.orders.length,
-                  period: item.closing_time.substring(0, 10)
-                }
-              })
+              _openDetail(
+                data.product,
+                item.discount_rates,
+                item.orders.length,
+                item.closing_time.substring(0, 10)
+              )
             }
           >
             <Image source={{ uri: item.product.image }} />
@@ -90,7 +86,8 @@ const Item = ({ item, navigation, isLast = false }) => {
 
 Item.propTypes = {
   item: PropTypes.object.isRequired,
-  isLast: PropTypes.bool
+  isLast: PropTypes.bool,
+  _openDetail: PropTypes.func.isRequired
 };
 
 export default withNavigation(Item);

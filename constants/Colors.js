@@ -19,5 +19,6 @@ export default {
   progressRemainColor: "#D5D5D5",
   iconTintColor: "#FFB1B4",
   emptyHole: "#EFEFEF",
-  filledHole: tintColor
+  filledHole: tintColor,
+  borderBottomColor: "#949494"
 };

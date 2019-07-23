@@ -14,7 +14,7 @@
 
 ###Cart
 
-- [ ] Main
+- [x] Main
 - [ ] OrderComplete
 
 ###GroupBuying

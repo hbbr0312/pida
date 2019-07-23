@@ -5,14 +5,19 @@ import Item from "./components/Item";
 
 const Container = styled.ScrollView``;
 
-const GroupBuyingPresenter = ({ data }) => {
+const GroupBuyingPresenter = ({ data, _openDetail }) => {
   return (
     <Container>
       {data.map((item, index) =>
         index === data.length - 1 ? (
-          <Item key={item.id} item={item} isLast={true} />
+          <Item
+            key={item.id}
+            item={item}
+            isLast={true}
+            _openDetail={_openDetail}
+          />
         ) : (
-          <Item key={item.id} item={item} />
+          <Item key={item.id} item={item} _openDetail={_openDetail} />
         )
       )}
     </Container>
@@ -20,7 +25,8 @@ const GroupBuyingPresenter = ({ data }) => {
 };
 
 GroupBuyingPresenter.propTypes = {
-  data: PropTypes.array.isRequired
+  data: PropTypes.array.isRequired,
+  _openDetail: PropTypes.func.isRequired
 };
 
 export default GroupBuyingPresenter;

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import Product from "./Product";
+import Product from "./components/Product";
 import Swiper from "react-native-swiper";
 import Layout from "../../../constants/Layout";
 import { Palette2 } from "../../../components/Palettes";
@@ -39,10 +39,13 @@ const ProductListPresenter = ({
   products,
   navigation,
   palette,
-  _openModal
+  _openModal,
+  _openDetail
 }) => {
   const nextBtn = <Btn> › </Btn>;
   const prevBtn = <Btn> ‹ </Btn>;
+  console.log("problem:");
+  console.log(palette);
   return (
     <Screen>
       <Container>
@@ -58,13 +61,18 @@ const ProductListPresenter = ({
               product={product}
               key={product.id}
               navigation={navigation}
+              _openDetail={_openDetail}
             />
           ))}
         </Swiper>
       </Container>
       <PaletteContainer>
         <Palette onPress={() => _openModal()}>
-          <Palette2 isSmall={false} filled={countSelected(palette)} />
+          <Palette2
+            isSmall={false}
+            shadow={true}
+            filled={countSelected(palette)}
+          />
         </Palette>
       </PaletteContainer>
     </Screen>
@@ -74,7 +82,8 @@ const ProductListPresenter = ({
 ProductListPresenter.propTypes = {
   products: PropTypes.array.isRequired,
   palette: PropTypes.object.isRequired,
-  _openModal: PropTypes.func.isRequired
+  _openModal: PropTypes.func.isRequired,
+  _openDetail: PropTypes.func.isRequired
 };
 
 export default ProductListPresenter;

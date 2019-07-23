@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import Colors from "../../../constants/Colors";
-import Layout from "../../../constants/Layout";
-import { priceParser } from "../../../utils";
+import Colors from "../../../../constants/Colors";
+import Layout from "../../../../constants/Layout";
+import { priceParser } from "../../../../utils";
 
 const Container = styled.View`
   background-color: white;
@@ -50,20 +50,10 @@ const Price = styled.Text`
   font-size: 15px;
 `;
 
-const Product = ({ product, navigation }) => {
+const Product = ({ product, _openDetail }) => {
   return (
     <Container>
-      <Touchable
-        onPress={() =>
-          navigation.navigate({
-            routeName: "Detail",
-            params: {
-              tab: "category",
-              product
-            }
-          })
-        }
-      >
+      <Touchable onPress={() => _openDetail(product)}>
         <Image source={{ uri: product.image }} />
         <Text>
           <Brand>{product.brand.name}</Brand>
@@ -76,7 +66,8 @@ const Product = ({ product, navigation }) => {
 };
 
 Product.propTypes = {
-  product: PropTypes.object.isRequired
+  product: PropTypes.object.isRequired,
+  _openDetail: PropTypes.func.isRequired
 };
 
 export default Product;
