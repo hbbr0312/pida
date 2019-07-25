@@ -20,5 +20,7 @@ export default {
   iconTintColor: "#FFB1B4",
   emptyHole: "#EFEFEF",
   filledHole: tintColor,
-  borderBottomColor: "#949494"
+  borderBottomColor: "#949494",
+  plusColor: "#2e66e8",
+  minusColor: "#e64539"
 };

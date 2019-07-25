@@ -5,8 +5,6 @@ import { Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Layout from "../../../constants/Layout";
 import Colors from "../../../constants/Colors";
-import { put2cart } from "../../../utils";
-import { withNavigation } from "react-navigation";
 
 const Container = styled.View`
   background-color: black;
@@ -45,37 +43,7 @@ const Text = styled.Text`
   color: ${props => props.color};
 `;
 
-const Bottom = ({ tab, product, _addTester, navigation }) => {
-  const putToCart = async number => {
-    try {
-      const no = await put2cart(product, number);
-      if (no === 1) {
-        Alert.alert(
-          "상품 담기 완료",
-          "장바구니로 이동하시겠습니까?",
-          [
-            {
-              text: "장바구니로 이동",
-              onPress: () =>
-                navigation.navigate({
-                  routeName: "Cart"
-                })
-            },
-            { text: "취소", style: "cancel" }
-          ],
-          { cancelable: false }
-        );
-      } else {
-        Alert.alert(
-          "경고",
-          "이미 담긴 상품입니다",
-          [{ text: "OK", style: "cancel" }],
-          { cancelable: false }
-        );
-      }
-    } catch {}
-  };
-
+const Bottom = ({ tab, product, _addTester, _openCartModal }) => {
   if (tab === "category")
     return (
       <Container>
@@ -89,7 +57,8 @@ const Bottom = ({ tab, product, _addTester, navigation }) => {
         </InPallete>
         <InCart
           onPress={() => {
-            putToCart(1);
+            _openCartModal();
+            //putToCart(1);
           }}
         >
           <Ionicons name="ios-cart" size={25} color="grey" />
@@ -112,7 +81,8 @@ const Bottom = ({ tab, product, _addTester, navigation }) => {
 Bottom.propTypes = {
   tab: PropTypes.string.isRequired,
   product: PropTypes.object.isRequired,
-  _addTester: PropTypes.func
+  _addTester: PropTypes.func,
+  _openCartModal: PropTypes.func
 };
 
-export default withNavigation(Bottom);
+export default Bottom;

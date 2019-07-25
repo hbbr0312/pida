@@ -1,6 +1,5 @@
 import React from "react";
 import CartPresenter from "./CartPresenter";
-import { AsyncStorage } from "react-native";
 import Loader from "../../components/Loader";
 import { loadCart, vacateCart } from "../../utils";
 import Notice from "../../components/Notice";
@@ -29,7 +28,6 @@ export default class extends React.Component {
   }
 
   render() {
-    vacateCart();
     const { cart, loading } = this.state;
     if (loading) return <Loader />;
     else if (cart === [] || cart.length === 0)

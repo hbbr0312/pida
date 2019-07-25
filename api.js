@@ -13,3 +13,9 @@ export const getProduct = url => {
     .then(res => res.json())
     .catch(error => console.log(error));
 };
+
+export const getReview = url => {
+  return fetch(url)
+    .then(res => res.json())
+    .catch(error => console.log(error));
+};

@@ -114,3 +114,10 @@ export const removeTester = (id, palette) => {
   AsyncStorage.setItem("palette", JSON.stringify(newPalette));
   return newPalette;
 };
+
+export const getReviewer = url => {
+  const list = url.split("/");
+  const valid = list.filter(item => item !== "");
+  const len = valid.length;
+  return valid[len - 1];
+};

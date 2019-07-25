@@ -9,6 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 import ProgressBar from "../../components/ProgressBar";
 import { Modal } from "react-native";
 import Bottom from "./components/Bottom";
+import CartModal from "./components/CartModal";
 
 const Top = styled.View`
   height: 100px;
@@ -29,7 +30,7 @@ const Progress = styled.View`
   border-bottom-width: 0.3px;
 `;
 
-const Detail = ({
+const DetailPresenter = ({
   visible,
   product,
   tab,
@@ -37,7 +38,14 @@ const Detail = ({
   orders_num,
   period,
   _addTester,
-  _closeDetail
+  _closeDetail,
+  modalVisible,
+  _openCartModal,
+  _closeCartModal,
+  number,
+  _controlInput,
+  _put2Cart,
+  reviews
 }) => {
   if (visible) {
     return (
@@ -73,27 +81,44 @@ const Detail = ({
             infoUrl={product.info_url}
           />
           <IngredientSection ingredients={product.ingredients} />
-          <ReviewSection reviews={product.reviews} />
+          <ReviewSection reviews={reviews} />
         </Container>
-        <Bottom tab={tab} product={product} />
+        <Bottom
+          tab={tab}
+          product={product}
+          _openCartModal={_openCartModal}
+          _addTester={_addTester}
+        />
+        <CartModal
+          visible={modalVisible}
+          _closeCartModal={_closeCartModal}
+          number={number}
+          _controlInput={_controlInput}
+          _put2Cart={_put2Cart}
+        />
       </Modal>
     );
   } else {
-    return (
-      <Modal visible={visible} transparent={false} _addTester={_addTester} />
-    );
+    return <Modal visible={visible} transparent={false} />;
   }
 };
 
-Detail.propTypes = {
+DetailPresenter.propTypes = {
   tab: PropTypes.string.isRequired,
   product: PropTypes.object.isRequired,
   visible: PropTypes.bool.isRequired,
   _closeDetail: PropTypes.func.isRequired,
+  reviews: PropTypes.array.isRequired,
   discount_rates: PropTypes.array, //공동구매 탭
   orders_num: PropTypes.number, //공동구매 탭
   period: PropTypes.string, //공동구매 탭
-  _addTester: PropTypes.func //카테고리 탭
+  _addTester: PropTypes.func, //카테고리 탭
+  modalVisible: PropTypes.bool, //카테고리 탭
+  _openCartModal: PropTypes.func, //카테고리 탭
+  _closeCartModal: PropTypes.func, //카테고리 탭
+  number: PropTypes.string, //카테고리 탭
+  _controlInput: PropTypes.func, //카테고리 탭
+  _put2Cart: PropTypes.func //카테고리 탭
 };
 
-export default Detail;
+export default DetailPresenter;
