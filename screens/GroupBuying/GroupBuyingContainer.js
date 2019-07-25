@@ -3,7 +3,7 @@ import GroupBuyingPresenter from "./GroupBuyingPresenter";
 import Loader from "../../components/Loader";
 import { Query } from "react-apollo";
 import { GROUP_BUYING } from "../../Apollo/queries";
-import Detail from "../Detail/Detail";
+import Detail from "../Detail";
 
 export default class GroupBuyingContainer extends React.Component {
   constructor(props) {

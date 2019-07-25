@@ -59,7 +59,7 @@ const Bar = styled.View`
   height: 12px;
   position: relative;
   flex-direction: row;
-  border-radius: 5px;
+  border-radius: 6px;
   background-color: ${Colors.progressRemainColor};
 `;
 const Circle = styled.View`

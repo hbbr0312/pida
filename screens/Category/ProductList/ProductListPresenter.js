@@ -44,8 +44,6 @@ const ProductListPresenter = ({
 }) => {
   const nextBtn = <Btn> › </Btn>;
   const prevBtn = <Btn> ‹ </Btn>;
-  console.log("problem:");
-  console.log(palette);
   return (
     <Screen>
       <Container>

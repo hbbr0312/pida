@@ -7,10 +7,11 @@ import {
   loadPalette,
   paletteSelect,
   initializePalette,
-  add2palette
+  add2palette,
+  removeTester
 } from "../../../utils";
 import PaletteModal from "./components/PaletteModal";
-import Detail from "../../Detail/Detail";
+import Detail from "../../Detail";
 import Notice from "../../../components/Notice";
 
 export default class extends React.Component {
@@ -109,7 +110,6 @@ export default class extends React.Component {
     try {
       const newPalette = await add2palette(product);
       this.setState({ palette: newPalette });
-      console.log("addTester");
     } catch (error) {
       console.log(error);
     }
@@ -125,7 +125,6 @@ export default class extends React.Component {
       product,
       detailVisible
     } = this.state;
-    console.log("is this?", palette);
     if (loading) return <Loader />;
     else if (products.length === 0)
       return <Notice text="상품을 준비중입니다." />;
@@ -141,20 +140,24 @@ export default class extends React.Component {
             _openModal={this._openModal}
             _openDetail={this._openDetail}
           />
-          <Detail
-            visible={detailVisible}
-            product={product}
-            tab="category"
-            _closeDetail={this._closeDetail}
-            _addTester={this._addTester}
-          />
-          <PaletteModal
-            visible={modalVisible}
-            _closeModal={this._closeModal}
-            palette={palette}
-            _removeTester={this._removeTester}
-            _clearPalette={this._clearPalette}
-          />
+          {detailVisible ? (
+            <Detail
+              visible={detailVisible}
+              product={product}
+              tab="category"
+              _closeDetail={this._closeDetail}
+              _addTester={this._addTester}
+            />
+          ) : null}
+          {modalVisible ? (
+            <PaletteModal
+              visible={modalVisible}
+              _closeModal={this._closeModal}
+              palette={palette}
+              _removeTester={this._removeTester}
+              _clearPalette={this._clearPalette}
+            />
+          ) : null}
         </>
       );
   }
