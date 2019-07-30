@@ -11,13 +11,14 @@ import { Modal } from "react-native";
 import Bottom from "./components/Bottom";
 import CartModal from "./components/CartModal";
 
-const Top = styled.View`
-  height: 100px;
+const Header = styled.View`
+  height: 40px;
 `;
+
 const Close = styled.TouchableOpacity`
   height: 40px;
   width: 40px;
-  margin-top: 50px;
+  margin-top: 10px;
   margin-left: 20px;
   align-items: center;
   justify-content: center;
@@ -50,12 +51,11 @@ const DetailPresenter = ({
   if (visible) {
     return (
       <Modal visible={visible} transparent={false}>
+        <Header />
         <Container>
-          <Top>
-            <Close onPress={() => _closeDetail()}>
-              <Ionicons name="ios-close" size={35} color="grey" />
-            </Close>
-          </Top>
+          <Close onPress={() => _closeDetail()}>
+            <Ionicons name="ios-close" size={35} color="grey" />
+          </Close>
           <ProductSection
             image={product.image}
             brand_name={product.brand.name}

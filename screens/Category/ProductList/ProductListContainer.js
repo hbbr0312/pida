@@ -13,6 +13,7 @@ import {
 import PaletteModal from "./components/PaletteModal";
 import Detail from "../../Detail";
 import Notice from "../../../components/Notice";
+import Complete from "../../../components/Complete";
 
 export default class extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -37,7 +38,9 @@ export default class extends React.Component {
       product: {},
       navigation: props.navigation,
       modalVisible: false,
-      detailVisible: false
+      detailVisible: false,
+      paletteSelectVisible: false,
+      completeVisible: false
     };
   }
 
@@ -48,17 +51,33 @@ export default class extends React.Component {
       palette = await loadPalette();
     } catch {
     } finally {
+      let paletteSelectVisible = false;
+      if (Object.keys(palette).length === 0 || palette.size === -1)
+        paletteSelectVisible = true;
       this.setState({
         loading: false,
         products,
-        palette: palette || {}
+        palette: palette || {},
+        paletteSelectVisible
       });
     }
   }
 
-  _clearPalette = () => {
+  _closePalette = () => {
+    //
+    this.setState({
+      modalVisible: false,
+      completeVisible: true
+    });
+  };
+
+  _closeComplete = () => {
     initializePalette();
-    this.setState({ palette: {} });
+    this.setState({
+      //palette: { size: -1, selected: [] },
+      //paletteSelectVisible: true,
+      completeVisible: false
+    });
   };
 
   _loadProducts = async () => {
@@ -81,7 +100,7 @@ export default class extends React.Component {
       size: size,
       selected: []
     };
-    this.setState({ palette });
+    this.setState({ palette, paletteSelectVisible: false });
   };
 
   _removeTester = id => {
@@ -123,23 +142,32 @@ export default class extends React.Component {
       palette,
       modalVisible,
       product,
-      detailVisible
+      detailVisible,
+      paletteSelectVisible,
+      completeVisible
     } = this.state;
     if (loading) return <Loader />;
     else if (products.length === 0)
       return <Notice text="상품을 준비중입니다." />;
-    else if (Object.keys(palette).length === 0)
-      return <PaletteSelect _select={this._select} />;
-    else
+    else {
       return (
         <>
-          <ProductListPresenter
-            products={products}
-            palette={palette}
-            navigation={navigation}
-            _openModal={this._openModal}
-            _openDetail={this._openDetail}
-          />
+          {paletteSelectVisible ? (
+            <PaletteSelect
+              _select={this._select}
+              visible={paletteSelectVisible}
+            />
+          ) : (
+            <>
+              <ProductListPresenter
+                products={products}
+                palette={palette}
+                navigation={navigation}
+                _openModal={this._openModal}
+                _openDetail={this._openDetail}
+              />
+            </>
+          )}
           {detailVisible ? (
             <Detail
               visible={detailVisible}
@@ -149,16 +177,20 @@ export default class extends React.Component {
               _addTester={this._addTester}
             />
           ) : null}
-          {modalVisible ? (
-            <PaletteModal
-              visible={modalVisible}
-              _closeModal={this._closeModal}
-              palette={palette}
-              _removeTester={this._removeTester}
-              _clearPalette={this._clearPalette}
-            />
-          ) : null}
+          <PaletteModal
+            visible={modalVisible}
+            _closeModal={this._closeModal}
+            palette={palette}
+            _removeTester={this._removeTester}
+            _closePalette={this._closePalette}
+          />
+          <Complete
+            from="palette"
+            visible={completeVisible}
+            _closeComplete={this._closeComplete}
+          />
         </>
       );
+    }
   }
 }
