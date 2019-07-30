@@ -121,7 +121,7 @@ const PaletteModal = ({
   _closeModal,
   palette,
   _removeTester,
-  _clearPalette
+  _closePalette
 }) => {
   const filled = countSelected(palette);
   const disable = filled !== palette.size;
@@ -142,8 +142,7 @@ const PaletteModal = ({
   };
   const order = disable => {
     if (!disable) {
-      _clearPalette();
-      alert("받아보기");
+      _closePalette();
     }
   };
   const fillWithEmpty = () => {
@@ -157,54 +156,56 @@ const PaletteModal = ({
   };
   return (
     <Modal visible={visible} transparent={true}>
-      <Container>
-        <Close onPress={() => _closeModal()}>
-          <Ionicons
-            name={"ios-close"}
-            size={35}
-            style={{ marginBottom: -3 }}
-            color="white"
-          />
-        </Close>
-        <PaletteContainer>
-          <Palette2 isSmall={false} shadow={false} filled={filled} />
-        </PaletteContainer>
-        <Bottom>
-          <Text>상품 채우기 (테스트용)</Text>
-          <ProductBox size={palette.size}>
-            {palette.selected.map((item, index) =>
-              index === palette.size - 1
-                ? Product(item.id, item.name, true, palette)
-                : Product(item.id, item.name, false, palette)
-            )}
-            {fillWithEmpty()}
-          </ProductBox>
-          <InfoBox>
-            <PayInfo onPress={() => alert("결제 정보")}>
-              <InfoText>결제 정보</InfoText>
-              <Ionicons
-                name={"ios-arrow-forward"}
-                size={20}
-                style={{ marginBottom: -3 }}
-                color="black"
-              />
-            </PayInfo>
-            <DeliveryInfo onPress={() => alert("배송 정보")}>
-              <InfoText>배송 정보</InfoText>
-              <Ionicons
-                name={"ios-arrow-forward"}
-                size={20}
-                style={{ marginBottom: -3 }}
-                color="black"
-              />
-            </DeliveryInfo>
-          </InfoBox>
-          <Button disable={disable} onPress={() => order(disable)}>
-            <OrderText disable={disable}>받아보기</OrderText>
-            {disable ? <Notice>나머지 제품을 선택해 주세요</Notice> : null}
-          </Button>
-        </Bottom>
-      </Container>
+      {visible ? (
+        <Container>
+          <Close onPress={() => _closeModal()}>
+            <Ionicons
+              name={"ios-close"}
+              size={35}
+              style={{ marginBottom: -3 }}
+              color="white"
+            />
+          </Close>
+          <PaletteContainer>
+            <Palette2 isSmall={false} shadow={false} filled={filled} />
+          </PaletteContainer>
+          <Bottom>
+            <Text>상품 채우기 (테스트용)</Text>
+            <ProductBox size={palette.size}>
+              {palette.selected.map((item, index) =>
+                index === palette.size - 1
+                  ? Product(item.id, item.name, true, palette)
+                  : Product(item.id, item.name, false, palette)
+              )}
+              {fillWithEmpty()}
+            </ProductBox>
+            <InfoBox>
+              <PayInfo onPress={() => alert("결제 정보")}>
+                <InfoText>결제 정보</InfoText>
+                <Ionicons
+                  name={"ios-arrow-forward"}
+                  size={20}
+                  style={{ marginBottom: -3 }}
+                  color="black"
+                />
+              </PayInfo>
+              <DeliveryInfo onPress={() => alert("배송 정보")}>
+                <InfoText>배송 정보</InfoText>
+                <Ionicons
+                  name={"ios-arrow-forward"}
+                  size={20}
+                  style={{ marginBottom: -3 }}
+                  color="black"
+                />
+              </DeliveryInfo>
+            </InfoBox>
+            <Button disable={disable} onPress={() => order(disable)}>
+              <OrderText disable={disable}>받아보기</OrderText>
+              {disable ? <Notice>나머지 제품을 선택해 주세요</Notice> : null}
+            </Button>
+          </Bottom>
+        </Container>
+      ) : null}
     </Modal>
   );
 };
@@ -212,7 +213,7 @@ PaletteModal.propTypes = {
   visible: PropTypes.bool.isRequired,
   _closeModal: PropTypes.func.isRequired,
   _removeTester: PropTypes.func.isRequired,
-  _clearPalette: PropTypes.func.isRequired,
+  _closePalette: PropTypes.func.isRequired,
   palette: PropTypes.object.isRequired
 };
 

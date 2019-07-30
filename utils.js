@@ -98,7 +98,7 @@ export const add2palette = async product => {
 };
 
 export const initializePalette = () => {
-  AsyncStorage.setItem("palette", JSON.stringify({}));
+  AsyncStorage.setItem("palette", JSON.stringify({ size: -1, selected: [] }));
 };
 
 export const countSelected = palette => {
