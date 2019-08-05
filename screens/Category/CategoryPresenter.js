@@ -4,26 +4,22 @@ import Section from "./components/Section";
 import PropTypes from "prop-types";
 import ReadySections from "./components/ReadySections";
 
-const ScrollView = styled.ScrollView``;
+const View = styled.View`
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+`;
 
 const CategoryPresenter = ({ category }) => {
   return (
-    <ScrollView>
+    <View>
       <Section
         key={0}
         name="크림"
-        color="#ff5158"
+        colors={["#ff5259", "#FFA8AC"]}
         items={category.filter(data => data.big_name === "크림")}
       />
-      <Section
-        key={1}
-        name="유아용품"
-        color="#45D2F5"
-        items={category.filter(data => data.big_name === "유아용품")}
-        itemColor="#F3FBFE"
-      />
-      <ReadySections />
-    </ScrollView>
+    </View>
   );
 };
 

@@ -61,7 +61,14 @@ const ToMain = styled.TouchableOpacity`
   margin-bottom: 28px;
 `;
 
-const Complete = ({ navigation, from, img, visible, _closeComplete }) => {
+const Complete = ({
+  navigation,
+  from,
+  img,
+  visible,
+  _closeComplete,
+  start
+}) => {
   let notice;
   if (from === "palette") {
     notice = "신청 완료!";
@@ -99,7 +106,7 @@ const Complete = ({ navigation, from, img, visible, _closeComplete }) => {
             onPress={() => {
               _closeComplete();
               navigation.navigate({
-                routeName: "Category"
+                routeName: start
               });
             }}
           >
@@ -115,7 +122,8 @@ Complete.propTypes = {
   from: PropTypes.string.isRequired,
   img: PropTypes.string, //주문 완료, 참여 완료
   visible: PropTypes.bool.isRequired,
-  _closeComplete: PropTypes.func.isRequired
+  _closeComplete: PropTypes.func.isRequired,
+  start: PropTypes.string.isRequired
 };
 
 export default withNavigation(Complete);

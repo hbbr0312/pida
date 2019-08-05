@@ -4,6 +4,8 @@ import Loader from "../../components/Loader";
 import { Query } from "react-apollo";
 import { GROUP_BUYING } from "../../Apollo/queries";
 import Detail from "../Detail";
+import Notice from "../../components/Notice";
+import Complete from "../../components/Complete";
 
 export default class GroupBuyingContainer extends React.Component {
   constructor(props) {
@@ -11,7 +13,8 @@ export default class GroupBuyingContainer extends React.Component {
     this.state = {
       detailVisible: false,
       detailInfo: {},
-      product: {}
+      product: {},
+      completeVisible: false
     };
   }
 
@@ -28,9 +31,17 @@ export default class GroupBuyingContainer extends React.Component {
     this.setState({ detailVisible: false });
   };
 
+  _openComplete = () => {
+    this.setState({ completeVisible: true, detailVisible: false });
+  };
+
+  _closeComplete = () => {
+    this.setState({ completeVisible: false });
+  };
+
   render() {
     var currentdate = new Date();
-    const { detailVisible, product, detailInfo } = this.state;
+    const { detailVisible, product, detailInfo, completeVisible } = this.state;
     return (
       <Query query={GROUP_BUYING}>
         {({ loading, error, data }) => {
@@ -44,6 +55,8 @@ export default class GroupBuyingContainer extends React.Component {
             // validData = data.groupBuying.filter(
             //   item => new Date(item.closing_time) > currentdate
             // );
+            if (validData.length === 0)
+              return <Notice text="진행중인 공동구매가 없습니다." />;
             return (
               <>
                 <GroupBuyingPresenter
@@ -58,6 +71,14 @@ export default class GroupBuyingContainer extends React.Component {
                   discount_rates={detailInfo.discount_rates}
                   orders_num={detailInfo.orders_num}
                   period={detailInfo.period}
+                  _openComplete={this._openComplete}
+                />
+                <Complete
+                  visible={completeVisible}
+                  from={"group_buying"}
+                  img={product.image}
+                  _closeComplete={this._closeComplete}
+                  start={"GroupBuying"}
                 />
               </>
             );

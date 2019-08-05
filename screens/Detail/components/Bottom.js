@@ -43,7 +43,13 @@ const Text = styled.Text`
   color: ${props => props.color};
 `;
 
-const Bottom = ({ tab, product, _addTester, _openCartModal }) => {
+const Bottom = ({
+  tab,
+  product,
+  _addTester,
+  _openCartModal,
+  _openComplete
+}) => {
   if (tab === "category")
     return (
       <Container>
@@ -69,7 +75,7 @@ const Bottom = ({ tab, product, _addTester, _openCartModal }) => {
   else if (tab === "group_buying")
     return (
       <Container>
-        <Join onPress={() => alert("참여하기")}>
+        <Join onPress={() => _openComplete()}>
           <Ionicons name="ios-people" size={25} color={Colors.iconTintColor} />
           <Text color="white">참여하기</Text>
         </Join>
@@ -82,7 +88,8 @@ Bottom.propTypes = {
   tab: PropTypes.string.isRequired,
   product: PropTypes.object.isRequired,
   _addTester: PropTypes.func,
-  _openCartModal: PropTypes.func
+  _openCartModal: PropTypes.func,
+  _openComplete: PropTypes.func
 };
 
 export default Bottom;

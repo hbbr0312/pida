@@ -44,6 +44,14 @@ const ProductListPresenter = ({
 }) => {
   const nextBtn = <Btn> › </Btn>;
   const prevBtn = <Btn> ‹ </Btn>;
+  const list = products.map(product => (
+    <Product
+      product={product}
+      key={product.id}
+      navigation={navigation}
+      _openDetail={_openDetail}
+    />
+  ));
   return (
     <Screen>
       <Container>
@@ -53,15 +61,9 @@ const ProductListPresenter = ({
           showsButtons={true}
           prevButton={prevBtn}
           nextButton={nextBtn}
+          loop={false}
         >
-          {products.map(product => (
-            <Product
-              product={product}
-              key={product.id}
-              navigation={navigation}
-              _openDetail={_openDetail}
-            />
-          ))}
+          {list}
         </Swiper>
       </Container>
       <PaletteContainer>

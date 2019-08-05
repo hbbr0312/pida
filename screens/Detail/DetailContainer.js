@@ -15,6 +15,7 @@ class DetailContainer extends React.Component {
     _closeDetail: PropTypes.func.isRequired,
     discount_rates: PropTypes.array, //공동구매 탭
     orders_num: PropTypes.number, //공동구매 탭
+    _openComplete: PropTypes.func, //공동구매 탭
     period: PropTypes.string, //공동구매 탭
     _addTester: PropTypes.func //카테고리 탭
   };
@@ -62,7 +63,7 @@ class DetailContainer extends React.Component {
   _put2Cart = async () => {
     const { product, navigation } = this.props;
     const { number } = this.state;
-    this.setState({ modalVisible: false });
+    this.setState({ modalVisible: false, number: "1" });
     try {
       const no = await put2cart(product, Number(number));
       if (no === 1) {
@@ -102,7 +103,8 @@ class DetailContainer extends React.Component {
       discount_rates,
       orders_num,
       period,
-      _addTester
+      _addTester,
+      _openComplete
     } = this.props;
     const { modalVisible, number, reviews } = this.state;
     return (
@@ -122,6 +124,7 @@ class DetailContainer extends React.Component {
         _controlInput={this._controlInput}
         _put2Cart={this._put2Cart}
         reviews={reviews}
+        _openComplete={_openComplete}
       />
     );
   }
