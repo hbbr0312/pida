@@ -46,7 +46,8 @@ const DetailPresenter = ({
   number,
   _controlInput,
   _put2Cart,
-  reviews
+  reviews,
+  _openComplete
 }) => {
   if (visible) {
     return (
@@ -88,6 +89,7 @@ const DetailPresenter = ({
           product={product}
           _openCartModal={_openCartModal}
           _addTester={_addTester}
+          _openComplete={_openComplete}
         />
         <CartModal
           visible={modalVisible}
@@ -112,6 +114,7 @@ DetailPresenter.propTypes = {
   discount_rates: PropTypes.array, //공동구매 탭
   orders_num: PropTypes.number, //공동구매 탭
   period: PropTypes.string, //공동구매 탭
+  _openComplete: PropTypes.func, //공동구매 탭
   _addTester: PropTypes.func, //카테고리 탭
   modalVisible: PropTypes.bool, //카테고리 탭
   _openCartModal: PropTypes.func, //카테고리 탭

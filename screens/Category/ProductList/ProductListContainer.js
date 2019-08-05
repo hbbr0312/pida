@@ -177,17 +177,21 @@ export default class extends React.Component {
               _addTester={this._addTester}
             />
           ) : null}
-          <PaletteModal
-            visible={modalVisible}
-            _closeModal={this._closeModal}
-            palette={palette}
-            _removeTester={this._removeTester}
-            _closePalette={this._closePalette}
-          />
+          {modalVisible ? (
+            <PaletteModal
+              visible={modalVisible}
+              _closeModal={this._closeModal}
+              palette={palette}
+              _removeTester={this._removeTester}
+              _closePalette={this._closePalette}
+            />
+          ) : null}
+
           <Complete
             from="palette"
             visible={completeVisible}
             _closeComplete={this._closeComplete}
+            start="Category"
           />
         </>
       );

@@ -26,11 +26,11 @@ const Container = styled.View`
 const Items = styled.ScrollView`
   flex: 1;
   width: ${Layout.window.width};
-  border-bottom-width: 0.3px;
-  border-bottom-color: grey;
 `;
 
 const Bottom = styled.View`
+  border-top-width: 0.3px;
+  border-top-color: grey;
   height: 200px;
   width: ${Layout.window.width};
 `;
@@ -112,7 +112,7 @@ const calculatePrice = cart => {
   });
   return priceParser(total);
 };
-const CartPresenter = ({ cart }) => {
+const CartPresenter = ({ cart, _openComplete }) => {
   const price = calculatePrice(cart);
   return (
     <Container>
@@ -131,7 +131,7 @@ const CartPresenter = ({ cart }) => {
           <Ionicons name={"ios-arrow-forward"} color="grey" size={26} />
         </DeliveryInfo>
         <Order>
-          <Button onPress={() => alert("주문하기")}>
+          <Button onPress={() => _openComplete()}>
             <ButtonText>주문하기</ButtonText>
             <ButtonPrice>{price}</ButtonPrice>
           </Button>
@@ -142,7 +142,8 @@ const CartPresenter = ({ cart }) => {
 };
 
 CartPresenter.propTypes = {
-  cart: PropTypes.array.isRequired
+  cart: PropTypes.array.isRequired,
+  _openComplete: PropTypes.func.isRequired
 };
 
 export default CartPresenter;

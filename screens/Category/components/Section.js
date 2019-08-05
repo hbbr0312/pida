@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Layout from "../../../constants/Layout";
 import Colors from "../../../constants/Colors";
 import Item from "./Item";
+import { LinearGradient } from "expo-linear-gradient";
 
 const Container = styled.View`
   align-items: center;
@@ -16,9 +17,9 @@ const Box = styled.View`
   width: ${Layout.window.width - 30};
   border-top-left-radius: 5px;
   border-top-end-radius: 5px;
-  background-color: ${props => props.color};
+  overflow: hidden;
 `;
-
+//background-color: ${props => props.color};
 const Text = styled.Text`
   margin-top: 15px;
   margin-left: 15px;
@@ -27,11 +28,20 @@ const Text = styled.Text`
 `;
 
 /*This is section for Category*/
-const Section = ({ name, items, color, itemColor = "#fff1f2" }) => {
+const Section = ({ name, items, colors, itemColor = "#fff1f2" }) => {
   return (
     <Container>
-      <Box color={color}>
-        <Text>{name}</Text>
+      <Box>
+        <LinearGradient
+          start={[0, 0]}
+          end={[1, 0]}
+          colors={colors}
+          style={{
+            flex: 1
+          }}
+        >
+          <Text>{name}</Text>
+        </LinearGradient>
       </Box>
       {items.map((item, index) =>
         index === items.length - 1 ? (
@@ -60,7 +70,7 @@ const Section = ({ name, items, color, itemColor = "#fff1f2" }) => {
 Section.proptypes = {
   name: PropTypes.string.isRequired,
   items: PropTypes.array,
-  color: PropTypes.string.isRequired,
+  colors: PropTypes.array.isRequired,
   itemColor: PropTypes.string
 };
 
