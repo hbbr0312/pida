@@ -19,3 +19,30 @@ export const getReview = url => {
     .then(res => res.json())
     .catch(error => console.log(error));
 };
+
+export const register = async (username, password) => {
+  let response;
+  try {
+    response = await fetch(BASE_URL + "users/", {
+      method: "POST",
+      body: JSON.stringify({
+        username: "username",
+        password: "password",
+        gender: 1,
+        age: 2,
+        skin_type: 3,
+        skin_concerns: [],
+        allergies: []
+      }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    });
+  } catch (err) {
+    console.log("error:", err);
+  } finally {
+    console.log("/response/", response);
+    return response;
+  }
+};

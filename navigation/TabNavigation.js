@@ -64,10 +64,7 @@ const TabNavigation = createBottomTabNavigator(
           <TabBarTitle focused={focused} title={"My피다"} />
         ),
         tabBarIcon: ({ focused }) => (
-          <TabBarIcon
-            focused={focused}
-            name={Platform.OS === "ios" ? "ios-person" : "md-person"}
-          />
+          <TabBarIcon focused={focused} name={"truck"} fontawesome={true} />
         )
       }
     },

@@ -22,5 +22,7 @@ export default {
   filledHole: tintColor,
   borderBottomColor: "#949494",
   plusColor: "#2e66e8",
-  minusColor: "#e64539"
+  minusColor: "#e64539",
+  invalidButton: "#e0e0e0",
+  invalidButtonText: "grey"
 };
