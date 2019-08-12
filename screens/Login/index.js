@@ -1,5 +1,4 @@
 import React from "react";
-import { Modal } from "react-native";
 import styled from "styled-components";
 import logo from "../../assets/icon.png";
 import Layout from "../../constants/Layout";
@@ -80,43 +79,59 @@ const BottomText = styled.Text`
 `;
 const ToRegister = styled.TouchableOpacity``;
 
-const Login = ({ logined }) => {
-  return (
-    <Modal visible={logined} transparent={false}>
-      <Container>
-        <LogoBox>
-          <Logo source={logo} />
-        </LogoBox>
-        <Bottom>
-          <Block>
-            <Text>이메일</Text>
-            <InputBox>
-              <Input autoCapitalize={"none"} />
-            </InputBox>
-          </Block>
-          <Block>
-            <Text>비밀번호</Text>
-            <InputBox>
-              <Input secureTextEntry={true} />
-            </InputBox>
-          </Block>
-          <Button onPress={() => alert("close login modal")}>
-            <ButtonText>로그인</ButtonText>
-          </Button>
-          <TextBox>
-            <BottomText color={"black"}>아이디가 없으신가요? </BottomText>
-            <ToRegister onPress={() => alert("open register modal")}>
-              <BottomText color={Colors.tintColor}>회원가입</BottomText>
-            </ToRegister>
-          </TextBox>
-        </Bottom>
-      </Container>
-      <Register visible={true} step={1} />
-    </Modal>
-  );
-};
+export default class Login extends React.Component {
+  static propTypes = {};
+  constructor(props) {
+    super(props);
+    this.state = {
+      registerVisible: false
+    };
+  }
+  _openRegister() {
+    this.setState({ registerVisible: true });
+  }
+  _closeRegister = () => {
+    this.setState({ registerVisible: false });
+    alert("회원가입이 완료되었습니다.");
+  };
 
-Login.propTypes = {
-  logined: PropTypes.bool.isRequired
-};
-export default Login;
+  render() {
+    const { registerVisible } = this.state;
+    return (
+      <>
+        <Container>
+          <LogoBox>
+            <Logo source={logo} />
+          </LogoBox>
+          <Bottom>
+            <Block>
+              <Text>이메일</Text>
+              <InputBox>
+                <Input autoCapitalize={"none"} />
+              </InputBox>
+            </Block>
+            <Block>
+              <Text>비밀번호</Text>
+              <InputBox>
+                <Input secureTextEntry={true} />
+              </InputBox>
+            </Block>
+            <Button onPress={() => alert("close login modal")}>
+              <ButtonText>로그인</ButtonText>
+            </Button>
+            <TextBox>
+              <BottomText color={"black"}>아이디가 없으신가요? </BottomText>
+              <ToRegister onPress={() => this._openRegister()}>
+                <BottomText color={Colors.tintColor}>회원가입</BottomText>
+              </ToRegister>
+            </TextBox>
+          </Bottom>
+          <Register
+            visible={registerVisible}
+            _closeRegister={this._closeRegister}
+          />
+        </Container>
+      </>
+    );
+  }
+}
