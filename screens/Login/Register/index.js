@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import Colors from "../../../constants/Colors";
 import { Modal } from "react-native";
+import { register } from "../../../api";
 
 const Container = styled.View`
   flex: 1;
@@ -16,11 +17,7 @@ const Top = styled.View`
   align-items: center;
 `;
 const Content = styled.View`
-  flex: 5.5;
-`;
-const Bottom = styled.View`
-  flex: 1.5;
-  align-items: center;
+  flex: 7;
 `;
 const Title = styled.Text`
   margin-top: 70px;
@@ -45,32 +42,16 @@ const StepBar = styled.View`
     props.focused ? Colors.tintColor : Colors.invalidButton};
 `;
 
-const Next = styled.TouchableOpacity`
-  align-items: center;
-  justify-content: center;
-  width: 180px;
-  height: 50px;
-  border-radius: 4px;
-  background-color: ${props =>
-    props.valid ? Colors.tintColor : Colors.invalidButton};
-`;
-
-const ButtonText = styled.Text`
-  color: ${props => (props.valid ? "white" : Colors.invalidButtonText)};
-  font-size: 16px;
-  letter-spacing: 1px;
-`;
-
 export default class Register extends React.Component {
   static propTypes = {
-    visible: PropTypes.bool.isRequired
+    visible: PropTypes.bool.isRequired,
+    _closeRegister: PropTypes.func.isRequired
   };
+
   constructor(props) {
     super(props);
     this.state = {
       step: 1,
-      visible: props.visible,
-      valid: [false, false, false],
       username: "",
       password: "",
       gender: null,
@@ -81,17 +62,38 @@ export default class Register extends React.Component {
     };
   }
 
-  _update = value => {
-    console.log("update");
-    this.setState(value);
-  };
+  _goNext = async info => {
+    const { step } = this.state;
+    if (step < 3) this.setState(Object.assign({ step: step + 1 }, info));
+    else if (step === 3) {
+      const { username, password, gender, age } = this.state;
+      const userinfo = Object.assign({ username, password, gender, age }, info);
+      const { _closeRegister } = this.props;
+      let response;
+      let that = this;
 
-  _goNext = () => {
-    const { step, valid } = this.state;
-    if (step < 3 && valid[step - 1]) this.setState({ step: step + 1 });
-    else if (step === 3 && valid[2]) {
-      //register
-      this.setState({ step: 1, valid: [false, false, false] });
+      try {
+        response = await register(userinfo);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        if (response.ok) {
+          that.setState({
+            step: 1,
+            username: "",
+            password: "",
+            gender: null,
+            age: null,
+            skin_type: null,
+            skin_concerns: [],
+            allergies: []
+          });
+          _closeRegister();
+        } else {
+          alert("cannot register");
+          console.log("status", response.status);
+        }
+      }
     } else {
       alert("invalid!");
     }
@@ -99,9 +101,7 @@ export default class Register extends React.Component {
 
   render() {
     const {
-      visible,
       step,
-      valid,
       username,
       password,
       gender,
@@ -110,7 +110,7 @@ export default class Register extends React.Component {
       skin_concerns,
       allergies
     } = this.state;
-    console.log(username);
+    const { visible } = this.props;
     return (
       <Modal visible={visible} transparent={false}>
         <Container>
@@ -131,25 +131,21 @@ export default class Register extends React.Component {
               <Step1
                 username={username}
                 password={password}
-                _update={this._update}
+                _goNext={this._goNext}
               />
             ) : null}
-            {step === 2 ? <Step2 gender={gender} age={age} /> : null}
+            {step === 2 ? (
+              <Step2 gender={gender} age={age} _goNext={this._goNext} />
+            ) : null}
             {step === 3 ? (
               <Step3
                 skin_type={skin_type}
                 skin_concerns={skin_concerns}
                 allergies={allergies}
+                _goNext={this._goNext}
               />
             ) : null}
           </Content>
-          <Bottom>
-            <Next valid={valid[step - 1]} onPress={this._goNext}>
-              <ButtonText valid={valid}>
-                {step === 3 ? "다음" : "완료"}
-              </ButtonText>
-            </Next>
-          </Bottom>
         </Container>
       </Modal>
     );

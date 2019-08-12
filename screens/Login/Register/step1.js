@@ -4,6 +4,7 @@ import Layout from "../../../constants/Layout";
 import PropTypes from "prop-types";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../../../constants/Colors";
+import { Content, ButtonContainer, Next, ButtonText } from "./styled";
 
 //이메일, 비밀번호, 비밀번호 확인
 // username
@@ -84,82 +85,148 @@ export default class Step1 extends React.Component {
   static propTypes = {
     username: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,
-    _update: PropTypes.func.isRequired
+    _goNext: PropTypes.func.isRequired
   };
   constructor(props) {
     super(props);
     this.state = {
       username: props.username,
       password: props.password,
-      confirm: "",
-      usernameValid: 0,
-      passwordValid: 0
+      confirm: ""
     };
   }
+  goNext = valid => {
+    if (valid) {
+      const { _goNext } = this.props;
+      const { username, password } = this.state;
+      const info = {
+        username,
+        password
+      };
+      _goNext(info);
+    }
+  };
+
+  makeMessage = (validNum, code) => {
+    if (code === 1) {
+      //case: email
+      if (validNum === 1) return "사용 가능한 이메일입니다";
+      else if (validNum === -1) return "이미 가입된 이메일입니다";
+      else "";
+    } else if (code === 2) {
+      //case: password
+      if (validNum === 1) return "사용 가능한 비밀번호입니다";
+      else if (validNum === -1) return "사용 불가능한 비밀번호입니다";
+      else "";
+    } else {
+      //case: password confirm
+      if (validNum === 0) return "";
+      else if (validNum === -1) return "비밀번호가 일치하지 않습니다";
+      else return "비밀번호가 일치합니다";
+    }
+  };
+
+  checkValidOfPw = pw => {
+    const minLength = 4;
+    const maxLength = 12;
+    const needNumber = true;
+    const needSpecialChar = false;
+    const needCapital = false;
+    var special = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+    if (pw.length === 0) {
+      return 0;
+    } else if (pw.length < minLength || pw.length > maxLength) {
+      return -1;
+    } else if (needNumber && !/\d/.test(pw)) {
+      return -1;
+    } else if (needSpecialChar && !special.test(pw)) {
+      return -1;
+    } else if (needCapital && !/[A-Z]/.test(pw)) {
+      return -1;
+    } else {
+      return 1;
+    }
+  };
+
+  checkConfirm = (confirm, password) => {
+    if (confirm === "") return 0;
+    else if (confirm === password) return 1;
+    else return -1;
+  };
+
+  checkUsernameValid = username => {
+    if (username.length === 0) return 0;
+    else if (username.length >= 4) return 1;
+    else return -1;
+  };
+
   render() {
-    const { _update } = this.props;
-    const {
-      username,
-      password,
-      confirm,
-      usernameValid,
-      passwordValid
-    } = this.state;
+    const { username, password, confirm } = this.state;
+    const usernameValid = this.checkUsernameValid(username);
+    const passwordValid = this.checkValidOfPw(password);
+    const confirmValid = this.checkConfirm(confirm, password);
+    const valid = usernameValid === 1 && passwordValid === 1;
+
     return (
       <>
-        <Block>
-          <Top>
-            <Title>이메일</Title>
-            <Notice>이미 가입된 이메일입니다.</Notice>
-          </Top>
-          <Bottom>
-            <InputBox>
-              <TextInput
-                onChangeText={id => this.setState({ username: id })}
-                value={username}
-              />
-            </InputBox>
-            {Circle(usernameValid)}
-          </Bottom>
-        </Block>
-        <Block>
-          <Top>
-            <Title>비밀번호</Title>
-            <Notice>사용 가능한 비밀번호입니다</Notice>
-          </Top>
-          <Bottom>
-            <InputBox>
-              <TextInput
-                secureTextEntry={true}
-                onChangeText={pw => this.setState({ password: pw })}
-                value={password}
-              />
-            </InputBox>
-            {Circle(passwordValid)}
-          </Bottom>
-        </Block>
-        <Block>
-          <Top>
-            <Title>비밀번호 확인</Title>
-            <Notice>비밀번호가 일치하지 않습니다</Notice>
-          </Top>
-          <Bottom>
-            <InputBox>
-              <TextInput
-                secureTextEntry={true}
-                onChangeText={pw => {
-                  this.setState({ confirm: pw });
-                }}
-                value={confirm}
-              />
-            </InputBox>
-            {confirm === ""
-              ? Circle(0)
-              : confirm === password
-              ? Circle(1)
-              : Circle(-1)}
-          </Bottom>
-        </Block>
+        <Content>
+          <Block>
+            <Top>
+              <Title>이메일</Title>
+              <Notice>{this.makeMessage(usernameValid, 1)}</Notice>
+            </Top>
+            <Bottom>
+              <InputBox>
+                <TextInput
+                  onChangeText={id => this.setState({ username: id })}
+                  value={username}
+                  autoCapitalize={"none"}
+                  keyboardType={"email-address"}
+                />
+              </InputBox>
+              {Circle(usernameValid)}
+            </Bottom>
+          </Block>
+          <Block>
+            <Top>
+              <Title>비밀번호</Title>
+              <Notice>{this.makeMessage(passwordValid, 2)}</Notice>
+            </Top>
+            <Bottom>
+              <InputBox>
+                <TextInput
+                  secureTextEntry={true}
+                  onChangeText={pw => this.setState({ password: pw })}
+                  value={password}
+                />
+              </InputBox>
+              {Circle(passwordValid)}
+            </Bottom>
+          </Block>
+          <Block>
+            <Top>
+              <Title>비밀번호 확인</Title>
+              <Notice>{this.makeMessage(confirmValid, 3)}</Notice>
+            </Top>
+            <Bottom>
+              <InputBox>
+                <TextInput
+                  secureTextEntry={true}
+                  onChangeText={pw => {
+                    this.setState({ confirm: pw });
+                  }}
+                  value={confirm}
+                />
+              </InputBox>
+              {Circle(confirmValid)}
+            </Bottom>
+          </Block>
+        </Content>
+        <ButtonContainer>
+          <Next valid={valid} onPress={() => this.goNext(valid)}>
+            <ButtonText valid={valid}>다음</ButtonText>
+          </Next>
+        </ButtonContainer>
       </>
     );
   }
