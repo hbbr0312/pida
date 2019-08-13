@@ -92,7 +92,6 @@ export default class Login extends React.Component {
   }
   _closeRegister = () => {
     this.setState({ registerVisible: false });
-    alert("회원가입이 완료되었습니다.");
   };
 
   render() {

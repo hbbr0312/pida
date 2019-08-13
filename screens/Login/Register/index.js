@@ -2,6 +2,7 @@ import React from "react";
 import Step1 from "./step1";
 import Step2 from "./step2";
 import Step3 from "./step3";
+import Complete from "./complete";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Colors from "../../../constants/Colors";
@@ -62,24 +63,28 @@ export default class Register extends React.Component {
     };
   }
 
+  _go2Login = () => {
+    const { _closeRegister } = this.props;
+    this.setState({ step: 1 });
+    _closeRegister();
+  };
+
   _goNext = async info => {
     const { step } = this.state;
     if (step < 3) this.setState(Object.assign({ step: step + 1 }, info));
     else if (step === 3) {
       const { username, password, gender, age } = this.state;
       const userinfo = Object.assign({ username, password, gender, age }, info);
-      const { _closeRegister } = this.props;
       let response;
       let that = this;
-
       try {
         response = await register(userinfo);
       } catch (err) {
         console.log(err);
       } finally {
-        if (response.ok) {
+        if (!response.ok) {
           that.setState({
-            step: 1,
+            step: 4,
             username: "",
             password: "",
             gender: null,
@@ -88,9 +93,8 @@ export default class Register extends React.Component {
             skin_concerns: [],
             allergies: []
           });
-          _closeRegister();
         } else {
-          alert("cannot register");
+          alert("이미 등록된 아이디입니다.");
           console.log("status", response.status);
         }
       }
@@ -118,13 +122,17 @@ export default class Register extends React.Component {
             <Title>
               {step === 1
                 ? "피다의 회원이 되어주세요"
+                : step === 4
+                ? ""
                 : "회원 정보를 입력해 주세요"}
             </Title>
-            <Bar>
-              <StepBar focused={step === 1 ? true : false} />
-              <StepBar focused={step === 2 ? true : false} />
-              <StepBar focused={step === 3 ? true : false} />
-            </Bar>
+            {step === 4 ? null : (
+              <Bar>
+                <StepBar focused={step === 1 ? true : false} />
+                <StepBar focused={step === 2 ? true : false} />
+                <StepBar focused={step === 3 ? true : false} />
+              </Bar>
+            )}
           </Top>
           <Content>
             {step === 1 ? (
@@ -145,6 +153,7 @@ export default class Register extends React.Component {
                 _goNext={this._goNext}
               />
             ) : null}
+            {step === 4 ? <Complete _go2Login={this._go2Login} /> : null}
           </Content>
         </Container>
       </Modal>

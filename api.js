@@ -54,13 +54,13 @@ export const login = async info => {
   try {
     response = await fetch(BASE_URL + "o/token/", {
       method: "POST",
-      body: JSON.stringify({
+      parameters: JSON.stringify({
         username: info.username,
         password: info.password
       }),
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/x-www-form-urlencoded"
       }
     });
   } catch (err) {
