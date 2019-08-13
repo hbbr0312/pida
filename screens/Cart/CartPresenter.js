@@ -112,13 +112,13 @@ const calculatePrice = cart => {
   });
   return priceParser(total);
 };
-const CartPresenter = ({ cart, _openComplete }) => {
+const CartPresenter = ({ cart, _openComplete, _update }) => {
   const price = calculatePrice(cart);
   return (
     <Container>
       <Items>
         {cart.map(item => (
-          <Item item={item} key={item.id} />
+          <Item item={item} key={item.id} _update={_update} />
         ))}
       </Items>
       <Bottom>
@@ -143,7 +143,8 @@ const CartPresenter = ({ cart, _openComplete }) => {
 
 CartPresenter.propTypes = {
   cart: PropTypes.array.isRequired,
-  _openComplete: PropTypes.func.isRequired
+  _openComplete: PropTypes.func.isRequired,
+  _update: PropTypes.func.isRequired
 };
 
 export default CartPresenter;

@@ -52,6 +52,48 @@ export const put2cart = async (product, number) => {
   }
 };
 
+export const removeProduct = async id => {
+  let cart;
+  try {
+    cart = await loadCart();
+    console.log("removeProduct");
+    console.log(id, cart);
+    let index = -1;
+    for (var i = 0; i < cart.length; i++) {
+      if (cart[i].id === id) {
+        index = i;
+      }
+    }
+    cart.splice(index, 1);
+    AsyncStorage.setItem("cart", JSON.stringify(cart));
+  } catch (err) {
+    console.log(err);
+  } finally {
+    console.log("result", cart);
+    return cart;
+  }
+};
+
+export const updateProduct = async (id, number) => {
+  let cart;
+  try {
+    cart = await loadCart();
+    console.log("removeProduct");
+    console.log(id, cart);
+    for (var i = 0; i < cart.length; i++) {
+      if (cart[i].id === id) {
+        cart[i].number = number;
+      }
+    }
+    AsyncStorage.setItem("cart", JSON.stringify(cart));
+  } catch (err) {
+    console.log(err);
+  } finally {
+    console.log("result", cart);
+    return cart;
+  }
+};
+
 export const loadPalette = async () => {
   try {
     const palette = await AsyncStorage.getItem("palette");
