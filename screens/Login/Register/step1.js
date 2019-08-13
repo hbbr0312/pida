@@ -165,7 +165,8 @@ export default class Step1 extends React.Component {
     const usernameValid = this.checkUsernameValid(username);
     const passwordValid = this.checkValidOfPw(password);
     const confirmValid = this.checkConfirm(confirm, password);
-    const valid = usernameValid === 1 && passwordValid === 1;
+    const valid =
+      usernameValid === 1 && passwordValid === 1 && confirmValid === 1;
 
     return (
       <>
