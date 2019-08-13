@@ -5,6 +5,8 @@ import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
 import { Ionicons } from "@expo/vector-icons";
 import { priceParser } from "../../utils";
+import { Alert } from "react-native";
+import { removeProduct } from "../../utils";
 
 const Container = styled.View`
   flex-direction: row;
@@ -49,7 +51,30 @@ const Price = styled.Text`
   font-size: 15px;
 `;
 
-const Item = ({ item }) => {
+const select = (item, _update) => {
+  Alert.alert(
+    "장바구니 상품 수정",
+    item.name,
+    [
+      { text: "수량 변경", onPress: () => console.log("수정") },
+      {
+        text: "취소",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel"
+      },
+      {
+        text: "삭제",
+        onPress: async () => {
+          const cart = await removeProduct(item.id);
+          _update(cart);
+        }
+      }
+    ],
+    { cancelable: false }
+  );
+};
+
+const Item = ({ item, _update }) => {
   return (
     <Container>
       <ImageSection>
@@ -61,7 +86,7 @@ const Item = ({ item }) => {
           {priceParser(item.price)} / {item.number}개
         </Price>
       </Text>
-      <IconSection onPress={() => alert(item.name)}>
+      <IconSection onPress={() => select(item, _update)}>
         <Ionicons name={"ios-more"} color="black" size={26} />
       </IconSection>
     </Container>
@@ -69,7 +94,8 @@ const Item = ({ item }) => {
 };
 
 Item.propTypes = {
-  item: PropTypes.object.isRequired
+  item: PropTypes.object.isRequired,
+  _update: PropTypes.func.isRequired
 };
 
 export default Item;

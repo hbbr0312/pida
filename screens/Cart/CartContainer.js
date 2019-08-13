@@ -36,6 +36,12 @@ export default class extends React.Component {
     }
   }
 
+  _update = cart => {
+    this.setState({
+      cart: cart
+    });
+  };
+
   _openComplete = () => {
     this.setState({
       completeVisible: true
@@ -76,7 +82,7 @@ export default class extends React.Component {
           <NavigationEvents
             onWillFocus={payload => {
               this.test();
-              //console.log("will focus", payload);
+              console.log("will focus", payload);
             }}
           />
           {loading ? (
@@ -85,7 +91,11 @@ export default class extends React.Component {
             <Notice text="장바구니가 비어있습니다" />
           ) : (
             <>
-              <CartPresenter cart={cart} _openComplete={this._openComplete} />
+              <CartPresenter
+                cart={cart}
+                _openComplete={this._openComplete}
+                _update={this._update}
+              />
               <Complete
                 visible={completeVisible}
                 _closeComplete={this._closeComplete}

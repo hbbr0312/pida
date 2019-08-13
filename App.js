@@ -6,8 +6,7 @@ import Login from "./screens/Login";
 import { login } from "./api";
 
 export default function App() {
-  const logined = false;
-  login({ username: "test@test", password: "1234" });
+  const logined = true;
   if (logined)
     return (
       <ApolloProvider client={defaultClient}>
