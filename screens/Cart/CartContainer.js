@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import CartPresenter from "./CartPresenter";
 import Loader from "../../components/Loader";
 import { loadCart, vacateCart } from "../../utils";
@@ -6,6 +7,9 @@ import Notice from "../../components/Notice";
 import Complete from "../../components/Complete";
 import { NavigationEvents } from "react-navigation";
 
+const Refresh = styled.TouchableOpacity`
+  flex: 1;
+`;
 export default class extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -56,8 +60,7 @@ export default class extends React.Component {
     vacateCart();
   };
 
-  test = async () => {
-    console.log("test");
+  load = async () => {
     let parsedCart;
     try {
       parsedCart = await loadCart();
@@ -75,14 +78,17 @@ export default class extends React.Component {
     const { cart, loading, completeVisible } = this.state;
     if (loading) return <Loader />;
     else if (cart === [] || cart.length === 0)
-      return <Notice text="장바구니가 비어있습니다" />;
+      return (
+        <Refresh onPress={() => this.componentDidMount()}>
+          <Notice text="장바구니가 비어있습니다" />
+        </Refresh>
+      );
     else
       return (
         <>
           <NavigationEvents
-            onWillFocus={payload => {
-              this.test();
-              console.log("will focus", payload);
+            onWillFocus={async () => {
+              this.load();
             }}
           />
           {loading ? (

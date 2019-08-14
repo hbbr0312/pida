@@ -79,58 +79,70 @@ const Confirm = styled.TouchableOpacity`
 `;
 const BottomText = styled.Text``;
 
-const CartModal = ({
-  visible,
-  _closeCartModal,
-  number,
-  _controlInput,
-  _put2Cart
-}) => {
-  const changeNum = isUp => {
+export default class CartModal extends React.Component {
+  static propTypes = {
+    visible: PropTypes.bool.isRequired,
+    _closeCartModal: PropTypes.func.isRequired,
+    item: PropTypes.object.isRequired,
+    _updateCart: PropTypes.func.isRequired
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      id: props.item.id,
+      number: props.item.number
+    };
+  }
+
+  changeNum = isUp => {
+    const { number } = this.state;
     let result = Number(number);
     if (isUp) result += 1;
     else if (result > 1) result -= 1;
-    _controlInput(String(result));
+    else return;
+    this.setState({ number: String(result) });
   };
-  return (
-    <Modal visible={visible} transparent={true}>
-      <Container>
-        <Box>
-          <Top>
-            <UpDown color={Colors.minusColor} onPress={() => changeNum(false)}>
-              <UpDownText color={Colors.minusColor}>-</UpDownText>
-            </UpDown>
-            <Input
-              keyboardType={"number-pad"}
-              returnKeyType={"done"}
-              textAlign={"center"}
-              value={number}
-              onChangeText={_controlInput}
-            />
-            <UpDown color={Colors.plusColor} onPress={() => changeNum(true)}>
-              <UpDownText color={Colors.plusColor}>+</UpDownText>
-            </UpDown>
-          </Top>
-          <Bottom>
-            <Cancel onPress={() => _closeCartModal()}>
-              <BottomText>취소</BottomText>
-            </Cancel>
-            <Confirm onPress={() => _put2Cart()}>
-              <BottomText>담기</BottomText>
-            </Confirm>
-          </Bottom>
-        </Box>
-      </Container>
-    </Modal>
-  );
-};
 
-CartModal.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  _closeCartModal: PropTypes.func.isRequired,
-  number: PropTypes.string.isRequired,
-  _controlInput: PropTypes.func.isRequired,
-  _put2Cart: PropTypes.func.isRequired
-};
-
-export default CartModal;
+  render() {
+    const { visible, _closeCartModal, _updateCart } = this.props;
+    const { id, number } = this.state;
+    return (
+      <Modal visible={visible} transparent={true}>
+        <Container>
+          <Box>
+            <Top>
+              <UpDown
+                color={Colors.minusColor}
+                onPress={() => this.changeNum(false)}
+              >
+                <UpDownText color={Colors.minusColor}>-</UpDownText>
+              </UpDown>
+              <Input
+                keyboardType={"number-pad"}
+                returnKeyType={"done"}
+                textAlign={"center"}
+                value={String(number)}
+                onChangeText={text => this.setState({ number: text })}
+              />
+              <UpDown
+                color={Colors.plusColor}
+                onPress={() => this.changeNum(true)}
+              >
+                <UpDownText color={Colors.plusColor}>+</UpDownText>
+              </UpDown>
+            </Top>
+            <Bottom>
+              <Cancel onPress={() => _closeCartModal()}>
+                <BottomText>취소</BottomText>
+              </Cancel>
+              <Confirm onPress={async () => _updateCart(id, Number(number))}>
+                <BottomText>담기</BottomText>
+              </Confirm>
+            </Bottom>
+          </Box>
+        </Container>
+      </Modal>
+    );
+  }
+}

@@ -56,8 +56,6 @@ export const removeProduct = async id => {
   let cart;
   try {
     cart = await loadCart();
-    console.log("removeProduct");
-    console.log(id, cart);
     let index = -1;
     for (var i = 0; i < cart.length; i++) {
       if (cart[i].id === id) {
@@ -69,7 +67,6 @@ export const removeProduct = async id => {
   } catch (err) {
     console.log(err);
   } finally {
-    console.log("result", cart);
     return cart;
   }
 };
@@ -78,8 +75,6 @@ export const updateProduct = async (id, number) => {
   let cart;
   try {
     cart = await loadCart();
-    console.log("removeProduct");
-    console.log(id, cart);
     for (var i = 0; i < cart.length; i++) {
       if (cart[i].id === id) {
         cart[i].number = number;
@@ -89,7 +84,6 @@ export const updateProduct = async (id, number) => {
   } catch (err) {
     console.log(err);
   } finally {
-    console.log("result", cart);
     return cart;
   }
 };
