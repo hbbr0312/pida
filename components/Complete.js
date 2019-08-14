@@ -24,10 +24,10 @@ const Bottom = styled.View`
   margin-bottom: 20px;
 `;
 const ImageContainer = styled.View`
-  justify-content: center;
-  align-items: center;
+  align-items: flex-end;
   height: 200px;
   width: 200px;
+  flex-direction: row;
 `;
 const Image = styled.Image`
   height: 200px;
@@ -61,13 +61,23 @@ const ToMain = styled.TouchableOpacity`
   margin-bottom: 28px;
 `;
 
+const Length = styled.Text`
+  font-size: 25px;
+  color: grey;
+`;
+
+const makeText = leng => {
+  if (leng > 1) return <Length>+ {leng - 1}</Length>;
+  else return null;
+};
 const Complete = ({
   navigation,
   from,
   img,
   visible,
   _closeComplete,
-  start
+  start,
+  length
 }) => {
   let notice;
   if (from === "palette") {
@@ -88,6 +98,7 @@ const Complete = ({
             ) : (
               <Image source={{ uri: img }} />
             )}
+            {makeText(length)}
           </ImageContainer>
           <Notice>{notice}</Notice>
         </Top>
@@ -123,7 +134,8 @@ Complete.propTypes = {
   img: PropTypes.string, //주문 완료, 참여 완료
   visible: PropTypes.bool.isRequired,
   _closeComplete: PropTypes.func.isRequired,
-  start: PropTypes.string.isRequired
+  start: PropTypes.string.isRequired,
+  length: PropTypes.number
 };
 
 export default withNavigation(Complete);

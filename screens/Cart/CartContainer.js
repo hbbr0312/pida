@@ -107,6 +107,7 @@ export default class extends React.Component {
                 _closeComplete={this._closeComplete}
                 from={"order"}
                 img={cart[0].image}
+                length={cart.length}
                 start="Cart"
               />
             </>
