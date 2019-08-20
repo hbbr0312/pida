@@ -3,16 +3,32 @@ import MainNavigation from "./navigation/MainNavigation"
 import { ApolloProvider } from "react-apollo"
 import defaultClient from "./Apollo/client"
 import Login from "./screens/Login"
-import { login } from "./api"
+import { islogin, logout } from "./api"
 
-export default function App() {
-  const logined = true
-  login({ username: "final", password: "1234" })
-  if (logined)
-    return (
-      <ApolloProvider client={defaultClient}>
-        <MainNavigation />
-      </ApolloProvider>
-    )
-  else return <Login />
+export default class App extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      logined: false
+    }
+  }
+  componentDidMount = async () => {
+    const logined = await islogin()
+    console.log("logined", logined)
+    this.setState({ logined })
+  }
+
+  login = logined => {
+    this.setState({ logined })
+  }
+  render() {
+    const { logined } = this.state
+    if (logined)
+      return (
+        <ApolloProvider client={defaultClient}>
+          <MainNavigation />
+        </ApolloProvider>
+      )
+    else return <Login login={this.login} />
+  }
 }
