@@ -56,35 +56,73 @@ export const checkDuplicateId = async email => {
 }
 
 export const login = async info => {
-  let response
-  const client_id = "yg30yWvkbNXIjDbA4mDLimNkyCgZpriBy6c5k8yU"
-  const grant_type = "password"
-  const client_secret =
-    "4yRNL6m1LUsHPP8ohiDLfnnPVQ8Vikh1EMGYSRhsTKzDRZoAKYZm2HZPe4Ls9HTJuTwjJddcFJmivKCVtAve5yPzmJ9M6pO5XGmh3DmARscXu4L8cRSrk8XpkoXHYFZW"
-  const strParams =
-    "username=" +
-    info.username +
-    "&password=" +
-    info.password +
-    "&grant_type=" +
-    grant_type +
-    "&client_id=" +
-    client_id +
-    "&client_secret=" +
-    client_secret
-  try {
-    response = await fetch(BASE_URL + "o/token/" + "?" + strParams, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
+  const result = await new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest()
+    xhr.withCredentials = true
+
+    xhr.addEventListener("readystatechange", function() {
+      if (this.readyState === 4) {
+        //console.log(this.responseText)
       }
     })
-  } catch (err) {
-    console.log("error:", err)
-  } finally {
-    console.log("/response/", response)
-    console.log("/access_token/", response.access_token)
-    console.log("/refresh_token/", response.refresh_token)
-    return response
-  }
+
+    xhr.open(
+      "POST",
+      `http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/o/token/?username=${
+        info.username
+      }&password=${
+        info.password
+      }&grant_type=password&client_id=yg30yWvkbNXIjDbA4mDLimNkyCgZpriBy6c5k8yU&client_secret=4yRNL6m1LUsHPP8ohiDLfnnPVQ8Vikh1EMGYSRhsTKzDRZoAKYZm2HZPe4Ls9HTJuTwjJddcFJmivKCVtAve5yPzmJ9M6pO5XGmh3DmARscXu4L8cRSrk8XpkoXHYFZW`
+    )
+    xhr.onload = function(e) {
+      resolve(xhr.response)
+    }
+    xhr.setRequestHeader("Content-Type", "application/json")
+    xhr.setRequestHeader("User-Agent", "PostmanRuntime/7.15.2")
+    xhr.setRequestHeader("Accept", "*/*")
+    xhr.setRequestHeader("Cache-Control", "no-cache")
+    xhr.setRequestHeader(
+      "Postman-Token",
+      "e070d598-ee6c-4ac4-a3be-4f9f83dc85d6,3788b544-e1bd-4976-a0fc-8a1e01ee15a7"
+    )
+    xhr.setRequestHeader(
+      "Host",
+      "ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com"
+    )
+    xhr.setRequestHeader("Accept-Encoding", "gzip, deflate")
+    xhr.setRequestHeader("Content-Length", "")
+    xhr.setRequestHeader("Connection", "keep-alive")
+    xhr.setRequestHeader("cache-control", "no-cache")
+
+    xhr.send()
+  })
+  AsyncStorage.setItem("tokens", result);
+  const json = JSON.parse(result)
+  console.log("token", json)
+  const userinfo = await getUserInfo(json, info.username)
+  console.log("userinfo", userinfo)
+}
+
+export const getUserInfo = async (res, username) => {
+  const result = await new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest()
+    xhr.withCredentials = true
+
+    xhr.addEventListener("readystatechange", function() {
+      if (this.readyState === 4) {
+        //console.log(this.responseText)
+      }
+    })
+    xhr.open(
+      "GET",
+      BASE_URL + "users/" + username + "/?access_token=" + res.access_token
+    )
+    xhr.onload = function(e) {
+      resolve(xhr.response)
+    }
+    xhr.setRequestHeader("Accept", "application/json")
+
+    xhr.send()
+  })
+  return JSON.parse(result)
 }
