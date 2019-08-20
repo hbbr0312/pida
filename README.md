@@ -15,13 +15,13 @@
 ###Cart
 
 - [x] Main
-- [ ] OrderComplete
+- [x] OrderComplete
 
 ###GroupBuying
 
 - [x] Main
 - [x] ProductDetail
-- [ ] JoinComplete
+- [x] JoinComplete
 
 ###MyPida
 
@@ -36,4 +36,4 @@
 
 ###Tools
 
-- [ ] SamplePallete
+- [x] SamplePallete
