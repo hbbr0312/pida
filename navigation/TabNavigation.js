@@ -1,17 +1,17 @@
-import React from "react";
-import { createBottomTabNavigator, createAppContainer } from "react-navigation";
-import TabBarTitle from "../components/TabBarTitle";
+import React from "react"
+import { createBottomTabNavigator, createAppContainer } from "react-navigation"
+import TabBarTitle from "../components/TabBarTitle"
 
-import Category from "../screens/Category";
-import Cart from "../screens/Cart";
-import GroupBuying from "../screens/GroupBuying";
-import MyPida from "../screens/MyPida";
-import Settings from "../screens/Settings";
+import Category from "../screens/Category"
+import Cart from "../screens/Cart"
+import GroupBuying from "../screens/GroupBuying"
+import MyPida from "../screens/MyPida"
+import Settings from "../screens/Settings"
 
-import { BG_COLOR } from "../constants/Colors";
-import TabBarIcon from "../components/TabBarIcon";
-import { Platform } from "@unimodules/core";
-import { createStack } from "./config";
+import { BG_COLOR } from "../constants/Colors"
+import TabBarIcon from "../components/TabBarIcon"
+import { Platform } from "@unimodules/core"
+import { createStack } from "./config"
 
 const TabNavigation = createBottomTabNavigator(
   {
@@ -84,13 +84,13 @@ const TabNavigation = createBottomTabNavigator(
     }
   },
   {
-    initialRouteName: "Category",
+    initialRouteName: "Settings",
     tabBarOptions: {
       style: {
         backgroundColor: BG_COLOR
       }
     }
   }
-);
+)
 
-export default createAppContainer(TabNavigation);
+export default createAppContainer(TabNavigation)

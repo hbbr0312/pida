@@ -1,3 +1,4 @@
+import { AsyncStorage } from "react-native"
 const BASE_URL =
   "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/"
 
@@ -26,13 +27,13 @@ export const register = async info => {
     response = await fetch(BASE_URL + "users/", {
       method: "POST",
       body: JSON.stringify({
-        username: info.username,
-        password: info.password,
-        gender: info.gender,
-        age: info.age,
-        skin_type: info.skin_type,
-        skin_concerns: info.skin_concerns,
-        allergies: info.allergies
+        username: username,
+        password: password,
+        gender: gender,
+        age: age,
+        skin_type: skin_type,
+        skin_concerns: skin_concerns,
+        allergies: allergies
       }),
       headers: {
         Accept: "application/json",
@@ -55,7 +56,8 @@ export const checkDuplicateId = async email => {
   else if (response.status === 404) return true
 }
 
-export const login = async info => {
+export const getTokens = async (username, password) => {
+  let status
   const result = await new Promise((resolve, reject) => {
     var xhr = new XMLHttpRequest()
     xhr.withCredentials = true
@@ -68,14 +70,11 @@ export const login = async info => {
 
     xhr.open(
       "POST",
-      `http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/o/token/?username=${
-        info.username
-      }&password=${
-        info.password
-      }&grant_type=password&client_id=yg30yWvkbNXIjDbA4mDLimNkyCgZpriBy6c5k8yU&client_secret=4yRNL6m1LUsHPP8ohiDLfnnPVQ8Vikh1EMGYSRhsTKzDRZoAKYZm2HZPe4Ls9HTJuTwjJddcFJmivKCVtAve5yPzmJ9M6pO5XGmh3DmARscXu4L8cRSrk8XpkoXHYFZW`
+      `http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/o/token/?username=${username}&password=${password}&grant_type=password&client_id=yg30yWvkbNXIjDbA4mDLimNkyCgZpriBy6c5k8yU&client_secret=4yRNL6m1LUsHPP8ohiDLfnnPVQ8Vikh1EMGYSRhsTKzDRZoAKYZm2HZPe4Ls9HTJuTwjJddcFJmivKCVtAve5yPzmJ9M6pO5XGmh3DmARscXu4L8cRSrk8XpkoXHYFZW`
     )
     xhr.onload = function(e) {
       resolve(xhr.response)
+      status = xhr.status
     }
     xhr.setRequestHeader("Content-Type", "application/json")
     xhr.setRequestHeader("User-Agent", "PostmanRuntime/7.15.2")
@@ -96,14 +95,17 @@ export const login = async info => {
 
     xhr.send()
   })
-  AsyncStorage.setItem("tokens", result);
-  const json = JSON.parse(result)
-  console.log("token", json)
-  const userinfo = await getUserInfo(json, info.username)
-  console.log("userinfo", userinfo)
+  if (status === 200) {
+    AsyncStorage.setItem("tokens", result)
+    AsyncStorage.setItem("username", username)
+    return true
+  } else {
+    return false
+  }
 }
 
 export const getUserInfo = async (res, username) => {
+  let status
   const result = await new Promise((resolve, reject) => {
     var xhr = new XMLHttpRequest()
     xhr.withCredentials = true
@@ -119,10 +121,40 @@ export const getUserInfo = async (res, username) => {
     )
     xhr.onload = function(e) {
       resolve(xhr.response)
+      status = xhr.status
     }
     xhr.setRequestHeader("Accept", "application/json")
 
     xhr.send()
   })
-  return JSON.parse(result)
+
+  const json = JSON.parse(result)
+  return { success: status === 200, result: json }
+}
+
+export const islogin = async () => {
+  const rawTokens = await AsyncStorage.getItem("tokens")
+  const username = await AsyncStorage.getItem("username")
+  const tokens = JSON.parse(rawTokens)
+  if (tokens != null) {
+    const response = await getUserInfo(tokens, username)
+    if (response.success) {
+      return true
+    } else {
+      //token invalid
+      return false
+    }
+  } else {
+    return false
+  }
+}
+
+export const logout = async () => {
+  try {
+    await AsyncStorage.removeItem("token")
+    await AsyncStorage.removeItem("username")
+    return true
+  } catch (exception) {
+    return false
+  }
 }

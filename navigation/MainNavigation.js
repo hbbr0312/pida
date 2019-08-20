@@ -1,9 +1,10 @@
-import { createStackNavigator, createAppContainer } from "react-navigation";
-import TabNavigation from "./TabNavigation";
-import ProductList from "../screens/Category/ProductList";
-import { headerStyles } from "./config";
-import { Back, Close } from "../components/HeaderLeft";
-import React from "react";
+import { createStackNavigator, createAppContainer } from "react-navigation"
+import TabNavigation from "./TabNavigation"
+import ProductList from "../screens/Category/ProductList"
+import MyInfo from "../screens/Settings/MyInfo"
+import { headerStyles } from "./config"
+import { Back, Close } from "../components/HeaderLeft"
+import React from "react"
 
 const MainNavigation = createStackNavigator(
   {
@@ -20,12 +21,22 @@ const MainNavigation = createStackNavigator(
           borderBottomWidth: 0
         }
       })
+    },
+    MyInfo: {
+      screen: MyInfo,
+      navigationOptions: ({ navigation }) => ({
+        headerLeft: <Back navigation={navigation} />,
+        headerStyle: {
+          ...headerStyles,
+          borderBottomWidth: 0
+        }
+      })
     }
   },
   {
     headerMode: "screen",
     headerBackTitleVisible: false
   }
-);
+)
 
-export default createAppContainer(MainNavigation);
+export default createAppContainer(MainNavigation)
