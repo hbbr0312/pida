@@ -33,6 +33,14 @@
 ###Setting
 
 - [ ] Main
+- [ ] MyInfo
+- [ ] PayInfo
+- [ ] Deliveryinfo
+- [ ] Notice
+- [ ] FAQ
+- [ ] AppInfo
+- [ ] Logout
+- [ ] 회원탈퇴
 
 ###Tools
 
