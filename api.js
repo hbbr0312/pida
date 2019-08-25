@@ -21,6 +21,17 @@ export const getReview = url => {
     .catch(error => console.log(error))
 }
 
+export const getFAQ = async () => {
+  const url = BASE_URL + "faqs"
+  const res = await fetch(url)
+  return res.json()
+}
+export const getNotice = async () => {
+  const url = BASE_URL + "notices/"
+  const res = await fetch(url)
+  return res.json()
+}
+
 export const register = async info => {
   let response
   try {
@@ -104,7 +115,10 @@ export const getTokens = async (username, password) => {
   }
 }
 
-export const getUserInfo = async (res, username) => {
+export const getUserInfo = async () => {
+  const res = await AsyncStorage.getItem("tokens")
+  const tokens = JSON.parse(res)
+  const username = await AsyncStorage.getItem("username")
   let status
   const result = await new Promise((resolve, reject) => {
     var xhr = new XMLHttpRequest()
@@ -117,7 +131,7 @@ export const getUserInfo = async (res, username) => {
     })
     xhr.open(
       "GET",
-      BASE_URL + "users/" + username + "/?access_token=" + res.access_token
+      `http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/users/${username}/?access_token=${tokens.access_token}`
     )
     xhr.onload = function(e) {
       resolve(xhr.response)
@@ -134,10 +148,8 @@ export const getUserInfo = async (res, username) => {
 
 export const islogin = async () => {
   const rawTokens = await AsyncStorage.getItem("tokens")
-  const username = await AsyncStorage.getItem("username")
-  const tokens = JSON.parse(rawTokens)
-  if (tokens != null) {
-    const response = await getUserInfo(tokens, username)
+  if (rawTokens != null) {
+    const response = await getUserInfo()
     if (response.success) {
       return true
     } else {
@@ -156,5 +168,62 @@ export const logout = async () => {
     return true
   } catch (exception) {
     return false
+  }
+}
+
+export const getPayInfo = async () => {
+  const res = await AsyncStorage.getItem("tokens")
+  const tokens = JSON.parse(res)
+  const userInfo = await getUserInfo()
+  const base_url = userInfo.result.default_payment_information
+  const url = base_url + "?access_token=" + tokens.access_token
+  let status
+  const result = await new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest()
+    xhr.withCredentials = true
+
+    xhr.addEventListener("readystatechange", function() {
+      if (this.readyState === 4) {
+        //console.log(this.responseText)
+      }
+    })
+
+    xhr.open("GET", url)
+    xhr.onload = function(e) {
+      resolve(xhr.response)
+      status = xhr.status
+    }
+    xhr.setRequestHeader("Content-Type", "application/json")
+
+    xhr.send()
+  })
+  if (status === 200) {
+    return JSON.parse(result)
+  } else return null
+}
+//TODo
+export const updateUserInfo = async info => {
+  let response
+  try {
+    response = await fetch(BASE_URL + "users/" + info.username, {
+      method: "POST",
+      body: JSON.stringify({
+        username: username,
+        gender: gender,
+        age: age,
+        skin_type: skin_type,
+        skin_concerns: skin_concerns,
+        allergies: allergies
+      }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+  } catch (err) {
+    console.log("error:", err)
+  } finally {
+    console.log("/response/", response)
+    return response
   }
 }
