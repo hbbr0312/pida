@@ -1,9 +1,9 @@
-import React from "react";
-import styled from "styled-components";
-import { Ionicons } from "@expo/vector-icons";
-import PropTypes from "prop-types";
-import Colors from "../../../constants/Colors";
-import { Content, ButtonContainer, Next, ButtonText } from "./styled";
+import React from "react"
+import styled from "styled-components"
+import { Ionicons } from "@expo/vector-icons"
+import PropTypes from "prop-types"
+import Colors from "../../../constants/Colors"
+import { Content, ButtonContainer, Next, ButtonText } from "./styled"
 
 // skin_type 0~3
 // skin_concerns a~h
@@ -11,33 +11,33 @@ import { Content, ButtonContainer, Next, ButtonText } from "./styled";
 
 const Box = styled.View`
   margin-bottom: 20px;
-`;
+`
 const Title = styled.Text`
   font-size: 16px;
   margin-left: 30px;
   letter-spacing: 1px;
   margin-bottom: 10px;
   font-weight: 500;
-`;
+`
 const Column = styled.View`
   margin-left: 30px;
   width: 100px;
   margin-left: 30px;
-`;
+`
 const Row = styled.View`
   flex-direction: row;
   align-items: center;
-`;
+`
 const Item = styled.TouchableOpacity`
   align-items: center;
   flex-direction: row;
   margin-bottom: 5px;
   height: 40px;
-`;
+`
 const Text = styled.Text`
   margin-left: 10px;
   font-size: 14px;
-`;
+`
 
 const Radio = on => {
   if (on) {
@@ -47,18 +47,16 @@ const Radio = on => {
         size={30}
         color={Colors.tintColor}
       />
-    );
+    )
   } else
-    return <Ionicons name={"ios-radio-button-off"} size={30} color="grey" />;
-};
+    return <Ionicons name={"ios-radio-button-off"} size={30} color="grey" />
+}
 
 const CheckBox = on => {
   if (on) {
-    return (
-      <Ionicons name={"ios-checkbox"} size={30} color={Colors.tintColor} />
-    );
-  } else return <Ionicons name={"ios-square-outline"} size={35} color="grey" />;
-};
+    return <Ionicons name={"ios-checkbox"} size={30} color={Colors.tintColor} />
+  } else return <Ionicons name={"ios-square-outline"} size={35} color="grey" />
+}
 
 export default class Step3 extends React.Component {
   static propTypes = {
@@ -66,62 +64,66 @@ export default class Step3 extends React.Component {
     skin_concerns: PropTypes.array.isRequired,
     allergies: PropTypes.array.isRequired,
     _goNext: PropTypes.func.isRequired
-  };
+  }
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       skin_type: props.skin_type,
       skin_concerns: props.skin_concerns,
       allergies: props.allergies
-    };
+    }
   }
 
   _handleConcern = concern => {
-    const { skin_concerns } = this.state;
+    const { skin_concerns } = this.state
     if (!skin_concerns.includes(concern)) {
-      skin_concerns.push(concern);
-      this.setState({ skin_concerns });
+      skin_concerns.push(concern)
+      this.setState({ skin_concerns })
+    } else {
+      const index = skin_concerns.indexOf(concern)
+      skin_concerns.splice(index, 1)
+      this.setState({ skin_concerns })
     }
-  };
+  }
 
   _handleAllergy = allergy => {
-    const { allergies } = this.state;
+    const { allergies } = this.state
     if (allergies.includes(allergy)) {
-      const index = allergies.indexOf(allergy);
-      allergies.splice(index, 1);
-      this.setState({ allergies });
+      const index = allergies.indexOf(allergy)
+      allergies.splice(index, 1)
+      this.setState({ allergies })
     } else {
       if (allergy === "f") {
-        this.setState({ allergies: ["f"] });
+        this.setState({ allergies: ["f"] })
       } else {
-        allergies.push(allergy);
+        allergies.push(allergy)
         if (allergies.includes("f")) {
-          const index = allergies.indexOf("f");
-          allergies.splice(index, 1);
+          const index = allergies.indexOf("f")
+          allergies.splice(index, 1)
         }
-        this.setState({ allergies });
+        this.setState({ allergies })
       }
     }
-  };
+  }
 
   goNext = valid => {
     if (valid) {
-      const { _goNext } = this.props;
-      const { skin_type, skin_concerns, allergies } = this.state;
+      const { _goNext } = this.props
+      const { skin_type, skin_concerns, allergies } = this.state
       const info = {
         skin_type,
         skin_concerns,
         allergies
-      };
-      _goNext(info);
+      }
+      _goNext(info)
     }
-  };
+  }
 
   render() {
-    const { skin_type, skin_concerns, allergies } = this.state;
-    const { _goNext } = this.props;
-    const valid = skin_type !== null && allergies.length > 0;
+    const { skin_type, skin_concerns, allergies } = this.state
+    const { _goNext } = this.props
+    const valid = skin_type !== null && allergies.length > 0
     return (
       <>
         <Content>
@@ -231,6 +233,6 @@ export default class Step3 extends React.Component {
           </Next>
         </ButtonContainer>
       </>
-    );
+    )
   }
 }

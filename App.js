@@ -14,7 +14,6 @@ export default class App extends React.Component {
   }
   componentDidMount = async () => {
     const logined = await islogin()
-    console.log("logined", logined)
     this.setState({ logined })
   }
 
