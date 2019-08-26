@@ -3,74 +3,202 @@ import styled from "styled-components"
 import PropTypes from "prop-types"
 import Layout from "../../../constants/Layout"
 import Colors from "../../../constants/Colors"
+import { Entypo } from "@expo/vector-icons"
+import { updatePayInfo } from "../../../api"
+import { TouchableWithoutFeedback, Keyboard } from "react-native"
 
-const fakeInfo = {
-  card_company: "우리카드",
-  card_number: "1234567800001234",
-  cvc: "111",
-  expiration_date: "08/12",
-  password_hashed: "1234"
-}
-
-const PayInfoPresenter = ({ payInfo, _updateState, fixed }) => {
-  console.log("fixed", fixed)
+const PayInfoPresenter = ({
+  issuer,
+  month,
+  year,
+  card_number_0,
+  card_number_1,
+  card_number_2,
+  card_number_3,
+  cvc,
+  password_hashed,
+  _updateState,
+  fixed
+}) => {
+  const handleModify = async () => {
+    if (!fixed) {
+      const info = {
+        issuer: issuer,
+        card_number:
+          card_number_0 + card_number_1 + card_number_2 + card_number_3,
+        expiration_date: month + year,
+        cvc: cvc,
+        password_hashed: password_hashed
+      }
+      await updatePayInfo(info)
+    }
+    _updateState({ fixed: !fixed })
+  }
   return (
-    <Container>
-      <Body>
-        <Box fixed={fixed}>
-          <Property fixed={fixed}>카드사</Property>
-          <TextInput
-            editable={!fixed}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <Container>
+        <Body>
+          <CBox
             fixed={fixed}
-            value={fakeInfo.card_company}
-          />
-        </Box>
-        <Box fixed={fixed}>
-          <Property fixed={fixed}>카드 번호</Property>
-          <TextInput
-            editable={!fixed}
-            fixed={fixed}
-            value={fakeInfo.card_number}
-          />
-        </Box>
-        <Row>
-          <Box fixed={fixed} isSmall={true}>
-            <Property fixed={fixed}>유효 기간</Property>
+            onPress={() => (fixed ? null : _updateState({ visible: true }))}
+          >
+            <Row>
+              <Body>
+                <Property fixed={fixed}>카드사</Property>
+                <Company editable={!fixed} fixed={fixed}>
+                  {issuer}
+                </Company>
+              </Body>
+              <Icon>
+                <Entypo
+                  name={"triangle-down"}
+                  size={25}
+                  color={fixed ? "#656565" : "#696969"}
+                />
+              </Icon>
+            </Row>
+          </CBox>
+          <Box fixed={fixed}>
+            <Property fixed={fixed}>카드 번호</Property>
+            <Row>
+              <Period
+                editable={!fixed}
+                fixed={fixed}
+                value={card_number_0}
+                keyboardType={"number-pad"}
+                maxLength={4}
+                returnKeyType={"done"}
+                blurOnSubmit={false}
+                onSubmitEditing={() => {
+                  this.secondNumber.focus()
+                }}
+                onChangeText={text => _updateState({ card_number_0: text })}
+                front={true}
+              />
+              <Text>-</Text>
+              <Period
+                editable={!fixed}
+                fixed={fixed}
+                value={card_number_1}
+                keyboardType={"number-pad"}
+                maxLength={4}
+                returnKeyType={"done"}
+                blurOnSubmit={false}
+                ref={input => {
+                  this.secondNumber = input
+                }}
+                onSubmitEditing={() => {
+                  this.thirdNumber.focus()
+                }}
+                onChangeText={text => _updateState({ card_number_1: text })}
+              />
+              <Text>-</Text>
+              <Period
+                editable={!fixed}
+                fixed={fixed}
+                value={card_number_2}
+                keyboardType={"number-pad"}
+                maxLength={4}
+                returnKeyType={"done"}
+                blurOnSubmit={false}
+                secureTextEntry={true}
+                ref={input => {
+                  this.thirdNumber = input
+                }}
+                onSubmitEditing={() => {
+                  this.lastNumber.focus()
+                }}
+                onChangeText={text => _updateState({ card_number_2: text })}
+              />
+              <Text>-</Text>
+              <Period
+                editable={!fixed}
+                fixed={fixed}
+                value={card_number_3}
+                keyboardType={"number-pad"}
+                maxLength={4}
+                ref={input => {
+                  this.lastNumber = input
+                }}
+                onChangeText={text => _updateState({ card_number_3: text })}
+              />
+            </Row>
+          </Box>
+          <Row>
+            <Box fixed={fixed} isSmall={true}>
+              <Property fixed={fixed}>유효 기간 (월/년)</Property>
+              <Row>
+                <Period
+                  editable={!fixed}
+                  fixed={fixed}
+                  value={month}
+                  keyboardType={"number-pad"}
+                  maxLength={2}
+                  returnKeyType={"done"}
+                  blurOnSubmit={false}
+                  onSubmitEditing={() => {
+                    this.yearInput.focus()
+                  }}
+                  onChangeText={text => _updateState({ month: text })}
+                />
+                <Text>/</Text>
+                <Period
+                  editable={!fixed}
+                  fixed={fixed}
+                  value={year}
+                  keyboardType={"number-pad"}
+                  maxLength={2}
+                  ref={input => {
+                    this.yearInput = input
+                  }}
+                  onChangeText={text => _updateState({ year: text })}
+                />
+              </Row>
+            </Box>
+            <Box fixed={fixed} isSmall={true} margin={true}>
+              <Property fixed={fixed}>CVC</Property>
+              <TextInput
+                secureTextEntry={true}
+                editable={!fixed}
+                fixed={fixed}
+                value={cvc}
+                maxLength={3}
+                onChangeText={text => _updateState({ cvc: text })}
+              />
+            </Box>
+          </Row>
+          <Box fixed={fixed}>
+            <Property fixed={fixed}>비밀번호</Property>
             <TextInput
+              secureTextEntry={true}
               editable={!fixed}
               fixed={fixed}
-              value={fakeInfo.expiration_date}
+              value={password_hashed}
+              maxLength={4}
+              onChangeText={text => _updateState({ password_hashed: text })}
             />
           </Box>
-          <Box fixed={fixed} isSmall={true} margin={true}>
-            <Property fixed={fixed}>CVC</Property>
-            <TextInput editable={!fixed} fixed={fixed} value={fakeInfo.cvc} />
-          </Box>
-        </Row>
-
-        <Box fixed={fixed}>
-          <Property fixed={fixed}>비밀번호</Property>
-          <TextInput
-            editable={!fixed}
-            fixed={fixed}
-            value={fakeInfo.password_hashed}
-          />
-        </Box>
-      </Body>
-      <ButtonContainer>
-        <Button
-          modifiable={!fixed}
-          onPress={() => _updateState({ fixed: !fixed })}
-        >
-          <ButtonText>{fixed ? "수 정" : "완 료"}</ButtonText>
-        </Button>
-      </ButtonContainer>
-    </Container>
+        </Body>
+        <ButtonContainer>
+          <Button modifiable={!fixed} onPress={async () => handleModify()}>
+            <ButtonText>{fixed ? "수 정" : "완 료"}</ButtonText>
+          </Button>
+        </ButtonContainer>
+      </Container>
+    </TouchableWithoutFeedback>
   )
 }
 
 PayInfoPresenter.propTypes = {
-  payInfo: PropTypes.object.isRequired,
+  issuer: PropTypes.string.isRequired,
+  month: PropTypes.string.isRequired,
+  year: PropTypes.string.isRequired,
+  card_number_0: PropTypes.string.isRequired,
+  card_number_1: PropTypes.string.isRequired,
+  card_number_2: PropTypes.string.isRequired,
+  card_number_3: PropTypes.string.isRequired,
+  cvc: PropTypes.string.isRequired,
+  password_hashed: PropTypes.string.isRequired,
   _updateState: PropTypes.func.isRequired,
   fixed: PropTypes.bool.isRequired
 }
@@ -108,6 +236,20 @@ const Box = styled.View`
 //unfixed - #EDEDED // arrow - #696969
 //fixed - #DFDFDF // arrow - #656565
 
+const CBox = styled.TouchableOpacity`
+  height: 80px;
+  margin-top: 20px;
+  width: ${props => (props.isSmall ? smallSize : bigSize)};
+  margin-left: ${props => (props.margin ? "20px" : "0px")}
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-left-radius: ${props => (props.fixed ? "4px" : "0px")};
+  border-bottom-right-radius: ${props => (props.fixed ? "4px" : "0px")};
+  background-color: ${props => (props.fixed ? "#DFDFDF" : "#EDEDED")};
+  border-bottom-width: ${props => (props.fixed ? "0px" : "3px")};
+  border-bottom-color: #696969;
+`
+
 const Property = styled.Text`
   color: ${props => (props.fixed ? "#656565" : "#696969")};
   font-size: 14px;
@@ -120,7 +262,26 @@ const TextInput = styled.TextInput`
   margin-top: 10px;
   margin-left: 20px;
   font-size: 18px;
+  height: 30px;
 `
+const Company = styled.Text`
+  color: ${props => (props.fixed ? "#656565" : "black")};
+  margin-top: 13px;
+  margin-left: 20px;
+  font-size: 18px;
+  height: 30px;
+  justify-content: center;
+`
+
+const Period = styled.TextInput`
+  color: ${props => (props.fixed ? "#656565" : "black")};
+  margin-top: 10px;
+  margin-left: 20px;
+  font-size: 18px;
+  height: 30px;
+  width: 50px;
+`
+
 const ButtonContainer = styled.View`
   flex: 1;
   justify-content: flex-end;
@@ -139,4 +300,18 @@ const ButtonText = styled.Text`
   color: white;
   font-weight: 500;
   font-size: 17px;
+`
+
+const Text = styled.Text`
+  font-size: 18px;
+  color: #656565;
+  margin-top: 10px;
+`
+
+const Icon = styled.View`
+  height: 80px;
+  flex: 1;
+  align-items: flex-end;
+  justify-content: center;
+  margin-right: 15px;
 `

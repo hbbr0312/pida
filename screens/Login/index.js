@@ -6,6 +6,7 @@ import Colors from "../../constants/Colors"
 import Register from "./Register"
 import PropTypes from "prop-types"
 import { getTokens } from "../../api"
+import { TouchableWithoutFeedback, Keyboard } from "react-native"
 
 export default class Login extends React.Component {
   static propTypes = {
@@ -36,7 +37,7 @@ export default class Login extends React.Component {
   render() {
     const { username, password, registerVisible } = this.state
     return (
-      <>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <Container>
           <LogoBox>
             <Logo source={logo} />
@@ -77,7 +78,7 @@ export default class Login extends React.Component {
             _closeRegister={this._closeRegister}
           />
         </Container>
-      </>
+      </TouchableWithoutFeedback>
     )
   }
 }

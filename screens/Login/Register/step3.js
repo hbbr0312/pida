@@ -111,6 +111,10 @@ export default class Step3 extends React.Component {
     if (valid) {
       const { _goNext } = this.props
       const { skin_type, skin_concerns, allergies } = this.state
+      var index = allergies.indexOf("f")
+      if (index > -1) {
+        allergies.splice(index, 1)
+      }
       const info = {
         skin_type,
         skin_concerns,
@@ -122,7 +126,6 @@ export default class Step3 extends React.Component {
 
   render() {
     const { skin_type, skin_concerns, allergies } = this.state
-    const { _goNext } = this.props
     const valid = skin_type !== null && allergies.length > 0
     return (
       <>
