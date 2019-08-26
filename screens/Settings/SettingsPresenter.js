@@ -2,6 +2,7 @@ import React from "react"
 import styled from "styled-components"
 import { withNavigation } from "react-navigation"
 import { Ionicons } from "@expo/vector-icons"
+import { logout } from "../../api"
 
 const SettingsPresenter = ({ navigation }) => {
   const makeRow = (routeName, label) => {
@@ -38,7 +39,12 @@ const SettingsPresenter = ({ navigation }) => {
       <Header marginTop={30}>
         <Title>보안</Title>
       </Header>
-      <Row onPress={() => alert("logout")}>
+      <Row
+        onPress={async () => {
+          await logout()
+          alert("로그아웃됨")
+        }}
+      >
         <Text>로그아웃</Text>
       </Row>
       <Row

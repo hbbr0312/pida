@@ -2,6 +2,7 @@ import React from "react"
 import styled from "styled-components"
 import PropTypes from "prop-types"
 import Colors from "../../../constants/Colors"
+import { updateUserInfo } from "../../../api"
 
 const MyInfoPresenter = ({
   username,
@@ -13,7 +14,11 @@ const MyInfoPresenter = ({
   modifiable,
   _updateState
 }) => {
-  const handleModify = () => {
+  const handleModify = async () => {
+    if (modifiable) {
+      const info = { gender, age, skin_concerns, skin_type, allergies }
+      await updateUserInfo(info)
+    }
     _updateState({ modifiable: !modifiable })
   }
   const openModal = step => {
@@ -68,7 +73,7 @@ const MyInfoPresenter = ({
         </Item>
       </Body>
       <ButtonContainer>
-        <Button modifiable={modifiable} onPress={() => handleModify()}>
+        <Button modifiable={modifiable} onPress={async () => handleModify()}>
           <ButtonText>{modifiable ? "완 료" : "수 정"}</ButtonText>
         </Button>
       </ButtonContainer>

@@ -6,10 +6,15 @@ import { Ionicons } from "@expo/vector-icons"
 import Colors from "../../../constants/Colors"
 import { Content, ButtonContainer, Next, ButtonText } from "./styled"
 import { checkDuplicateId } from "../../../api"
+import { TouchableWithoutFeedback, Keyboard } from "react-native"
 
 //이메일, 비밀번호, 비밀번호 확인
 // username
 // password
+
+const View = styled.View`
+  flex: 1;
+`
 
 const Block = styled.View`
   align-self: center;
@@ -151,7 +156,7 @@ export default class Step1 extends React.Component {
   }
 
   checkConfirm = (confirm, password) => {
-    if (confirm === "") return 0
+    if (confirm.length < 1 || confirm === null) return 0
     else if (confirm === password) return 1
     else return -1
   }
@@ -172,69 +177,73 @@ export default class Step1 extends React.Component {
       usernameValid === 1 && passwordValid === 1 && confirmValid === 1
 
     return (
-      <>
-        <Content>
-          <Block>
-            <Top>
-              <Title>이메일</Title>
-              <Notice>{this.makeMessage(usernameValid, 1)}</Notice>
-            </Top>
-            <Bottom>
-              <InputBox>
-                <TextInput
-                  onEndEditing={async () => this.checkUsernameValid()}
-                  onChangeText={id =>
-                    this.setState({ username: id, usernameValid: 0 })
-                  }
-                  value={username}
-                  autoCapitalize={"none"}
-                  keyboardType={"email-address"}
-                />
-              </InputBox>
-              {Circle(usernameValid)}
-            </Bottom>
-          </Block>
-          <Block>
-            <Top>
-              <Title>비밀번호</Title>
-              <Notice>{this.makeMessage(passwordValid, 2)}</Notice>
-            </Top>
-            <Bottom>
-              <InputBox>
-                <TextInput
-                  secureTextEntry={true}
-                  onChangeText={pw => this.setState({ password: pw })}
-                  value={password}
-                />
-              </InputBox>
-              {Circle(passwordValid)}
-            </Bottom>
-          </Block>
-          <Block>
-            <Top>
-              <Title>비밀번호 확인</Title>
-              <Notice>{this.makeMessage(confirmValid, 3)}</Notice>
-            </Top>
-            <Bottom>
-              <InputBox>
-                <TextInput
-                  secureTextEntry={true}
-                  onChangeText={pw => {
-                    this.setState({ confirm: pw })
-                  }}
-                  value={confirm}
-                />
-              </InputBox>
-              {Circle(confirmValid)}
-            </Bottom>
-          </Block>
-        </Content>
-        <ButtonContainer>
-          <Next valid={valid} onPress={() => this.goNext(valid)}>
-            <ButtonText valid={valid}>다음</ButtonText>
-          </Next>
-        </ButtonContainer>
-      </>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View>
+          <Content>
+            <Block>
+              <Top>
+                <Title>이메일</Title>
+                <Notice>{this.makeMessage(usernameValid, 1)}</Notice>
+              </Top>
+              <Bottom>
+                <InputBox>
+                  <TextInput
+                    onEndEditing={async () =>
+                      username.length > 0 ? this.checkUsernameValid() : null
+                    }
+                    onChangeText={id =>
+                      this.setState({ username: id, usernameValid: 0 })
+                    }
+                    value={username}
+                    autoCapitalize={"none"}
+                    keyboardType={"email-address"}
+                  />
+                </InputBox>
+                {Circle(usernameValid)}
+              </Bottom>
+            </Block>
+            <Block>
+              <Top>
+                <Title>비밀번호</Title>
+                <Notice>{this.makeMessage(passwordValid, 2)}</Notice>
+              </Top>
+              <Bottom>
+                <InputBox>
+                  <TextInput
+                    secureTextEntry={true}
+                    onChangeText={pw => this.setState({ password: pw })}
+                    value={password}
+                  />
+                </InputBox>
+                {Circle(passwordValid)}
+              </Bottom>
+            </Block>
+            <Block>
+              <Top>
+                <Title>비밀번호 확인</Title>
+                <Notice>{this.makeMessage(confirmValid, 3)}</Notice>
+              </Top>
+              <Bottom>
+                <InputBox>
+                  <TextInput
+                    secureTextEntry={true}
+                    onChangeText={pw => {
+                      this.setState({ confirm: pw })
+                    }}
+                    value={confirm}
+                  />
+                </InputBox>
+                {Circle(confirmValid)}
+              </Bottom>
+            </Block>
+          </Content>
+          <ButtonContainer>
+            <Next valid={valid} onPress={() => this.goNext(valid)}>
+              <ButtonText valid={valid}>다음</ButtonText>
+            </Next>
+          </ButtonContainer>
+        </View>
+      </TouchableWithoutFeedback>
     )
   }
 }

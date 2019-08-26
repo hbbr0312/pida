@@ -1,39 +1,39 @@
-import React from "react";
-import Step1 from "./step1";
-import Step2 from "./step2";
-import Step3 from "./step3";
-import Complete from "./complete";
-import PropTypes from "prop-types";
-import styled from "styled-components";
-import Colors from "../../../constants/Colors";
-import { Modal } from "react-native";
-import { register } from "../../../api";
+import React from "react"
+import Step1 from "./step1"
+import Step2 from "./step2"
+import Step3 from "./step3"
+import Complete from "./complete"
+import PropTypes from "prop-types"
+import styled from "styled-components"
+import Colors from "../../../constants/Colors"
+import { Modal } from "react-native"
+import { register } from "../../../api"
 
 const Container = styled.View`
   flex: 1;
-`;
+`
 
 const Top = styled.View`
   flex: 1.7;
   align-items: center;
-`;
+`
 const Content = styled.View`
   flex: 7;
-`;
+`
 const Title = styled.Text`
   margin-top: 70px;
   font-size: 25px;
   letter-spacing: 1px;
-`;
+`
 
 const Bar = styled.View`
   margin-top: 35px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-`;
+`
 
-const StepBar = styled.View`
+const StepBar = styled.TouchableOpacity`
   margin-left: 6px;
   margin-right: 6px;
   width: 50px;
@@ -41,16 +41,16 @@ const StepBar = styled.View`
   border-radius: 3px;
   background-color: ${props =>
     props.focused ? Colors.tintColor : Colors.invalidButton};
-`;
+`
 
 export default class Register extends React.Component {
   static propTypes = {
     visible: PropTypes.bool.isRequired,
     _closeRegister: PropTypes.func.isRequired
-  };
+  }
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       step: 1,
       username: "",
@@ -60,48 +60,42 @@ export default class Register extends React.Component {
       skin_type: null,
       skin_concerns: [],
       allergies: []
-    };
+    }
   }
 
   _go2Login = () => {
-    const { _closeRegister } = this.props;
-    this.setState({ step: 1 });
-    _closeRegister();
-  };
+    const { _closeRegister } = this.props
+    this.setState({ step: 1 })
+    _closeRegister()
+  }
 
   _goNext = async info => {
-    const { step } = this.state;
-    if (step < 3) this.setState(Object.assign({ step: step + 1 }, info));
+    const { step } = this.state
+    if (step < 3) this.setState(Object.assign({ step: step + 1 }, info))
     else if (step === 3) {
-      const { username, password, gender, age } = this.state;
-      const userinfo = Object.assign({ username, password, gender, age }, info);
-      let response;
-      let that = this;
-      try {
-        response = await register(userinfo);
-      } catch (err) {
-        console.log(err);
-      } finally {
-        if (!response.ok) {
-          that.setState({
-            step: 4,
-            username: "",
-            password: "",
-            gender: null,
-            age: null,
-            skin_type: null,
-            skin_concerns: [],
-            allergies: []
-          });
-        } else {
-          alert("이미 등록된 아이디입니다.");
-          console.log("status", response.status);
-        }
+      const { username, password, gender, age } = this.state
+      const userinfo = Object.assign({ username, password, gender, age }, info)
+      const response = await register(userinfo)
+      console.log(response)
+      if (response.ok) {
+        this.setState({
+          step: 4,
+          username: "",
+          password: "",
+          gender: null,
+          age: null,
+          skin_type: null,
+          skin_concerns: [],
+          allergies: []
+        })
+      } else {
+        alert("문제가 발생했습니다.")
+        console.log("status", response.status)
       }
     } else {
-      alert("invalid!");
+      alert("invalid!")
     }
-  };
+  }
 
   render() {
     const {
@@ -113,8 +107,8 @@ export default class Register extends React.Component {
       skin_type,
       skin_concerns,
       allergies
-    } = this.state;
-    const { visible } = this.props;
+    } = this.state
+    const { visible } = this.props
     return (
       <Modal visible={visible} transparent={false}>
         <Container>
@@ -157,6 +151,6 @@ export default class Register extends React.Component {
           </Content>
         </Container>
       </Modal>
-    );
+    )
   }
 }

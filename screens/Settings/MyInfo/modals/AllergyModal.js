@@ -20,14 +20,10 @@ export default class extends React.Component {
   renderIcon = (on = false) => {
     if (on) {
       return (
-        <Ionicons
-          name={"ios-radio-button-on"}
-          size={30}
-          color={Colors.tintColor}
-        />
+        <Ionicons name={"ios-checkbox"} size={30} color={Colors.tintColor} />
       )
     } else
-      return <Ionicons name={"ios-radio-button-off"} size={30} color="grey" />
+      return <Ionicons name={"ios-square-outline"} size={35} color="grey" />
   }
 
   _handleAllergy = allergy => {
