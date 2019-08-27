@@ -260,10 +260,7 @@ export const updateUserInfo = async info => {
 
     xhr.send(JSON.stringify(info))
   })
-  console.log("update user info result", result)
-  if (status === 200) {
-    return JSON.parse(result)
-  } else return null
+  return status === 200
 }
 
 export const updatePayInfo = async info => {
@@ -292,10 +289,7 @@ export const updatePayInfo = async info => {
 
     xhr.send(JSON.stringify(info))
   })
-  console.log("update pay info result", result)
-  if (status === 200) {
-    return JSON.parse(result)
-  } else return null
+  return status === 200
 }
 
 export const updateDeliveryInfo = async info => {
@@ -324,7 +318,63 @@ export const updateDeliveryInfo = async info => {
 
     xhr.send(JSON.stringify(info))
   })
-  console.log("update pay info result", result)
+  return status === 200
+}
+
+export const addressSearch = async (keyword, currentPage) => {
+  const base = "https://www.juso.go.kr/addrlink/addrLinkApi.do"
+  const countPerPage = 100
+  const confmKey = "U01TX0FVVEgyMDE5MDgyNzE0NDIwODEwODk4MDI="
+  const url = `${base}?confmKey=${confmKey}&currentPage=${currentPage}&countPerPage=${countPerPage}&keyword=${keyword}&resultType=json`
+  let status
+  const result = await new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest()
+    xhr.withCredentials = true
+
+    xhr.addEventListener("readystatechange", function() {
+      if (this.readyState === 4) {
+        //console.log(this.responseText)
+      }
+    })
+
+    xhr.open("GET", url)
+    xhr.onload = function(e) {
+      resolve(xhr.response)
+      status = xhr.status
+    }
+
+    xhr.send()
+  })
+  return JSON.parse(result)
+}
+
+//TODO
+export const getTesterOrder = async () => {
+  const res = await AsyncStorage.getItem("tokens")
+  const tokens = JSON.parse(res)
+  const base_url = BASE_URL + "tester-orders/16" //+ username
+  const url = base_url + "/?access_token=" + tokens.access_token
+  let status
+  const result = await new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest()
+    xhr.withCredentials = true
+
+    xhr.addEventListener("readystatechange", function() {
+      if (this.readyState === 4) {
+        //console.log(this.responseText)
+      }
+    })
+
+    xhr.open("GET", url)
+    xhr.onload = function(e) {
+      resolve(xhr.response)
+      status = xhr.status
+    }
+    xhr.setRequestHeader("Content-Type", "application/json")
+
+    xhr.send()
+  })
+  console.log(result)
   if (status === 200) {
     return JSON.parse(result)
   } else return null

@@ -3,8 +3,9 @@ import PropTypes from "prop-types"
 import styled from "styled-components"
 import Layout from "../../../constants/Layout"
 import Colors from "../../../constants/Colors"
-import { updateDeliveryInfo } from "../../../api"
-import { TouchableWithoutFeedback, Keyboard } from "react-native"
+import { updateDeliveryInfo, addressSearch } from "../../../api"
+import { TouchableWithoutFeedback, Keyboard, Alert } from "react-native"
+import SearchModal from "./SearchModal"
 
 const AddressInfoPresenter = ({
   fixed,
@@ -15,7 +16,8 @@ const AddressInfoPresenter = ({
   postal_code,
   address_line_road,
   address_line_detail,
-  _updateState
+  _updateState,
+  searchModalVisible
 }) => {
   const handleModify = async () => {
     if (!fixed) {
@@ -26,9 +28,31 @@ const AddressInfoPresenter = ({
         address_line_road: address_line_road,
         address_line_detail: address_line_detail
       }
-      await updateDeliveryInfo(info)
+      const updateStatus = await updateDeliveryInfo(info)
+      let notice
+      if (updateStatus) notice = "정보가 성공적으로 수정되었습니다."
+      else notice = "문제가 발생하였습니다."
+      Alert.alert("배송 정보", notice, [{ text: "확인" }], {
+        cancelable: false
+      })
     }
     _updateState({ fixed: !fixed })
+  }
+  const closeModal = () => {
+    _updateState({ searchModalVisible: false })
+  }
+
+  const updateAddress = item => {
+    _updateState({
+      address_line_road: item.roadAddr,
+      postal_code: item.zipNo,
+      searchModalVisible: false
+    })
+  }
+
+  const handleText = (target, json, leng, text) => {
+    _updateState(json)
+    if (text.length === leng) target.focus()
   }
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -57,7 +81,9 @@ const AddressInfoPresenter = ({
                 onSubmitEditing={() => {
                   this.secondNumber.focus()
                 }}
-                onChangeText={text => _updateState({ contact_0: text })}
+                onChangeText={text =>
+                  handleText(this.secondNumber, { contact_0: text }, 3, text)
+                }
                 front={true}
               />
               <Text>-</Text>
@@ -75,7 +101,9 @@ const AddressInfoPresenter = ({
                 onSubmitEditing={() => {
                   this.thirdNumber.focus()
                 }}
-                onChangeText={text => _updateState({ contact_1: text })}
+                onChangeText={text =>
+                  handleText(this.thirdNumber, { contact_1: text }, 4, text)
+                }
               />
               <Text>-</Text>
               <Period
@@ -84,23 +112,28 @@ const AddressInfoPresenter = ({
                 value={contact_2}
                 keyboardType={"number-pad"}
                 maxLength={4}
-                returnKeyType={"done"}
-                blurOnSubmit={false}
                 ref={input => {
                   this.thirdNumber = input
-                }}
-                onSubmitEditing={() => {
-                  this.lastNumber.focus()
                 }}
                 onChangeText={text => _updateState({ contact_2: text })}
               />
             </Row>
           </Box>
-          <TBox fixed={fixed}>
+          <TBox
+            fixed={fixed}
+            onPress={() =>
+              fixed ? null : _updateState({ searchModalVisible: true })
+            }
+          >
             <Property fixed={fixed}>우편번호</Property>
             <Value fixed={fixed}>{postal_code}</Value>
           </TBox>
-          <TBox fixed={fixed}>
+          <TBox
+            fixed={fixed}
+            onPress={() =>
+              fixed ? null : _updateState({ searchModalVisible: true })
+            }
+          >
             <Property fixed={fixed}>도로명</Property>
             <Value fixed={fixed}>{address_line_road}</Value>
           </TBox>
@@ -119,6 +152,11 @@ const AddressInfoPresenter = ({
             <ButtonText>{fixed ? "수 정" : "완 료"}</ButtonText>
           </Button>
         </ButtonContainer>
+        <SearchModal
+          visible={searchModalVisible}
+          closeModal={closeModal}
+          updateAddress={updateAddress}
+        />
       </Container>
     </TouchableWithoutFeedback>
   )
@@ -133,7 +171,8 @@ AddressInfoPresenter.propTypes = {
   postal_code: PropTypes.string.isRequired,
   address_line_road: PropTypes.string.isRequired,
   address_line_detail: PropTypes.string.isRequired,
-  _updateState: PropTypes.func.isRequired
+  _updateState: PropTypes.func.isRequired,
+  searchModalVisible: PropTypes.bool.isRequired
 }
 
 export default AddressInfoPresenter

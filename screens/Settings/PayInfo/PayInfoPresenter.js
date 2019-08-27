@@ -5,7 +5,7 @@ import Layout from "../../../constants/Layout"
 import Colors from "../../../constants/Colors"
 import { Entypo } from "@expo/vector-icons"
 import { updatePayInfo } from "../../../api"
-import { TouchableWithoutFeedback, Keyboard } from "react-native"
+import { TouchableWithoutFeedback, Keyboard, Alert } from "react-native"
 
 const PayInfoPresenter = ({
   issuer,
@@ -30,9 +30,19 @@ const PayInfoPresenter = ({
         cvc: cvc,
         password_hashed: password_hashed
       }
-      await updatePayInfo(info)
+      const updateStatus = await updatePayInfo(info)
+      let notice
+      if (updateStatus) notice = "정보가 성공적으로 수정되었습니다."
+      else notice = "문제가 발생하였습니다."
+      Alert.alert("결제 정보", notice, [{ text: "확인" }], {
+        cancelable: false
+      })
     }
     _updateState({ fixed: !fixed })
+  }
+  const handleText = (target, json, leng, text) => {
+    _updateState(json)
+    if (text.length === leng) target.focus()
   }
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -72,7 +82,14 @@ const PayInfoPresenter = ({
                 onSubmitEditing={() => {
                   this.secondNumber.focus()
                 }}
-                onChangeText={text => _updateState({ card_number_0: text })}
+                onChangeText={text =>
+                  handleText(
+                    this.secondNumber,
+                    { card_number_0: text },
+                    4,
+                    text
+                  )
+                }
                 front={true}
               />
               <Text>-</Text>
@@ -90,7 +107,9 @@ const PayInfoPresenter = ({
                 onSubmitEditing={() => {
                   this.thirdNumber.focus()
                 }}
-                onChangeText={text => _updateState({ card_number_1: text })}
+                onChangeText={text =>
+                  handleText(this.thirdNumber, { card_number_1: text }, 4, text)
+                }
               />
               <Text>-</Text>
               <Period
@@ -108,7 +127,9 @@ const PayInfoPresenter = ({
                 onSubmitEditing={() => {
                   this.lastNumber.focus()
                 }}
-                onChangeText={text => _updateState({ card_number_2: text })}
+                onChangeText={text =>
+                  handleText(this.lastNumber, { card_number_2: text }, 4, text)
+                }
               />
               <Text>-</Text>
               <Period
@@ -120,7 +141,12 @@ const PayInfoPresenter = ({
                 ref={input => {
                   this.lastNumber = input
                 }}
-                onChangeText={text => _updateState({ card_number_3: text })}
+                onSubmitEditing={() => {
+                  this.monthInput.focus()
+                }}
+                onChangeText={text =>
+                  handleText(this.monthInput, { card_number_3: text }, 4, text)
+                }
               />
             </Row>
           </Box>
@@ -136,10 +162,15 @@ const PayInfoPresenter = ({
                   maxLength={2}
                   returnKeyType={"done"}
                   blurOnSubmit={false}
+                  ref={input => {
+                    this.monthInput = input
+                  }}
                   onSubmitEditing={() => {
                     this.yearInput.focus()
                   }}
-                  onChangeText={text => _updateState({ month: text })}
+                  onChangeText={text =>
+                    handleText(this.yearInput, { month: text }, 2, text)
+                  }
                 />
                 <Text>/</Text>
                 <Period
@@ -151,7 +182,12 @@ const PayInfoPresenter = ({
                   ref={input => {
                     this.yearInput = input
                   }}
-                  onChangeText={text => _updateState({ year: text })}
+                  onSubmitEditing={() => {
+                    this.cvc.focus()
+                  }}
+                  onChangeText={text =>
+                    handleText(this.cvc, { year: text }, 2, text)
+                  }
                 />
               </Row>
             </Box>
@@ -163,7 +199,15 @@ const PayInfoPresenter = ({
                 fixed={fixed}
                 value={cvc}
                 maxLength={3}
-                onChangeText={text => _updateState({ cvc: text })}
+                ref={input => {
+                  this.cvc = input
+                }}
+                onSubmitEditing={() => {
+                  this.pw.focus()
+                }}
+                onChangeText={text =>
+                  handleText(this.pw, { cvc: text }, 3, text)
+                }
               />
             </Box>
           </Row>
@@ -175,6 +219,9 @@ const PayInfoPresenter = ({
               fixed={fixed}
               value={password_hashed}
               maxLength={4}
+              ref={input => {
+                this.pw = input
+              }}
               onChangeText={text => _updateState({ password_hashed: text })}
             />
           </Box>
