@@ -3,6 +3,7 @@ import styled from "styled-components"
 import PropTypes from "prop-types"
 import Colors from "../../../constants/Colors"
 import { updateUserInfo } from "../../../api"
+import { Alert } from "react-native"
 
 const MyInfoPresenter = ({
   username,
@@ -17,7 +18,11 @@ const MyInfoPresenter = ({
   const handleModify = async () => {
     if (modifiable) {
       const info = { gender, age, skin_concerns, skin_type, allergies }
-      await updateUserInfo(info)
+      const updateStatus = await updateUserInfo(info)
+      let notice
+      if (updateStatus) notice = "정보가 성공적으로 수정되었습니다."
+      else notice = "문제가 발생하였습니다."
+      Alert.alert("내 정보", notice, [{ text: "확인" }], { cancelable: false })
     }
     _updateState({ modifiable: !modifiable })
   }

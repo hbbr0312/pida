@@ -15,6 +15,7 @@ export default class extends React.Component {
       loading: true,
       addressInfo: {},
       fixed: true,
+      searchModalVisible: false,
       name: null,
       contact_0: null,
       contact_1: null,
@@ -30,21 +31,6 @@ export default class extends React.Component {
 
   componentDidMount = async () => {
     let addressInfo = await getAddressInfo()
-    console.log(addressInfo)
-    addressInfo = {
-      address_line_detail: "302동 1201호",
-      address_line_road: "대전광역시 유성구 대학로 291",
-      contact: "01024029876",
-      id: 110,
-      name: "홍길동",
-      owner:
-        "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/users/final/",
-      postal_code: "34141",
-      url:
-        "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/delivery-informations/110/",
-      valid: false
-    }
-
     this.setState({
       name: addressInfo.name,
       contact_0: addressInfo.contact.substring(0, 3),
@@ -67,7 +53,8 @@ export default class extends React.Component {
       contact_2,
       postal_code,
       address_line_road,
-      address_line_detail
+      address_line_detail,
+      searchModalVisible
     } = this.state
     return loading ? (
       <Loader />
@@ -82,6 +69,7 @@ export default class extends React.Component {
         address_line_road={address_line_road}
         address_line_detail={address_line_detail}
         _updateState={this._updateState}
+        searchModalVisible={searchModalVisible}
       />
     )
   }

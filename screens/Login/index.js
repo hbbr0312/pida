@@ -49,6 +49,9 @@ export default class Login extends React.Component {
                 <Input
                   autoCapitalize={"none"}
                   onChangeText={id => this.setState({ username: id })}
+                  onSubmitEditing={() => {
+                    this.pw.focus()
+                  }}
                   value={username}
                 />
               </InputBox>
@@ -60,6 +63,9 @@ export default class Login extends React.Component {
                   secureTextEntry={true}
                   onChangeText={pw => this.setState({ password: pw })}
                   value={password}
+                  ref={input => {
+                    this.pw = input
+                  }}
                 />
               </InputBox>
             </Block>

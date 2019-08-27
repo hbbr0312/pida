@@ -33,14 +33,6 @@ export default class extends React.Component {
   }
   componentDidMount = async () => {
     let payInfo = await getPayInfo()
-    console.log(payInfo)
-    payInfo = {
-      issuer: "우리카드",
-      card_number: "1234567800001234",
-      cvc: "111",
-      expiration_date: "0812",
-      password_hashed: "1234"
-    }
     this.setState({
       issuer: payInfo.issuer || "",
       month: parseMonth(payInfo.expiration_date),
