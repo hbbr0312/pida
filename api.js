@@ -379,3 +379,51 @@ export const getTesterOrder = async () => {
     return JSON.parse(result)
   } else return null
 }
+//
+export const orderTester = async () => {
+  const res = await AsyncStorage.getItem("tokens")
+  const tokens = JSON.parse(res)
+  const userInfo = await getUserInfo()
+  const url = BASE_URL + "tester-orders/"
+  const payUrl =
+    userInfo.result.default_payment_information +
+    "?access_token=" +
+    tokens.access_token
+  const delUrl =
+    userInfo.result.default_delivery_information +
+    "?access_token=" +
+    tokens.access_token
+  let status
+  const result = await new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest()
+    xhr.withCredentials = true
+
+    xhr.addEventListener("readystatechange", function() {
+      if (this.readyState === 4) {
+        console.log(this.responseText)
+      }
+    })
+
+    xhr.open("POST", url)
+    xhr.setRequestHeader("Content-Type", "application/json")
+    xhr.setRequestHeader("Accept", "application/json")
+    xhr.onload = function(e) {
+      resolve(xhr.response)
+      status = xhr.status
+    }
+    const body = JSON.stringify({
+      category:
+        "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/categories/1/",
+      products: [
+        "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/products/1/",
+        "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/products/2/",
+        "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/products/3/"
+      ],
+      receipt_id: "1",
+      payment_information: payUrl,
+      delivery_information: delUrl
+    })
+    xhr.send(body)
+  })
+  //console.log(result)
+}

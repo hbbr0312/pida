@@ -6,6 +6,7 @@ import Colors from "../../../constants/Colors"
 import { Entypo } from "@expo/vector-icons"
 import { updatePayInfo } from "../../../api"
 import { TouchableWithoutFeedback, Keyboard, Alert } from "react-native"
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 
 const PayInfoPresenter = ({
   issuer,
@@ -45,194 +46,211 @@ const PayInfoPresenter = ({
     if (text.length === leng) target.focus()
   }
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <Container>
-        <Body>
-          <CBox
-            fixed={fixed}
-            onPress={() => (fixed ? null : _updateState({ visible: true }))}
-          >
-            <Row>
-              <Body>
-                <Property fixed={fixed}>카드사</Property>
-                <Company editable={!fixed} fixed={fixed}>
-                  {issuer}
-                </Company>
-              </Body>
-              <Icon>
-                <Entypo
-                  name={"triangle-down"}
-                  size={25}
-                  color={fixed ? "#656565" : "#696969"}
-                />
-              </Icon>
-            </Row>
-          </CBox>
-          <Box fixed={fixed}>
-            <Property fixed={fixed}>카드 번호</Property>
-            <Row>
-              <Period
-                editable={!fixed}
-                fixed={fixed}
-                value={card_number_0}
-                keyboardType={"number-pad"}
-                maxLength={4}
-                returnKeyType={"done"}
-                blurOnSubmit={false}
-                onSubmitEditing={() => {
-                  this.secondNumber.focus()
-                }}
-                onChangeText={text =>
-                  handleText(
-                    this.secondNumber,
-                    { card_number_0: text },
-                    4,
-                    text
-                  )
-                }
-                front={true}
-              />
-              <Text>-</Text>
-              <Period
-                editable={!fixed}
-                fixed={fixed}
-                value={card_number_1}
-                keyboardType={"number-pad"}
-                maxLength={4}
-                returnKeyType={"done"}
-                blurOnSubmit={false}
-                ref={input => {
-                  this.secondNumber = input
-                }}
-                onSubmitEditing={() => {
-                  this.thirdNumber.focus()
-                }}
-                onChangeText={text =>
-                  handleText(this.thirdNumber, { card_number_1: text }, 4, text)
-                }
-              />
-              <Text>-</Text>
-              <Period
-                editable={!fixed}
-                fixed={fixed}
-                value={card_number_2}
-                keyboardType={"number-pad"}
-                maxLength={4}
-                returnKeyType={"done"}
-                blurOnSubmit={false}
-                secureTextEntry={true}
-                ref={input => {
-                  this.thirdNumber = input
-                }}
-                onSubmitEditing={() => {
-                  this.lastNumber.focus()
-                }}
-                onChangeText={text =>
-                  handleText(this.lastNumber, { card_number_2: text }, 4, text)
-                }
-              />
-              <Text>-</Text>
-              <Period
-                editable={!fixed}
-                fixed={fixed}
-                value={card_number_3}
-                keyboardType={"number-pad"}
-                maxLength={4}
-                ref={input => {
-                  this.lastNumber = input
-                }}
-                onSubmitEditing={() => {
-                  this.monthInput.focus()
-                }}
-                onChangeText={text =>
-                  handleText(this.monthInput, { card_number_3: text }, 4, text)
-                }
-              />
-            </Row>
-          </Box>
-          <Row>
-            <Box fixed={fixed} isSmall={true}>
-              <Property fixed={fixed}>유효 기간 (월/년)</Property>
+    <KeyboardAwareScrollView>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <Container>
+          <Body>
+            <CBox
+              fixed={fixed}
+              onPress={() => (fixed ? null : _updateState({ visible: true }))}
+            >
+              <Row>
+                <Body>
+                  <Property fixed={fixed}>카드사</Property>
+                  <Company editable={!fixed} fixed={fixed}>
+                    {issuer}
+                  </Company>
+                </Body>
+                <Icon>
+                  <Entypo
+                    name={"triangle-down"}
+                    size={25}
+                    color={fixed ? "#656565" : "#696969"}
+                  />
+                </Icon>
+              </Row>
+            </CBox>
+            <Box fixed={fixed}>
+              <Property fixed={fixed}>카드 번호</Property>
               <Row>
                 <Period
                   editable={!fixed}
                   fixed={fixed}
-                  value={month}
+                  value={card_number_0}
                   keyboardType={"number-pad"}
-                  maxLength={2}
+                  maxLength={4}
                   returnKeyType={"done"}
                   blurOnSubmit={false}
-                  ref={input => {
-                    this.monthInput = input
-                  }}
                   onSubmitEditing={() => {
-                    this.yearInput.focus()
+                    this.secondNumber.focus()
                   }}
                   onChangeText={text =>
-                    handleText(this.yearInput, { month: text }, 2, text)
+                    handleText(
+                      this.secondNumber,
+                      { card_number_0: text },
+                      4,
+                      text
+                    )
                   }
+                  front={true}
                 />
-                <Text>/</Text>
+                <Text>-</Text>
                 <Period
                   editable={!fixed}
                   fixed={fixed}
-                  value={year}
+                  value={card_number_1}
                   keyboardType={"number-pad"}
-                  maxLength={2}
+                  maxLength={4}
+                  returnKeyType={"done"}
+                  blurOnSubmit={false}
                   ref={input => {
-                    this.yearInput = input
+                    this.secondNumber = input
                   }}
                   onSubmitEditing={() => {
-                    this.cvc.focus()
+                    this.thirdNumber.focus()
                   }}
                   onChangeText={text =>
-                    handleText(this.cvc, { year: text }, 2, text)
+                    handleText(
+                      this.thirdNumber,
+                      { card_number_1: text },
+                      4,
+                      text
+                    )
+                  }
+                />
+                <Text>-</Text>
+                <Period
+                  editable={!fixed}
+                  fixed={fixed}
+                  value={card_number_2}
+                  keyboardType={"number-pad"}
+                  maxLength={4}
+                  returnKeyType={"done"}
+                  blurOnSubmit={false}
+                  secureTextEntry={true}
+                  ref={input => {
+                    this.thirdNumber = input
+                  }}
+                  onSubmitEditing={() => {
+                    this.lastNumber.focus()
+                  }}
+                  onChangeText={text =>
+                    handleText(
+                      this.lastNumber,
+                      { card_number_2: text },
+                      4,
+                      text
+                    )
+                  }
+                />
+                <Text>-</Text>
+                <Period
+                  editable={!fixed}
+                  fixed={fixed}
+                  value={card_number_3}
+                  keyboardType={"number-pad"}
+                  maxLength={4}
+                  ref={input => {
+                    this.lastNumber = input
+                  }}
+                  onSubmitEditing={() => {
+                    this.monthInput.focus()
+                  }}
+                  onChangeText={text =>
+                    handleText(
+                      this.monthInput,
+                      { card_number_3: text },
+                      4,
+                      text
+                    )
                   }
                 />
               </Row>
             </Box>
-            <Box fixed={fixed} isSmall={true} margin={true}>
-              <Property fixed={fixed}>CVC</Property>
+            <Row>
+              <Box fixed={fixed} isSmall={true}>
+                <Property fixed={fixed}>유효 기간 (월/년)</Property>
+                <Row>
+                  <Period
+                    editable={!fixed}
+                    fixed={fixed}
+                    value={month}
+                    keyboardType={"number-pad"}
+                    maxLength={2}
+                    returnKeyType={"done"}
+                    blurOnSubmit={false}
+                    ref={input => {
+                      this.monthInput = input
+                    }}
+                    onSubmitEditing={() => {
+                      this.yearInput.focus()
+                    }}
+                    onChangeText={text =>
+                      handleText(this.yearInput, { month: text }, 2, text)
+                    }
+                  />
+                  <Text>/</Text>
+                  <Period
+                    editable={!fixed}
+                    fixed={fixed}
+                    value={year}
+                    keyboardType={"number-pad"}
+                    maxLength={2}
+                    ref={input => {
+                      this.yearInput = input
+                    }}
+                    onSubmitEditing={() => {
+                      this.cvc.focus()
+                    }}
+                    onChangeText={text =>
+                      handleText(this.cvc, { year: text }, 2, text)
+                    }
+                  />
+                </Row>
+              </Box>
+              <Box fixed={fixed} isSmall={true} margin={true}>
+                <Property fixed={fixed}>CVC</Property>
+                <TextInput
+                  secureTextEntry={true}
+                  editable={!fixed}
+                  fixed={fixed}
+                  value={cvc}
+                  maxLength={3}
+                  ref={input => {
+                    this.cvc = input
+                  }}
+                  onSubmitEditing={() => {
+                    this.pw.focus()
+                  }}
+                  onChangeText={text =>
+                    handleText(this.pw, { cvc: text }, 3, text)
+                  }
+                />
+              </Box>
+            </Row>
+            <Box fixed={fixed}>
+              <Property fixed={fixed}>비밀번호</Property>
               <TextInput
                 secureTextEntry={true}
                 editable={!fixed}
                 fixed={fixed}
-                value={cvc}
-                maxLength={3}
+                value={password_hashed}
+                maxLength={4}
                 ref={input => {
-                  this.cvc = input
+                  this.pw = input
                 }}
-                onSubmitEditing={() => {
-                  this.pw.focus()
-                }}
-                onChangeText={text =>
-                  handleText(this.pw, { cvc: text }, 3, text)
-                }
+                onChangeText={text => _updateState({ password_hashed: text })}
               />
             </Box>
-          </Row>
-          <Box fixed={fixed}>
-            <Property fixed={fixed}>비밀번호</Property>
-            <TextInput
-              secureTextEntry={true}
-              editable={!fixed}
-              fixed={fixed}
-              value={password_hashed}
-              maxLength={4}
-              ref={input => {
-                this.pw = input
-              }}
-              onChangeText={text => _updateState({ password_hashed: text })}
-            />
-          </Box>
-        </Body>
-        <ButtonContainer>
-          <Button modifiable={!fixed} onPress={async () => handleModify()}>
-            <ButtonText>{fixed ? "수 정" : "완 료"}</ButtonText>
-          </Button>
-        </ButtonContainer>
-      </Container>
-    </TouchableWithoutFeedback>
+          </Body>
+          <ButtonContainer>
+            <Button modifiable={!fixed} onPress={async () => handleModify()}>
+              <ButtonText>{fixed ? "수 정" : "완 료"}</ButtonText>
+            </Button>
+          </ButtonContainer>
+        </Container>
+      </TouchableWithoutFeedback>
+    </KeyboardAwareScrollView>
   )
 }
 
@@ -331,6 +349,7 @@ const Period = styled.TextInput`
 
 const ButtonContainer = styled.View`
   flex: 1;
+  margin-top: 30px;
   justify-content: flex-end;
   align-items: center;
 `

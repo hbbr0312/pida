@@ -6,6 +6,7 @@ import Colors from "../../../constants/Colors"
 import { updateDeliveryInfo, addressSearch } from "../../../api"
 import { TouchableWithoutFeedback, Keyboard, Alert } from "react-native"
 import SearchModal from "./SearchModal"
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 
 const AddressInfoPresenter = ({
   fixed,
@@ -55,110 +56,114 @@ const AddressInfoPresenter = ({
     if (text.length === leng) target.focus()
   }
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <Container>
-        <Body>
-          <Box fixed={fixed}>
-            <Property fixed={fixed}>수령인</Property>
-            <TextInput
-              editable={!fixed}
+    <KeyboardAwareScrollView>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <Container>
+          <Body>
+            <Box fixed={fixed}>
+              <Property fixed={fixed}>수령인</Property>
+              <TextInput
+                editable={!fixed}
+                fixed={fixed}
+                value={name}
+                onChangeText={text => _updateState({ name: text })}
+              />
+            </Box>
+            <Box fixed={fixed}>
+              <Property fixed={fixed}>연락처</Property>
+              <Row>
+                <Period
+                  editable={!fixed}
+                  fixed={fixed}
+                  value={contact_0}
+                  keyboardType={"number-pad"}
+                  maxLength={3}
+                  returnKeyType={"done"}
+                  blurOnSubmit={false}
+                  onSubmitEditing={() => {
+                    this.secondNumber.focus()
+                  }}
+                  onChangeText={text =>
+                    handleText(this.secondNumber, { contact_0: text }, 3, text)
+                  }
+                  front={true}
+                />
+                <Text>-</Text>
+                <Period
+                  editable={!fixed}
+                  fixed={fixed}
+                  value={contact_1}
+                  keyboardType={"number-pad"}
+                  maxLength={4}
+                  returnKeyType={"done"}
+                  blurOnSubmit={false}
+                  ref={input => {
+                    this.secondNumber = input
+                  }}
+                  onSubmitEditing={() => {
+                    this.thirdNumber.focus()
+                  }}
+                  onChangeText={text =>
+                    handleText(this.thirdNumber, { contact_1: text }, 4, text)
+                  }
+                />
+                <Text>-</Text>
+                <Period
+                  editable={!fixed}
+                  fixed={fixed}
+                  value={contact_2}
+                  keyboardType={"number-pad"}
+                  maxLength={4}
+                  ref={input => {
+                    this.thirdNumber = input
+                  }}
+                  onChangeText={text => _updateState({ contact_2: text })}
+                />
+              </Row>
+            </Box>
+            <TBox
               fixed={fixed}
-              value={name}
-              onChangeText={text => _updateState({ name: text })}
-            />
-          </Box>
-          <Box fixed={fixed}>
-            <Property fixed={fixed}>연락처</Property>
-            <Row>
-              <Period
-                editable={!fixed}
-                fixed={fixed}
-                value={contact_0}
-                keyboardType={"number-pad"}
-                maxLength={3}
-                returnKeyType={"done"}
-                blurOnSubmit={false}
-                onSubmitEditing={() => {
-                  this.secondNumber.focus()
-                }}
-                onChangeText={text =>
-                  handleText(this.secondNumber, { contact_0: text }, 3, text)
-                }
-                front={true}
-              />
-              <Text>-</Text>
-              <Period
-                editable={!fixed}
-                fixed={fixed}
-                value={contact_1}
-                keyboardType={"number-pad"}
-                maxLength={4}
-                returnKeyType={"done"}
-                blurOnSubmit={false}
-                ref={input => {
-                  this.secondNumber = input
-                }}
-                onSubmitEditing={() => {
-                  this.thirdNumber.focus()
-                }}
-                onChangeText={text =>
-                  handleText(this.thirdNumber, { contact_1: text }, 4, text)
-                }
-              />
-              <Text>-</Text>
-              <Period
-                editable={!fixed}
-                fixed={fixed}
-                value={contact_2}
-                keyboardType={"number-pad"}
-                maxLength={4}
-                ref={input => {
-                  this.thirdNumber = input
-                }}
-                onChangeText={text => _updateState({ contact_2: text })}
-              />
-            </Row>
-          </Box>
-          <TBox
-            fixed={fixed}
-            onPress={() =>
-              fixed ? null : _updateState({ searchModalVisible: true })
-            }
-          >
-            <Property fixed={fixed}>우편번호</Property>
-            <Value fixed={fixed}>{postal_code}</Value>
-          </TBox>
-          <TBox
-            fixed={fixed}
-            onPress={() =>
-              fixed ? null : _updateState({ searchModalVisible: true })
-            }
-          >
-            <Property fixed={fixed}>도로명</Property>
-            <Value fixed={fixed}>{address_line_road}</Value>
-          </TBox>
-          <Box fixed={fixed}>
-            <Property fixed={fixed}>상세주소</Property>
-            <TextInput
-              editable={!fixed}
+              onPress={() =>
+                fixed ? null : _updateState({ searchModalVisible: true })
+              }
+            >
+              <Property fixed={fixed}>우편번호</Property>
+              <Value fixed={fixed}>{postal_code}</Value>
+            </TBox>
+            <TBox
               fixed={fixed}
-              value={address_line_detail}
-              onChangeText={text => _updateState({ address_line_detail: text })}
-            />
-          </Box>
-        </Body>
-        <ButtonContainer>
-          <Button modifiable={!fixed} onPress={async () => handleModify()}>
-            <ButtonText>{fixed ? "수 정" : "완 료"}</ButtonText>
-          </Button>
-        </ButtonContainer>
-        <SearchModal
-          visible={searchModalVisible}
-          closeModal={closeModal}
-          updateAddress={updateAddress}
-        />
-      </Container>
-    </TouchableWithoutFeedback>
+              onPress={() =>
+                fixed ? null : _updateState({ searchModalVisible: true })
+              }
+            >
+              <Property fixed={fixed}>도로명</Property>
+              <Value fixed={fixed}>{address_line_road}</Value>
+            </TBox>
+            <Box fixed={fixed}>
+              <Property fixed={fixed}>상세주소</Property>
+              <TextInput
+                editable={!fixed}
+                fixed={fixed}
+                value={address_line_detail}
+                onChangeText={text =>
+                  _updateState({ address_line_detail: text })
+                }
+              />
+            </Box>
+          </Body>
+          <ButtonContainer>
+            <Button modifiable={!fixed} onPress={async () => handleModify()}>
+              <ButtonText>{fixed ? "수 정" : "완 료"}</ButtonText>
+            </Button>
+          </ButtonContainer>
+          <SearchModal
+            visible={searchModalVisible}
+            closeModal={closeModal}
+            updateAddress={updateAddress}
+          />
+        </Container>
+      </TouchableWithoutFeedback>
+    </KeyboardAwareScrollView>
   )
 }
 
@@ -244,6 +249,7 @@ const Period = styled.TextInput`
 `
 
 const ButtonContainer = styled.View`
+  margin-top: 30px;
   flex: 1;
   justify-content: flex-end;
   align-items: center;

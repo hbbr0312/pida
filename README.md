@@ -32,13 +32,13 @@
 
 ###Setting
 
-- [ ] Main
-- [ ] MyInfo
-- [ ] PayInfo
-- [ ] Deliveryinfo
-- [ ] Notice
-- [ ] FAQ
-- [ ] AppInfo
+- [x] Main
+- [x] MyInfo
+- [x] PayInfo
+- [x] Deliveryinfo
+- [x] Notice
+- [x] FAQ
+- [x] AppInfo
 - [ ] Logout
 - [ ] 회원탈퇴
 
