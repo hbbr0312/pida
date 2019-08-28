@@ -1,9 +1,9 @@
-import React from "react";
-import styled from "styled-components";
-import { Ionicons } from "@expo/vector-icons";
-import Colors from "../../../constants/Colors";
-import PropTypes from "prop-types";
-import { Content, ButtonContainer, Next, ButtonText } from "./styled";
+import React from "react"
+import styled from "styled-components"
+import { Ionicons } from "@expo/vector-icons"
+import Colors from "../../../constants/Colors"
+import PropTypes from "prop-types"
+import { Content, ButtonContainer, Next, ButtonText, Back } from "./styled"
 
 //gender
 //age
@@ -11,21 +11,21 @@ import { Content, ButtonContainer, Next, ButtonText } from "./styled";
 const Box = styled.View`
   margin-left: 30px;
   margin-bottom: 20px;
-`;
+`
 const Title = styled.Text`
   font-size: 16px;
   letter-spacing: 1px;
   margin-bottom: 10px;
-`;
+`
 const Row = styled.TouchableOpacity`
   flex-direction: row;
   margin-bottom: 5px;
   align-items: center;
-`;
+`
 const Text = styled.Text`
   margin-left: 10px;
   font-size: 14px;
-`;
+`
 
 const Radio = (on = false) => {
   if (on)
@@ -35,40 +35,42 @@ const Radio = (on = false) => {
         size={30}
         color={Colors.tintColor}
       />
-    );
-  else return <Ionicons name={"ios-radio-button-off"} size={30} color="grey" />;
-};
+    )
+  else return <Ionicons name={"ios-radio-button-off"} size={30} color="grey" />
+}
 
 export default class Step2 extends React.Component {
   static propTypes = {
     gender: PropTypes.number,
     age: PropTypes.number,
-    _goNext: PropTypes.func.isRequired
-  };
+    _goNext: PropTypes.func.isRequired,
+    _goBack: PropTypes.func.isRequired
+  }
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       gender: props.gender,
       age: props.age
-    };
+    }
   }
 
   goNext = valid => {
     if (valid) {
-      const { _goNext } = this.props;
-      const { gender, age } = this.state;
+      const { _goNext } = this.props
+      const { gender, age } = this.state
       const info = {
         gender,
         age
-      };
-      _goNext(info);
+      }
+      _goNext(info)
     }
-  };
+  }
 
   render() {
-    const { gender, age } = this.state;
-    const valid = gender !== null && age !== null;
+    const { gender, age } = this.state
+    const { _goBack } = this.props
+    const valid = gender !== null && age !== null
     return (
       <>
         <Content>
@@ -108,11 +110,14 @@ export default class Step2 extends React.Component {
           </Box>
         </Content>
         <ButtonContainer>
+          <Back onPress={() => _goBack({ gender, age })}>
+            <ButtonText valid={true}>뒤로</ButtonText>
+          </Back>
           <Next valid={valid} onPress={() => this.goNext(valid)}>
             <ButtonText valid={valid}>다음</ButtonText>
           </Next>
         </ButtonContainer>
       </>
-    );
+    )
   }
 }

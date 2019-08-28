@@ -44,13 +44,13 @@ const MyInfoPresenter = ({
         <Item>
           <Property>성별</Property>
           <Value onPress={() => openModal(1)}>
-            <Text>{parseGender(gender)}</Text>
+            <Text modifiable={modifiable}>{parseGender(gender)}</Text>
           </Value>
         </Item>
         <Item>
           <Property>나이</Property>
           <Value onPress={() => openModal(2)}>
-            <Text>{parseAge(age)}</Text>
+            <Text modifiable={modifiable}>{parseAge(age)}</Text>
           </Value>
         </Item>
       </Body>
@@ -61,19 +61,19 @@ const MyInfoPresenter = ({
         <Item>
           <Property>피부 타입</Property>
           <Value onPress={() => openModal(3)}>
-            <Text>{parseType(skin_type)}</Text>
+            <Text modifiable={modifiable}>{parseType(skin_type)}</Text>
           </Value>
         </Item>
         <Item>
           <Property>피부 고민</Property>
           <Value onPress={() => openModal(4)}>
-            <Text>{parseConcerns(skin_concerns)}</Text>
+            <Text modifiable={modifiable}>{parseConcerns(skin_concerns)}</Text>
           </Value>
         </Item>
         <Item>
           <Property>알러지</Property>
           <Value onPress={() => openModal(5)}>
-            <Text>{parseAllergies(allergies)}</Text>
+            <Text modifiable={modifiable}>{parseAllergies(allergies)}</Text>
           </Value>
         </Item>
       </Body>
@@ -232,7 +232,7 @@ const Value = styled.TouchableOpacity`
 
 const Text = styled.Text`
   font-size: 16px;
-  color: #525252;
+  color: ${props => (props.modifiable ? "black" : "#525252")};
 `
 const ButtonContainer = styled.View`
   flex: 1;

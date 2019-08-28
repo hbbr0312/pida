@@ -6,13 +6,24 @@ export const Content = styled.View`
 `
 export const ButtonContainer = styled.View`
   flex: 1;
+  justify-content: center;
+  flex-direction: row;
+`
+
+export const Back = styled.TouchableOpacity`
   align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 50px;
+  border-radius: 4px;
+  margin-right: 20px;
+  background-color: ${Colors.invalidButtonText};
 `
 
 export const Next = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
-  width: 180px;
+  width: 100px;
   height: 50px;
   border-radius: 4px;
   background-color: ${props =>

@@ -4,56 +4,10 @@ import Layout from "../../../constants/Layout"
 import PropTypes from "prop-types"
 import { Ionicons } from "@expo/vector-icons"
 import Colors from "../../../constants/Colors"
-import { Content, ButtonContainer, Next, ButtonText } from "./styled"
+import { Content, ButtonContainer, Next, ButtonText, Back } from "./styled"
 import { checkDuplicateId } from "../../../api"
 import { TouchableWithoutFeedback, Keyboard } from "react-native"
-
-//이메일, 비밀번호, 비밀번호 확인
-// username
-// password
-
-const View = styled.View`
-  flex: 1;
-`
-
-const Block = styled.View`
-  align-self: center;
-  width: ${Layout.window.width - 60};
-  margin-bottom: 25px;
-`
-const Top = styled.View`
-  flex-direction: row;
-  width: ${Layout.window.width - 90};
-`
-const Bottom = styled.View`
-  flex-direction: row;
-  align-items: center;
-  margin-top: 8px;
-`
-const Title = styled.Text`
-  font-size: 16px;
-  letter-spacing: 1px;
-`
-const Notice = styled.Text`
-  font-size: 14px;
-  color: grey;
-  flex: 1;
-  text-align: right;
-`
-
-const InputBox = styled.View`
-  width: ${Layout.window.width - 90};
-  height: 48px;
-  border-color: grey;
-  border-width: 1.5px;
-  border-radius: 4px;
-  justify-content: center;
-  align-items: center;
-`
-const TextInput = styled.TextInput`
-  flex: 1;
-  width: ${Layout.window.width - 110};
-`
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 
 const Circle = status => {
   switch (status) {
@@ -91,7 +45,8 @@ export default class Step1 extends React.Component {
   static propTypes = {
     username: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,
-    _goNext: PropTypes.func.isRequired
+    _goNext: PropTypes.func.isRequired,
+    _close: PropTypes.func.isRequired
   }
   constructor(props) {
     super(props)
@@ -171,6 +126,7 @@ export default class Step1 extends React.Component {
 
   render() {
     const { username, password, confirm, usernameValid } = this.state
+    const { _close } = this.props
     const passwordValid = this.checkValidOfPw(password)
     const confirmValid = this.checkConfirm(confirm, password)
     const valid =
@@ -197,6 +153,9 @@ export default class Step1 extends React.Component {
                     value={username}
                     autoCapitalize={"none"}
                     keyboardType={"email-address"}
+                    onSubmitEditing={() => {
+                      this.pw.focus()
+                    }}
                   />
                 </InputBox>
                 {Circle(usernameValid)}
@@ -213,6 +172,12 @@ export default class Step1 extends React.Component {
                     secureTextEntry={true}
                     onChangeText={pw => this.setState({ password: pw })}
                     value={password}
+                    onSubmitEditing={() => {
+                      this.pw2.focus()
+                    }}
+                    ref={input => {
+                      this.pw = input
+                    }}
                   />
                 </InputBox>
                 {Circle(passwordValid)}
@@ -231,6 +196,9 @@ export default class Step1 extends React.Component {
                       this.setState({ confirm: pw })
                     }}
                     value={confirm}
+                    ref={input => {
+                      this.pw2 = input
+                    }}
                   />
                 </InputBox>
                 {Circle(confirmValid)}
@@ -238,6 +206,9 @@ export default class Step1 extends React.Component {
             </Block>
           </Content>
           <ButtonContainer>
+            <Back onPress={() => _close()}>
+              <ButtonText valid={true}>취소</ButtonText>
+            </Back>
             <Next valid={valid} onPress={() => this.goNext(valid)}>
               <ButtonText valid={valid}>다음</ButtonText>
             </Next>
@@ -247,3 +218,50 @@ export default class Step1 extends React.Component {
     )
   }
 }
+
+//이메일, 비밀번호, 비밀번호 확인
+// username
+// password
+
+const View = styled.View`
+  flex: 1;
+`
+
+const Block = styled.View`
+  align-self: center;
+  width: ${Layout.window.width - 60};
+  margin-bottom: 25px;
+`
+const Top = styled.View`
+  flex-direction: row;
+  width: ${Layout.window.width - 90};
+`
+const Bottom = styled.View`
+  flex-direction: row;
+  align-items: center;
+  margin-top: 8px;
+`
+const Title = styled.Text`
+  font-size: 16px;
+  letter-spacing: 1px;
+`
+const Notice = styled.Text`
+  font-size: 14px;
+  color: grey;
+  flex: 1;
+  text-align: right;
+`
+
+const InputBox = styled.View`
+  width: ${Layout.window.width - 90};
+  height: 48px;
+  border-color: grey;
+  border-width: 1.5px;
+  border-radius: 4px;
+  justify-content: center;
+  align-items: center;
+`
+const TextInput = styled.TextInput`
+  flex: 1;
+  width: ${Layout.window.width - 110};
+`

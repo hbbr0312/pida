@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { Ionicons } from "@expo/vector-icons"
 import PropTypes from "prop-types"
 import Colors from "../../../constants/Colors"
-import { Content, ButtonContainer, Next, ButtonText } from "./styled"
+import { Content, ButtonContainer, Next, ButtonText, Back } from "./styled"
 
 // skin_type 0~3
 // skin_concerns a~h
@@ -63,7 +63,8 @@ export default class Step3 extends React.Component {
     skin_type: PropTypes.number,
     skin_concerns: PropTypes.array.isRequired,
     allergies: PropTypes.array.isRequired,
-    _goNext: PropTypes.func.isRequired
+    _goNext: PropTypes.func.isRequired,
+    _goBack: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -126,6 +127,7 @@ export default class Step3 extends React.Component {
 
   render() {
     const { skin_type, skin_concerns, allergies } = this.state
+    const { _goBack } = this.props
     const valid = skin_type !== null && allergies.length > 0
     return (
       <>
@@ -231,6 +233,11 @@ export default class Step3 extends React.Component {
           </Box>
         </Content>
         <ButtonContainer>
+          <Back
+            onPress={() => _goBack({ skin_type, skin_concerns, allergies })}
+          >
+            <ButtonText valid={true}>뒤로</ButtonText>
+          </Back>
           <Next valid={valid} onPress={() => this.goNext(valid)}>
             <ButtonText valid={valid}>다음</ButtonText>
           </Next>

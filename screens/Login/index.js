@@ -7,6 +7,7 @@ import Register from "./Register"
 import PropTypes from "prop-types"
 import { getTokens } from "../../api"
 import { TouchableWithoutFeedback, Keyboard } from "react-native"
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 
 export default class Login extends React.Component {
   static propTypes = {
@@ -37,54 +38,56 @@ export default class Login extends React.Component {
   render() {
     const { username, password, registerVisible } = this.state
     return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <Container>
-          <LogoBox>
-            <Logo source={logo} />
-          </LogoBox>
-          <Bottom>
-            <Block>
-              <Text>이메일</Text>
-              <InputBox>
-                <Input
-                  autoCapitalize={"none"}
-                  onChangeText={id => this.setState({ username: id })}
-                  onSubmitEditing={() => {
-                    this.pw.focus()
-                  }}
-                  value={username}
-                />
-              </InputBox>
-            </Block>
-            <Block>
-              <Text>비밀번호</Text>
-              <InputBox>
-                <Input
-                  secureTextEntry={true}
-                  onChangeText={pw => this.setState({ password: pw })}
-                  value={password}
-                  ref={input => {
-                    this.pw = input
-                  }}
-                />
-              </InputBox>
-            </Block>
-            <Button onPress={() => this._login()}>
-              <ButtonText>로그인</ButtonText>
-            </Button>
-            <TextBox>
-              <BottomText color={"black"}>아이디가 없으신가요? </BottomText>
-              <ToRegister onPress={() => this._openRegister()}>
-                <BottomText color={Colors.tintColor}>회원가입</BottomText>
-              </ToRegister>
-            </TextBox>
-          </Bottom>
-          <Register
-            visible={registerVisible}
-            _closeRegister={this._closeRegister}
-          />
-        </Container>
-      </TouchableWithoutFeedback>
+      <KeyboardAwareScrollView>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <Container>
+            <LogoBox>
+              <Logo source={logo} />
+            </LogoBox>
+            <Bottom>
+              <Block>
+                <Text>이메일</Text>
+                <InputBox>
+                  <Input
+                    autoCapitalize={"none"}
+                    onChangeText={id => this.setState({ username: id })}
+                    onSubmitEditing={() => {
+                      this.pw.focus()
+                    }}
+                    value={username}
+                  />
+                </InputBox>
+              </Block>
+              <Block>
+                <Text>비밀번호</Text>
+                <InputBox>
+                  <Input
+                    secureTextEntry={true}
+                    onChangeText={pw => this.setState({ password: pw })}
+                    value={password}
+                    ref={input => {
+                      this.pw = input
+                    }}
+                  />
+                </InputBox>
+              </Block>
+              <Button onPress={() => this._login()}>
+                <ButtonText>로그인</ButtonText>
+              </Button>
+              <TextBox>
+                <BottomText color={"black"}>아이디가 없으신가요? </BottomText>
+                <ToRegister onPress={() => this._openRegister()}>
+                  <BottomText color={Colors.tintColor}>회원가입</BottomText>
+                </ToRegister>
+              </TextBox>
+            </Bottom>
+            <Register
+              visible={registerVisible}
+              _closeRegister={this._closeRegister}
+            />
+          </Container>
+        </TouchableWithoutFeedback>
+      </KeyboardAwareScrollView>
     )
   }
 }
@@ -94,7 +97,7 @@ const Container = styled.View`
 `
 
 const LogoBox = styled.View`
-  margin-top: 45px;
+  margin-top: 160px;
   justify-content: center;
   align-items: center;
   flex: 3;

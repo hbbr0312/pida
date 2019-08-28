@@ -33,7 +33,7 @@ const Bar = styled.View`
   align-items: center;
 `
 
-const StepBar = styled.TouchableOpacity`
+const StepBar = styled.View`
   margin-left: 6px;
   margin-right: 6px;
   width: 50px;
@@ -63,10 +63,30 @@ export default class Register extends React.Component {
     }
   }
 
+  _close = () => {
+    const { _closeRegister } = this.props
+    this.setState({
+      step: 1,
+      username: "",
+      password: "",
+      gender: null,
+      age: null,
+      skin_type: null,
+      skin_concerns: [],
+      allergies: []
+    })
+    _closeRegister()
+  }
+
   _go2Login = () => {
     const { _closeRegister } = this.props
     this.setState({ step: 1 })
     _closeRegister()
+  }
+
+  _goBack = info => {
+    const { step } = this.state
+    this.setState(Object.assign({ step: step - 1 }, info))
   }
 
   _goNext = async info => {
@@ -134,10 +154,16 @@ export default class Register extends React.Component {
                 username={username}
                 password={password}
                 _goNext={this._goNext}
+                _close={this._close}
               />
             ) : null}
             {step === 2 ? (
-              <Step2 gender={gender} age={age} _goNext={this._goNext} />
+              <Step2
+                gender={gender}
+                age={age}
+                _goNext={this._goNext}
+                _goBack={this._goBack}
+              />
             ) : null}
             {step === 3 ? (
               <Step3
@@ -145,6 +171,7 @@ export default class Register extends React.Component {
                 skin_concerns={skin_concerns}
                 allergies={allergies}
                 _goNext={this._goNext}
+                _goBack={this._goBack}
               />
             ) : null}
             {step === 4 ? <Complete _go2Login={this._go2Login} /> : null}
