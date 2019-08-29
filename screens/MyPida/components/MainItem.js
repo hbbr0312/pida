@@ -51,7 +51,7 @@ const MainItem = ({ label, date, image, status, number }) => {
 
 MainItem.propTypes = {
   label: PropTypes.number.isRequired,
-  date: PropTypes.string.isRequired,
+  date: PropTypes.string,
   status: PropTypes.string.isRequired,
   image: PropTypes.string,
   number: PropTypes.number
@@ -79,7 +79,7 @@ const Preview = styled.View`
 
 const Bottom = styled.View`
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 35px;
 `
 
 const Image = styled.Image`

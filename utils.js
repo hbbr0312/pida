@@ -35,7 +35,8 @@ export const put2cart = async (product, number) => {
     name: product.name,
     number: number,
     image: product.image,
-    price: product.price
+    price: product.price,
+    url: product.url
   }
   try {
     const cart = await loadCart()
@@ -92,7 +93,8 @@ export const loadPalette = async () => {
   try {
     const palette = await AsyncStorage.getItem("palette")
     const parsedPalette = JSON.parse(palette)
-    return parsedPalette || []
+    console.log(parsedPalette)
+    return parsedPalette || {}
   } catch (err) {
     console.log(err)
   }

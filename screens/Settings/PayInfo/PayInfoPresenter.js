@@ -215,6 +215,7 @@ const PayInfoPresenter = ({
                   editable={!fixed}
                   fixed={fixed}
                   value={cvc}
+                  keyboardType={"number-pad"}
                   maxLength={3}
                   ref={input => {
                     this.cvc = input
@@ -235,6 +236,7 @@ const PayInfoPresenter = ({
                 editable={!fixed}
                 fixed={fixed}
                 value={password_hashed}
+                keyboardType={"number-pad"}
                 maxLength={4}
                 ref={input => {
                   this.pw = input

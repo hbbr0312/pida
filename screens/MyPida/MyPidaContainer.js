@@ -6,6 +6,7 @@ import { getProduct } from "../../api"
 //주문한 테스터, 상품, 공동구매 정보 가져오기
 //각각의 상품에 대한 정보 가져오기 getProduct
 
+//[ { url : "" , qty : 0 }, ...]
 const fakeData = {
   tester: {
     date: "8월 27일",
@@ -47,6 +48,7 @@ export default class extends React.Component {
 
   render() {
     const { tester, order, group_order, loading } = this.state
+
     return loading ? (
       <Loader />
     ) : (

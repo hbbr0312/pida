@@ -67,6 +67,9 @@ const AddressInfoPresenter = ({
                 fixed={fixed}
                 value={name}
                 onChangeText={text => _updateState({ name: text })}
+                onSubmitEditing={() => {
+                  this.firstNumber.focus()
+                }}
               />
             </Box>
             <Box fixed={fixed}>
@@ -87,6 +90,12 @@ const AddressInfoPresenter = ({
                     handleText(this.secondNumber, { contact_0: text }, 3, text)
                   }
                   front={true}
+                  onSubmitEditing={() => {
+                    this.secondNumber.focus()
+                  }}
+                  ref={input => {
+                    this.firstNumber = input
+                  }}
                 />
                 <Text>-</Text>
                 <Period
