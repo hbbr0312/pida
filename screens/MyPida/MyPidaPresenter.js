@@ -44,6 +44,34 @@ export default class extends React.Component {
     const { tester, order, group_order } = this.props
     const { modal } = this.state
     const nothing = this.allEmpty()
+    const testerView = (
+      <MainItem
+        label={1}
+        date={tester.date}
+        number={tester.products.length}
+        status={tester.status}
+      />
+    )
+    const orderView = (
+      <MainItem
+        label={2}
+        date={order.date}
+        status={order.status}
+        image={
+          "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/media/1.jpg"
+        }
+      />
+    )
+    const group_orderView = (
+      <MainItem
+        label={3}
+        date={group_order.date}
+        status={group_order.status}
+        image={
+          "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/media/10.jpg"
+        }
+      />
+    )
     if (nothing)
       return (
         <NoticeView>
@@ -53,38 +81,31 @@ export default class extends React.Component {
     return (
       <>
         <Container>
-          <Item onPress={() => this.openModal(1)}>
-            <MainItem
-              label={1}
-              date={tester.date}
-              number={tester.products.length}
-              status={tester.status}
-            />
-          </Item>
-          <Item onPress={() => this.openModal(2)}>
-            <MainItem
-              label={2}
-              date={order.date}
-              status={order.status}
-              image={
-                "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/media/1.jpg"
-              }
-            />
-          </Item>
-          <Item onPress={() => this.openModal(3)}>
-            <MainItem
-              label={3}
-              date={group_order.date}
-              status={group_order.status}
-              image={
-                "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/media/10.jpg"
-              }
-            />
-          </Item>
+          <Item onPress={() => this.openModal(1)}>{testerView}</Item>
+          <Item onPress={() => this.openModal(2)}>{orderView}</Item>
+          <Item onPress={() => this.openModal(3)}>{group_orderView}</Item>
         </Container>
-        <PidaDetail visible={modal === 1} closeModal={this.closeModal} />
-        <PidaDetail visible={modal === 2} closeModal={this.closeModal} />
-        <PidaDetail visible={modal === 3} closeModal={this.closeModal} />
+        <PidaDetail
+          label={1}
+          visible={modal === 1}
+          closeModal={this.closeModal}
+          view={testerView}
+          order={tester}
+        />
+        <PidaDetail
+          label={2}
+          visible={modal === 2}
+          closeModal={this.closeModal}
+          view={orderView}
+          order={order}
+        />
+        <PidaDetail
+          label={3}
+          visible={modal === 3}
+          closeModal={this.closeModal}
+          view={group_orderView}
+          order={group_order}
+        />
       </>
     )
   }

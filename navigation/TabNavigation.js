@@ -84,7 +84,7 @@ const TabNavigation = createBottomTabNavigator(
     }
   },
   {
-    initialRouteName: "MyPida",
+    initialRouteName: "Category",
     tabBarOptions: {
       style: {
         backgroundColor: BG_COLOR

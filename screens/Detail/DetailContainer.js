@@ -1,11 +1,11 @@
-import React from "react";
-import { Alert } from "react-native";
-import PropTypes from "prop-types";
-import DetailPresenter from "./DetailPresenter";
-import { put2cart } from "../../utils";
-import { withNavigation } from "react-navigation";
-import { getReview } from "../../api";
-import { getReviewer } from "../../utils";
+import React from "react"
+import { Alert } from "react-native"
+import PropTypes from "prop-types"
+import DetailPresenter from "./DetailPresenter"
+import { put2cart } from "../../utils"
+import { withNavigation } from "react-navigation"
+import { getReview } from "../../api"
+import { getReviewer } from "../../utils"
 
 class DetailContainer extends React.Component {
   static propTypes = {
@@ -18,54 +18,54 @@ class DetailContainer extends React.Component {
     _openComplete: PropTypes.func, //공동구매 탭
     period: PropTypes.string, //공동구매 탭
     _addTester: PropTypes.func //카테고리 탭
-  };
+  }
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       modalVisible: false,
       number: "1",
       reviews: []
-    };
+    }
   }
 
   componentDidMount = async () => {
-    const { product } = this.props;
-    let reviews = [];
+    const { product } = this.props
+    let reviews = []
     try {
       for (var i = 0; i < product.reviews.length; i++) {
-        let item = await getReview(product.reviews[i]);
+        let item = await getReview(product.reviews[i])
         let review = {
           id: item.id,
           user: getReviewer(item.owner),
           content: item.content
-        };
-        reviews.push(review);
+        }
+        reviews.push(review)
       }
     } catch {
     } finally {
-      this.setState({ reviews });
+      this.setState({ reviews })
     }
-  };
+  }
 
   _openCartModal = () => {
-    this.setState({ modalVisible: true });
-  };
+    this.setState({ modalVisible: true })
+  }
 
   _closeCartModal = () => {
-    this.setState({ modalVisible: false });
-  };
+    this.setState({ modalVisible: false })
+  }
 
   _controlInput = num => {
-    this.setState({ number: num });
-  };
+    this.setState({ number: num })
+  }
 
   _put2Cart = async () => {
-    const { product, navigation } = this.props;
-    const { number } = this.state;
-    this.setState({ modalVisible: false, number: "1" });
+    const { product, navigation } = this.props
+    const { number } = this.state
+    this.setState({ modalVisible: false, number: "1" })
     try {
-      const no = await put2cart(product, Number(number));
+      const no = await put2cart(product, Number(number))
       if (no === 1) {
         Alert.alert(
           "상품 담기 완료",
@@ -82,17 +82,17 @@ class DetailContainer extends React.Component {
             { text: "취소", style: "cancel" }
           ],
           { cancelable: false }
-        );
+        )
       } else {
         Alert.alert(
           "경고",
           "이미 담긴 상품입니다",
           [{ text: "OK", style: "cancel" }],
           { cancelable: false }
-        );
+        )
       }
     } catch {}
-  };
+  }
 
   render() {
     const {
@@ -105,8 +105,8 @@ class DetailContainer extends React.Component {
       period,
       _addTester,
       _openComplete
-    } = this.props;
-    const { modalVisible, number, reviews } = this.state;
+    } = this.props
+    const { modalVisible, number, reviews } = this.state
     return (
       <DetailPresenter
         tab={tab}
@@ -126,8 +126,8 @@ class DetailContainer extends React.Component {
         reviews={reviews}
         _openComplete={_openComplete}
       />
-    );
+    )
   }
 }
 
-export default withNavigation(DetailContainer);
+export default withNavigation(DetailContainer)
