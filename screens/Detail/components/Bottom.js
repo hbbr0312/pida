@@ -50,10 +50,27 @@ const Bottom = ({
   _openCartModal,
   _openComplete
 }) => {
+  const add = no => {
+    if (!product.selling) {
+      Alert.alert(
+        "알림",
+        "품절된 상품입니다.",
+        [{ text: "OK", style: "cancel" }],
+        { cancelable: false }
+      )
+    } else {
+      if (no === 1) _addTester(product)
+      else if (no === 2) _openCartModal()
+      else {
+        console.log("공동구매")
+        _openComplete(product)
+      }
+    }
+  }
   if (tab === "category")
     return (
       <Container>
-        <InPallete onPress={() => _addTester(product)}>
+        <InPallete onPress={() => add(1)}>
           <Ionicons
             name="ios-color-palette"
             size={25}
@@ -63,7 +80,7 @@ const Bottom = ({
         </InPallete>
         <InCart
           onPress={() => {
-            _openCartModal()
+            add(2)
             //putToCart(1);
           }}
         >
@@ -75,7 +92,7 @@ const Bottom = ({
   else if (tab === "group_buying")
     return (
       <Container>
-        <Join onPress={() => _openComplete(product)}>
+        <Join onPress={() => add(3)}>
           <Ionicons name="ios-people" size={25} color={Colors.iconTintColor} />
           <Text color="white">참여하기</Text>
         </Join>

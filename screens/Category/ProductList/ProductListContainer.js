@@ -1,5 +1,5 @@
 import React from "react"
-import { getProduct } from "../../../api"
+import { getProduct, orderTester } from "../../../api"
 import Loader from "../../../components/Loader"
 import ProductListPresenter from "./ProductListPresenter"
 import PaletteSelect from "./PaletteSelect"
@@ -64,7 +64,7 @@ export default class extends React.Component {
   }
 
   _closePalette = () => {
-    //
+    //결제모듈 띄우기
     this.setState({
       modalVisible: false,
       completeVisible: true

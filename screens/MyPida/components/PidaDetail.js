@@ -5,96 +5,67 @@ import { Modal } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import Colors from "../../../constants/Colors"
 import MainItem from "./MainItem"
+import { priceParser, timeParser } from "../../../utils"
 
-const image =
-  "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/media/10.jpg"
-const PidaDetail = ({ label, visible, closeModal, order }) => {
-  console.log(order)
-  let view
-  if (label === 1)
-    view = (
-      <MainItem
-        label={1}
-        date={null}
-        number={order.products.length}
-        status={order.status}
-      />
-    )
-  else if (label === 2)
-    view = (
-      <MainItem
-        label={2}
-        date={null}
-        status={order.status}
-        image={
-          "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/media/1.jpg"
-        }
-      />
-    )
-  else
-    view = (
-      <MainItem
-        label={3}
-        date={null}
-        status={order.status}
-        image={
-          "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/media/10.jpg"
-        }
-      />
-    )
+const PidaDetail = ({ visible, closeModal, order, openDetail }) => {
+  const time = makeTime(order.order_time)
   return (
     <Modal visible={visible} transparent={false}>
       <Container>
         <Close onPress={() => closeModal()}>
           <Ionicons name={"ios-close"} size={30} color={"grey"} />
         </Close>
-        <View>{view}</View>
+        <View>
+          <MainItem order={order} />
+        </View>
         <OrderInfo>
           <Title bottom={true}>신청 정보</Title>
           <Row>
-            <Property>{label === 1 ? "신청일시" : "주문일시"}</Property>
-            <Value>{order.date}</Value>
+            <Property>{order.label === 1 ? "신청일시" : "주문일시"}</Property>
+            <Value>{time}</Value>
           </Row>
           <Row>
             <Property>가격</Property>
-            <Value>₩ 8,000</Value>
+            <Value>{priceParser(order.price)}</Value>
           </Row>
         </OrderInfo>
         <ProductInfo>
           <Title bottom={true}>상품 정보</Title>
           <PContainer>
-            <Product border={true}>
-              <Image source={{ uri: image }} />
-              <TextContainer>
-                <Name>세이프 미 릴리프 모이스처 크림 12</Name>
-                <Price>정가 ₩ 28,000</Price>
-              </TextContainer>
-              <Icon>
-                <Ionicons name={"ios-more"} size={30} color={"black"} />
-              </Icon>
-            </Product>
-            <Product border={false}>
-              <Image source={{ uri: image }} />
-              <TextContainer>
-                <Name>세이프 미 릴리프 모이스처 크림 12</Name>
-                <Price>정가 ₩ 28,000</Price>
-              </TextContainer>
-              <Icon>
-                <Ionicons name={"ios-more"} size={30} color={"black"} />
-              </Icon>
-            </Product>
+            {order.products
+              ? order.products.map((item, index) => (
+                  <Product
+                    border={index < order.products.length - 1}
+                    key={index}
+                    onPress={() => openDetail(item.product)}
+                  >
+                    <Image source={{ uri: item.product.image }} />
+                    <TextContainer>
+                      <Name>{item.product.name}</Name>
+                      <Price>
+                        {order.label === 1 ? "정가 " : ""}
+                        {priceParser(item.product.price)}
+                        {order.label === 2 ? ` / ${item.qty}개` : ""}
+                      </Price>
+                    </TextContainer>
+                    <Icon>
+                      <Ionicons name={"ios-more"} size={30} color={"black"} />
+                    </Icon>
+                  </Product>
+                ))
+              : null}
           </PContainer>
         </ProductInfo>
         <PayInfo>
           <Title>결제 정보</Title>
           <Icon>
-            <Ionicons name={"ios-arrow-forward"} size={30} color={"black"} />
+            <Ionicons name={"ios-arrow-forward"} size={23} color={"black"} />
           </Icon>
         </PayInfo>
-        <DeliveryInfo>
+        <DeliveryInfo onPress={console.log(order.delivery_info)}>
           <Title>배송 정보</Title>
           <Icon>
-            <Ionicons name={"ios-arrow-forward"} size={30} color={"black"} />
+            <Ionicons name={"ios-arrow-forward"} size={23} color={"black"} />
           </Icon>
         </DeliveryInfo>
       </Container>
@@ -102,18 +73,34 @@ const PidaDetail = ({ label, visible, closeModal, order }) => {
   )
 }
 PidaDetail.propTypes = {
-  label: PropTypes.number.isRequired,
   visible: PropTypes.bool.isRequired,
   closeModal: PropTypes.func.isRequired,
-  order: PropTypes.object
+  order: PropTypes.object,
+  openDetail: PropTypes.func.isRequired
 }
 export default PidaDetail
 
-const Container = styled.ScrollView``
+const makeTime = order_time => {
+  if (!order_time) return ""
+  const time = timeParser(order_time)
+  return (
+    time.year +
+    "년 " +
+    time.month +
+    "월 " +
+    time.day +
+    "일 " +
+    time.time +
+    ":" +
+    time.minute
+  )
+}
+const Container = styled.ScrollView`
+  margin-top: 50px;
+`
 const Close = styled.TouchableOpacity`
   width: 30px;
   height: 30px;
-  margin-top: 50px;
   margin-left: 20px;
   align-items: center;
   justify-content: center;

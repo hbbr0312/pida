@@ -4,8 +4,14 @@ import PropTypes from "prop-types"
 import { Status, GroupStatus } from "./Status"
 import { Palette2, Palette3, Palette7 } from "../../../components/Palettes"
 import Layout from "../../../constants/Layout"
+import { timeParser } from "../../../utils"
 
-const MainItem = ({ label, date, image, status, number }) => {
+const MainItem = ({ order }) => {
+  const label = order.label
+  const date = makeTime(order.order_time)
+  const image = order.products[0].product.image //for purchase, group_purchase
+  const status = order.status
+  const number = order.products.length //for tester
   if (label === 1)
     return (
       <View>
@@ -23,6 +29,7 @@ const MainItem = ({ label, date, image, status, number }) => {
       </View>
     )
   else if (label === 2) {
+    //purchase_order
     return (
       <View>
         <Date>{date}</Date>
@@ -35,6 +42,7 @@ const MainItem = ({ label, date, image, status, number }) => {
       </View>
     )
   } else {
+    //group_purchase_order
     return (
       <View>
         <Date>{date}</Date>
@@ -50,14 +58,16 @@ const MainItem = ({ label, date, image, status, number }) => {
 }
 
 MainItem.propTypes = {
-  label: PropTypes.number.isRequired,
-  date: PropTypes.string,
-  status: PropTypes.string.isRequired,
-  image: PropTypes.string,
-  number: PropTypes.number
+  order: PropTypes.object.isRequired
 }
 
 export default MainItem
+
+const makeTime = order_time => {
+  if (!order_time) return ""
+  const time = timeParser(order_time)
+  return time.month + "월 " + time.day + "일 "
+}
 
 const View = styled.View`
   border-bottom-width: 0.3px;

@@ -15,6 +15,23 @@ export const priceParser = price => {
   return `₩ ${newPrice}`
 }
 
+export const timeParser = time => {
+  //2019-09-02T12:34:23.076689Z
+  return {
+    year: time.substring(0, 4),
+    month: time.substring(5, 7),
+    day: time.substring(8, 10),
+    time: time.substring(11, 13),
+    minute: time.substring(14, 16)
+  }
+}
+
+export const time2int = raw => {
+  const t = timeParser(raw)
+  const time = t.year + t.month + t.day + t.time + t.minute
+  return Number(time)
+}
+
 export const loadCart = async () => {
   try {
     const cart = await AsyncStorage.getItem("cart")
@@ -93,7 +110,6 @@ export const loadPalette = async () => {
   try {
     const palette = await AsyncStorage.getItem("palette")
     const parsedPalette = JSON.parse(palette)
-    console.log(parsedPalette)
     return parsedPalette || {}
   } catch (err) {
     console.log(err)

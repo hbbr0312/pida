@@ -1,4 +1,8 @@
 import { AsyncStorage } from "react-native"
+import { loadPalette, loadCart } from "./utils"
+
+const ct =
+  "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/categories/1/"
 
 const BASE_URL =
   "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/"
@@ -16,6 +20,27 @@ export const getProduct = url => {
     .catch(error => console.log(error))
 }
 
+export const getTesters = async urlList => {
+  const products = []
+  for (var i = 0; i < urlList.length; i++) {
+    const url = urlList[i]
+    const product = await fetch(url).then(res => res.json())
+    products.push({ product, qty: 1 })
+  }
+  return products
+}
+
+export const getPurchases = async objList => {
+  const products = []
+  for (var i = 0; i < objList.length; i++) {
+    const curr = objList[i]
+    const url = curr.product
+    const product = await fetch(url).then(res => res.json())
+    products.push({ product, qty: curr.quantity })
+  }
+  return products
+}
+
 export const getReview = url => {
   return fetch(url)
     .then(res => res.json())
@@ -27,6 +52,7 @@ export const getFAQ = async () => {
   const res = await fetch(url)
   return res.json()
 }
+
 export const getNotice = async () => {
   const url = BASE_URL + "notices/"
   const res = await fetch(url)
@@ -108,6 +134,7 @@ export const getTokens = async (username, password) => {
     xhr.send()
   })
   if (status === 200) {
+    console.log(result)
     AsyncStorage.setItem("tokens", result)
     AsyncStorage.setItem("username", username)
     return true
@@ -221,6 +248,35 @@ export const getAddressInfo = async () => {
     })
 
     xhr.open("GET", url)
+    xhr.onload = function(e) {
+      resolve(xhr.response)
+      status = xhr.status
+    }
+    xhr.setRequestHeader("Content-Type", "application/json")
+
+    xhr.send()
+  })
+  if (status === 200) {
+    return JSON.parse(result)
+  } else return null
+}
+
+export const getDeliveryInfo = async url => {
+  const res = await AsyncStorage.getItem("tokens")
+  const tokens = JSON.parse(res)
+  const URL = url + "?access_token=" + tokens.access_token
+  let status
+  const result = await new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest()
+    xhr.withCredentials = true
+
+    xhr.addEventListener("readystatechange", function() {
+      if (this.readyState === 4) {
+        //console.log(this.responseText)
+      }
+    })
+
+    xhr.open("GET", URL)
     xhr.onload = function(e) {
       resolve(xhr.response)
       status = xhr.status
@@ -348,59 +404,68 @@ export const addressSearch = async (keyword, currentPage) => {
   return JSON.parse(result)
 }
 
-//TODO
-export const getTesterOrder = async () => {
-  const res = await AsyncStorage.getItem("tokens")
-  const tokens = JSON.parse(res)
-  const base_url = BASE_URL + "tester-orders/16" //+ username
-  const url = base_url + "/?access_token=" + tokens.access_token
-  let status
-  const result = await new Promise((resolve, reject) => {
-    var xhr = new XMLHttpRequest()
-    xhr.withCredentials = true
-
-    xhr.addEventListener("readystatechange", function() {
-      if (this.readyState === 4) {
-        //console.log(this.responseText)
-      }
-    })
-
-    xhr.open("GET", url)
-    xhr.onload = function(e) {
-      resolve(xhr.response)
-      status = xhr.status
-    }
-    xhr.setRequestHeader("Content-Type", "application/json")
-
-    xhr.send()
-  })
-  console.log(result)
-  if (status === 200) {
-    return JSON.parse(result)
-  } else return null
-}
-//
 export const orderTester = async () => {
   const res = await AsyncStorage.getItem("tokens")
   const tokens = JSON.parse(res)
   const userInfo = await getUserInfo()
-  const url = BASE_URL + "tester-orders/"
-  const payUrl =
-    userInfo.result.default_payment_information +
-    "?access_token=" +
-    tokens.access_token
-  const delUrl =
-    userInfo.result.default_delivery_information +
-    "?access_token=" +
-    tokens.access_token
+  const palette = await loadPalette()
+  const url = BASE_URL + "tester-orders/?access_token=" + tokens.access_token
   let status
+  const json = {
+    products: palette.selected.map(
+      item => BASE_URL + "products/" + item.id + "/"
+    ),
+    price: 2500,
+    category: ct,
+    payment_information: userInfo.result.default_payment_information,
+    delivery_information: userInfo.result.default_delivery_information
+  }
+  const body = JSON.stringify(json)
   const result = await new Promise((resolve, reject) => {
     var xhr = new XMLHttpRequest()
     xhr.withCredentials = true
 
     xhr.addEventListener("readystatechange", function() {
       if (this.readyState === 4) {
-        console.log(this.responseText)
+        status = xhr.status
+      }
+    })
+
+    xhr.open("POST", url)
+    xhr.setRequestHeader("Accept", "application/json")
+    xhr.setRequestHeader("Content-Type", "application/json")
+    xhr.onload = function(e) {
+      resolve(xhr.response)
+      status = xhr.status
+    }
+    xhr.send(body)
+  })
+  return status
+}
+const makeitem = item => {
+  return {
+    product: item.url,
+    quantity: item.number
+  }
+}
+export const orderPurchase = async () => {
+  const res = await AsyncStorage.getItem("tokens")
+  const tokens = JSON.parse(res)
+  const cart = await loadCart()
+  const userInfo = await getUserInfo()
+  const url = BASE_URL + "purchase-orders/?access_token=" + tokens.access_token
+  let status
+  const json = {
+    items: cart.map(item => makeitem(item))
+  }
+  const body = JSON.stringify(json)
+  const result = await new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest()
+    xhr.withCredentials = true
+
+    xhr.addEventListener("readystatechange", function() {
+      if (this.readyState === 4) {
+        status = xhr.status
       }
     })
 
@@ -411,19 +476,7 @@ export const orderTester = async () => {
       resolve(xhr.response)
       status = xhr.status
     }
-    const body = JSON.stringify({
-      category:
-        "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/categories/1/",
-      products: [
-        "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/products/1/",
-        "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/products/2/",
-        "http://ec2-13-125-246-38.ap-northeast-2.compute.amazonaws.com/products/3/"
-      ],
-      receipt_id: "1",
-      payment_information: payUrl,
-      delivery_information: delUrl
-    })
     xhr.send(body)
   })
-  //console.log(result)
+  return status
 }
