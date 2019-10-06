@@ -114,21 +114,23 @@ const parseCart = async () => {
 
 const parcePalette = palette => {
   const leng = palette.size
-  switch (leng) {
-    case 2:
-      return {
-        price: 2500,
-        name: "테스터 2개: " + palette.selected[0].name + " 외 1개"
-      }
-    case 3:
-      return {
-        price: 2500,
-        name: "테스터 3개: " + palette.selected[0].name + " 외 2개"
-      }
-    case 7:
-      return {
-        price: 2500,
-        name: "테스터 7개: " + palette.selected[0].name + " 외 6개"
-      }
-  }
+  if (palette.selected.length > 0) {
+    switch (leng) {
+      case 2:
+        return {
+          price: 2500,
+          name: "테스터 2개: " + palette.selected[0].name + " 외 1개"
+        }
+      case 3:
+        return {
+          price: 2500,
+          name: "테스터 3개: " + palette.selected[0].name + " 외 2개"
+        }
+      case 7:
+        return {
+          price: 2500,
+          name: "테스터 7개: " + palette.selected[0].name + " 외 6개"
+        }
+    }
+  } else return {}
 }

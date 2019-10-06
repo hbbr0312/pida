@@ -7,6 +7,7 @@ import Colors from "../constants/Colors"
 import Layout from "../constants/Layout"
 import { Palette2 } from "./Palettes"
 import { cartPay, testerPay, groupPay } from "../paymodule"
+import { orderTester, orderPurchase } from "../api"
 
 class Complete extends React.Component {
   static propTypes = {
@@ -28,10 +29,22 @@ class Complete extends React.Component {
     }
   }
 
-  callback = response => {
-    const { _closeComplete } = this.props
+  callback = async response => {
+    const { from, _closeComplete } = this.props
     if (response.imp_success === "false") _closeComplete()
-    else this.setState({ step: 2 })
+    else {
+      let status
+      if (from == "order") status = await orderPurchase()
+      else if (from == "palette") status = await orderTester()
+
+      if (status === 201) {
+        console.log("order success")
+        this.setState({ step: 2 })
+      } else {
+        console.log("fail :(")
+        alert("오류가 생겼습니다 관리자에게 문의하세요")
+      }
+    }
   }
 
   componentWillReceiveProps = async props => {

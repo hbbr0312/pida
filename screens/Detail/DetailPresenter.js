@@ -1,19 +1,19 @@
-import React from "react";
-import styled from "styled-components";
-import PropTypes from "prop-types";
-import ProductSection from "./components/ProductSection";
-import InfoSection from "./components/InfoSection";
-import IngredientSection from "./components/IngredientSection";
-import ReviewSection from "./components/ReviewSection";
-import { Ionicons } from "@expo/vector-icons";
-import ProgressBar from "../../components/ProgressBar";
-import { Modal } from "react-native";
-import Bottom from "./components/Bottom";
-import CartModal from "./components/CartModal";
+import React from "react"
+import styled from "styled-components"
+import PropTypes from "prop-types"
+import ProductSection from "./components/ProductSection"
+import InfoSection from "./components/InfoSection"
+import IngredientSection from "./components/IngredientSection"
+import ReviewSection from "./components/ReviewSection"
+import { Ionicons } from "@expo/vector-icons"
+import ProgressBar from "../../components/ProgressBar"
+import { Modal } from "react-native"
+import Bottom from "./components/Bottom"
+import CartModal from "./components/CartModal"
 
 const Header = styled.View`
   height: 40px;
-`;
+`
 
 const Close = styled.TouchableOpacity`
   height: 40px;
@@ -22,14 +22,14 @@ const Close = styled.TouchableOpacity`
   margin-left: 20px;
   align-items: center;
   justify-content: center;
-`;
+`
 
-const Container = styled.ScrollView``;
+const Container = styled.ScrollView``
 
 const Progress = styled.View`
   border-bottom-color: grey;
   border-bottom-width: 0.3px;
-`;
+`
 
 const DetailPresenter = ({
   visible,
@@ -99,11 +99,11 @@ const DetailPresenter = ({
           _put2Cart={_put2Cart}
         />
       </Modal>
-    );
+    )
   } else {
-    return <Modal visible={visible} transparent={false} />;
+    return <Modal visible={visible} transparent={false} />
   }
-};
+}
 
 DetailPresenter.propTypes = {
   tab: PropTypes.string.isRequired,
@@ -122,6 +122,6 @@ DetailPresenter.propTypes = {
   number: PropTypes.string, //카테고리 탭
   _controlInput: PropTypes.func, //카테고리 탭
   _put2Cart: PropTypes.func //카테고리 탭
-};
+}
 
-export default DetailPresenter;
+export default DetailPresenter

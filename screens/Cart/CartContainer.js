@@ -6,6 +6,7 @@ import { loadCart, vacateCart } from "../../utils"
 import Notice from "../../components/Notice"
 import Complete from "../../components/Complete"
 import { NavigationEvents } from "react-navigation"
+import { orderPurchase } from "../../api"
 
 const Refresh = styled.TouchableOpacity`
   flex: 1;
@@ -53,6 +54,7 @@ export default class extends React.Component {
   }
 
   _closeComplete = () => {
+
     this.setState({
       completeVisible: false
     })

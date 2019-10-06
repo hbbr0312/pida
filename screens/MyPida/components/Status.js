@@ -9,7 +9,7 @@ const notyet = "#E1E1E1"
 
 const makeColor = status => {
   switch (status) {
-    case "preparing":
+    case 1: //"preparing":
       return {
         circle1: active,
         line1: notyet,
@@ -17,7 +17,7 @@ const makeColor = status => {
         line2: notyet,
         circle3: notyet
       }
-    case "shipping":
+    case 2: //"shipping":
       return {
         circle1: passed,
         line1: passed,
@@ -25,7 +25,7 @@ const makeColor = status => {
         line2: notyet,
         circle3: notyet
       }
-    case "delivered":
+    case 3: //"delivered":
       return {
         circle1: passed,
         line1: passed,
@@ -64,7 +64,7 @@ export const Status = ({ status }) => {
 
 const makeColor_g = status => {
   switch (status) {
-    case "ongoing":
+    case 0: //"ongoing"
       return {
         circle0: active,
         line0: notyet,
@@ -74,7 +74,7 @@ const makeColor_g = status => {
         line2: notyet,
         circle3: notyet
       }
-    case "preparing":
+    case 1: //"preparing"
       return {
         circle0: passed,
         line0: passed,
@@ -84,7 +84,7 @@ const makeColor_g = status => {
         line2: notyet,
         circle3: notyet
       }
-    case "shipping":
+    case 2: //"shipping"
       return {
         circle0: passed,
         line0: passed,
@@ -94,7 +94,7 @@ const makeColor_g = status => {
         line2: notyet,
         circle3: notyet
       }
-    case "delivered":
+    case 3: //"delivered"
       return {
         circle0: passed,
         line0: passed,
