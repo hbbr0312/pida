@@ -3,8 +3,10 @@ import styled from "styled-components"
 import { withNavigation } from "react-navigation"
 import { Ionicons } from "@expo/vector-icons"
 import { logout } from "../../api"
+import { connect } from "react-redux"
+import { logout_ } from "../../actions"
 
-const SettingsPresenter = ({ navigation }) => {
+const SettingsPresenter = ({ navigation, logout_ }) => {
   const makeRow = (routeName, label) => {
     return (
       <Row
@@ -42,7 +44,7 @@ const SettingsPresenter = ({ navigation }) => {
       <Row
         onPress={async () => {
           await logout()
-          alert("로그아웃됨")
+          logout_()
         }}
       >
         <Text>로그아웃</Text>
@@ -60,7 +62,22 @@ const SettingsPresenter = ({ navigation }) => {
     </Container>
   )
 }
-export default withNavigation(SettingsPresenter)
+
+let mapStateToProps = state => {
+  return {
+    login: state
+  }
+}
+let mapDispatchToProps = dispatch => {
+  return {
+    logout_: () => dispatch(logout_())
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withNavigation(SettingsPresenter))
 
 const Container = styled.View`
   justify-content: center;
