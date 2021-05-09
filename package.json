@@ -19,7 +19,7 @@
     "graphql-anywhere": "^4.2.4",
     "graphql-tag": "^2.10.1",
     "iamport-react-native": "^1.2.2",
-    "lodash": "^4.17.14",
+    "lodash": "^4.17.21",
     "mem": "^5.1.1",
     "prop-types": "^15.7.2",
     "qs": "^6.7.0",
